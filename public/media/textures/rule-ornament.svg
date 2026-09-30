@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 24" width="320" height="24" role="img" aria-label="Decorative rule">
+  <title>Archival rule ornament</title>
+  <g fill="none" stroke="#6D2227" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="1.25" d="M12 12 H128"/>
+    <path stroke-width="1.25" d="M192 12 H308"/>
+    <path stroke-width="1.35" d="M160 4 L168 12 L160 20 L152 12 Z"/>
+    <circle cx="160" cy="12" r="2.2" fill="#6D2227" stroke="none"/>
+    <path stroke-width="1.1" d="M140 12 h8 M172 12 h8"/>
+    <path stroke-width="1.1" d="M134 8 l4 4 -4 4 M186 8 l-4 4 4 4"/>
+  </g>
+</svg>

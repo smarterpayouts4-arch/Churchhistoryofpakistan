@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Pictorial history">
+  <title>Pictorial history</title>
+  <!-- Framed photograph stack — Design #1 pictorial mark -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- rear frame (gold) -->
+    <rect x="16" y="8" width="34" height="28" rx="1.5" stroke="#AF8B58" stroke-width="2"/>
+    <!-- front frame (burgundy) -->
+    <rect x="8" y="22" width="34" height="30" rx="1.5" stroke="#6D2227" stroke-width="2.15"/>
+    <!-- landscape motif inside front frame -->
+    <path d="M12 46 L20 36 L26 42 L32 34 L40 46" stroke="#AF8B58" stroke-width="1.85"/>
+    <circle cx="16.5" cy="30" r="2.25" stroke="#AF8B58" stroke-width="1.75"/>
+    <!-- corner mounts -->
+    <path d="M11 25 h4 M11 25 v4" stroke="#AF8B58" stroke-width="1.4"/>
+    <path d="M39 25 h-4 M39 25 v4" stroke="#AF8B58" stroke-width="1.4"/>
+    <path d="M11 49 h4 M11 49 v-4" stroke="#AF8B58" stroke-width="1.4"/>
+    <path d="M39 49 h-4 M39 49 v-4" stroke="#AF8B58" stroke-width="1.4"/>
+  </g>
+</svg>

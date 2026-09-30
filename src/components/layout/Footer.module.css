@@ -1,0 +1,74 @@
+.footer {
+  background: #2f2020;
+  color: #eadfc9;
+  padding: 3rem 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr 1fr;
+  gap: 2.8rem;
+  align-items: start;
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brandMark {
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #f2e4ca;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: #f1dfc0;
+}
+
+.strap {
+  font-size: 0.82rem;
+  color: #cbbca6;
+  margin: 0.5rem 0 0;
+}
+
+.nav {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.nav a {
+  color: #f1dfc0;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.copy {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #cbbca6;
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.curatorLink {
+  color: #9a8a76;
+  text-decoration: none;
+  font-size: 0.78rem;
+}
+
+.curatorLink:hover {
+  color: #eadfc9;
+  text-decoration: underline;
+}

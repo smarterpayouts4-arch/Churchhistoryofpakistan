@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="t">
+<title id="t">Faith in the classroom — Archive record forthcoming</title>
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#F3E7CF"/><stop offset="55%" stop-color="#E8D7B8"/><stop offset="100%" stop-color="#D4C2A0"/>
+  </linearGradient>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="7" result="n"/>
+  <feColorMatrix in="n" type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer></filter>
+</defs>
+<rect width="960" height="600" fill="url(#g)"/>
+<rect x="22" y="22" width="916" height="556" fill="none" stroke="#6D2227" stroke-width="3"/>
+<rect x="34" y="34" width="892" height="532" fill="none" stroke="#AF8B58" stroke-width="1"/>
+<!-- archival motif: open book + cross — NOT a play button -->
+<g transform="translate(480 236)" fill="none" stroke="#6D2227" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M-54 18c28-22 54-20 54 4 0-24 26-26 54-4v52c-28-22-54-20-54 4 0-24-26-26-54-4z"/>
+  <path d="M0 22v52"/>
+  <path d="M0 -28v36M-18 -10h36"/>
+</g>
+<text x="480" y="360" text-anchor="middle" font-family="Georgia,serif" font-size="34" fill="#292522">Faith in the classroom</text>
+<text x="480" y="392" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#6E6255">Education workers · Christian schools</text>
+<rect x="280" y="430" width="400" height="36" fill="#6D2227"/>
+<text x="480" y="454" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" letter-spacing="2.5" fill="#FBF5E9">ARCHIVE RECORD FORTHCOMING</text>
+<rect width="960" height="600" filter="url(#grain)" opacity=".65"/>
+</svg>

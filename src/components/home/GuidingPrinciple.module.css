@@ -1,0 +1,29 @@
+/* -- Guiding principle -- */
+.guiding {
+  text-align: center;
+  padding: 5.4rem 0;
+  background:
+    linear-gradient(180deg, rgb(239 224 197 / 0.95), rgb(232 215 184 / 0.9)),
+    url("/media/textures/parchment-wash.png");
+  background-size: auto, 520px 520px;
+}
+
+.guidingInner {
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.guidingQuote {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.2vw, 3.35rem);
+  color: var(--color-burgundy);
+  margin: 1.25rem 0;
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.guidingNote {
+  color: var(--color-muted-brown);
+  max-width: 720px;
+  margin-inline: auto;
+}

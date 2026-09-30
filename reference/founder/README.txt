@@ -1,0 +1,1 @@
+These crops were made from the user-supplied portrait screenshot. Use founder-portrait-hero.webp for the homepage hero and founder-portrait-square.webp for curator/about cards. Confirm the public display name before launch.

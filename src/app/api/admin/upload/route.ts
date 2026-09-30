@@ -1,0 +1,91 @@
+import { NextRequest, NextResponse } from "next/server";
+import { promises as fs } from "fs";
+import path from "path";
+import { requireAdminApi } from "@/lib/auth/require-admin";
+
+export const runtime = "nodejs";
+
+const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
+const ALLOWED = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
+
+const DESTINATIONS = {
+  uploads: "public/media/uploads",
+  facebook: "public/media/archive/facebook",
+  cathedrals: "public/media/cathedrals",
+} as const;
+
+function safeFilename(original: string): string {
+  const base = path
+    .basename(original)
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  const ext = path.extname(base);
+  const stem = path.basename(base, ext).slice(0, 60) || "upload";
+  const stamp = Date.now().toString(36);
+  const safeExt =
+    ext === ".jpg" ||
+    ext === ".jpeg" ||
+    ext === ".png" ||
+    ext === ".webp" ||
+    ext === ".gif"
+      ? ext === ".jpeg"
+        ? ".jpg"
+        : ext
+      : ".jpg";
+  return `${stem}-${stamp}${safeExt}`;
+}
+
+export async function POST(req: NextRequest) {
+  const gate = await requireAdminApi();
+  if (!gate.ok) return gate.response;
+
+  let form: FormData;
+  try {
+    form = await req.formData();
+  } catch {
+    return NextResponse.json({ error: "Expected multipart form." }, { status: 400 });
+  }
+
+  const file = form.get("file");
+  if (!(file instanceof File)) {
+    return NextResponse.json({ error: "Missing file field." }, { status: 400 });
+  }
+  if (!ALLOWED.has(file.type)) {
+    return NextResponse.json(
+      { error: "Only JPEG, PNG, WebP, or GIF images are allowed." },
+      { status: 400 },
+    );
+  }
+  if (file.size > MAX_BYTES) {
+    return NextResponse.json(
+      { error: "File too large (max 8 MB)." },
+      { status: 400 },
+    );
+  }
+
+  const destKey = String(form.get("destination") || "uploads");
+  const destRel =
+    DESTINATIONS[destKey as keyof typeof DESTINATIONS] || DESTINATIONS.uploads;
+  const filename = safeFilename(file.name || "upload.jpg");
+  const absDir = path.join(process.cwd(), destRel);
+  await fs.mkdir(absDir, { recursive: true });
+  const absPath = path.join(absDir, filename);
+  const buf = Buffer.from(await file.arrayBuffer());
+  await fs.writeFile(absPath, buf);
+
+  const publicPath = `/${destRel.replace(/^public\//, "")}/${filename}`;
+  return NextResponse.json({
+    ok: true,
+    path: publicPath,
+    filename,
+    bytes: buf.length,
+    contentType: file.type,
+  });
+}

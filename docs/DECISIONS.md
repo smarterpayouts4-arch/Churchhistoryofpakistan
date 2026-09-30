@@ -1,0 +1,144 @@
+# DECISIONS — Architecture Decision Records
+
+Initial ADRs for History: Church of Pakistan. Status values: **Proposed** | **Accepted** | **Accepted-pending-confirm** | **Superseded**.
+
+Grounded in package `reference/source-docs/DESIGN_SYSTEM.md`, working `docs/DESIGN_SYSTEM.md`, `src/styles/tokens.css`, and `docs/OPEN_QUESTIONS.md`.
+
+---
+
+## ADR-001 — Next.js App Router pinned to 16.3.5 (Node 24)
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted — app is live under `src/app/` |
+| **Date** | 2026-09-17 |
+
+### Context
+
+The repo is a prepared heritage tree without an application scaffold. Heritage Forge / Archive QA need a fixed production target so agents do not drift across major versions.
+
+### Decision
+
+- Use **Next.js 16.3.5** with the **App Router**.  
+- Default to **React Server Components**.  
+- Run on **Node 24**.  
+- Use **TypeScript strict**.
+
+### Consequences
+
+- Scaffolding must pin these versions in `package.json` / engines when the app is created.  
+- No Pages Router as the primary architecture.  
+- Until scaffold exists, commands in `AGENTS.md` remain placeholders.
+
+---
+
+## ADR-002 — Package DESIGN_SYSTEM palette / tokens.css over chat-mentioned hexes
+
+| Field | Value |
+|-------|--------|
+| **Status** | **Accepted-pending-confirm** |
+| **Date** | 2026-09-17 |
+
+### Context
+
+`docs/OPEN_QUESTIONS.md` records a palette conflict:
+
+| Source | Burgundy / related |
+|--------|-------------------|
+| Chat brief (Heritage Forge) | `#7a2229` (also cream `#fbf7ef` in tokens comment) |
+| Package `DESIGN_SYSTEM` / tokens | Burgundy `#6D2227`, Parchment `#F3E7CF`, Paper `#FBF5E9`, Deep Burgundy `#4F171B`, etc. |
+
+Working decision in OPEN_QUESTIONS: follow the **package** system unless the user confirms otherwise. Working `docs/DESIGN_SYSTEM.md` and `src/styles/tokens.css` already implement package hexes and document the chat conflict in comments.
+
+### Decision
+
+- **Canonical palette** for build work: package Design #1 values as in `docs/DESIGN_SYSTEM.md` and `src/styles/tokens.css`.  
+- Do **not** adopt chat hexes (`#7a2229`, `#fbf7ef`) in components.  
+- **Do not treat this as final user confirmation** — status remains pending confirm per OPEN_QUESTIONS.
+
+### Consequences
+
+- UI work uses token variables (`--color-burgundy`, `--oxblood`, etc.), not ad-hoc chat hexes.  
+- If the user confirms chat hexes instead, update OPEN_QUESTIONS, this ADR, `docs/DESIGN_SYSTEM.md`, and `tokens.css` together.  
+- Agents must not “resolve” the conflict by inventing a third palette.
+
+---
+
+## ADR-003 — Typography: Cormorant Garamond + Source Sans 3 via next/font
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted — wired in `src/lib/fonts.ts` |
+| **Date** | 2026-09-17 |
+
+### Context
+
+Package `DESIGN_SYSTEM.md` recommends an editorial serif + clear sans, with Georgia / system-sans as safe fallbacks. Working `docs/DESIGN_SYSTEM.md` and `tokens.css` specify production fonts for the Next build: Cormorant Garamond (display) and Source Sans 3 (body), loaded via `next/font` CSS variables (`--font-cormorant`, `--font-source-sans` → `--font-display`, `--font-body`).
+
+### Decision
+
+- **Display / headings:** Cormorant Garamond via `next/font`  
+- **Body / UI:** Source Sans 3 via `next/font`  
+- Fallbacks remain in `tokens.css` (Georgia / system-ui) until fonts are wired on `<html>`.
+
+### Consequences
+
+- No novelty fonts for body copy.  
+- Prefer self-hosted / `next/font` loading (see package SEO/a11y notes).  
+- Starter-site Georgia/system choices remain reference only; production follows this ADR.
+
+---
+
+## ADR-004 — Package manager: pnpm
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted — `pnpm` preferred; `npm run` uses the same scripts |
+| **Date** | 2026-09-17 |
+
+### Context
+
+Archive QA and Heritage Forge standardize on a single install tool for reproducible installs and CI.
+
+### Decision
+
+Use **pnpm** exclusively (`pnpm install`, `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`).
+
+### Consequences
+
+- Do not introduce npm/yarn lockfiles as primary.  
+- Document scripts in `AGENTS.md` once `package.json` exists.
+
+---
+
+## ADR-005 — No UI kit — CSS Modules + design tokens only
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted |
+| **Date** | 2026-09-17 |
+
+### Context
+
+Design #1 Archival Heritage is a custom parchment/burgundy archival language. Package and working design docs forbid modern SaaS visuals (heavy gradients, glassmorphism, generic kit chrome). Working `docs/DESIGN_SYSTEM.md` states: CSS Modules only — no SaaS UI kits, no Tailwind/shadcn/MUI.
+
+### Decision
+
+- **CSS Modules** + **`src/styles/tokens.css`** only.  
+- **No** shadcn/ui, MUI, Chakra, Ant Design, or similar component kits.  
+- **No** Tailwind as the styling system for this project.
+
+### Consequences
+
+- Components consume design tokens and local module classes.  
+- Import `tokens.css` once from the root layout when the app exists.  
+- Visual QA is against Design #1 reference + tokens, not kit defaults.
+
+---
+
+## Related open questions (do not invent resolutions)
+
+- **Palette confirm** — ADR-002 pending user confirmation (`docs/OPEN_QUESTIONS.md`).  
+- **Curator public display name** — required before launch captions; use Project Curator until confirmed.  
+- **Interviews / people** — forthcoming; no fictional records.  
+- **Three cathedrals** (Faisalabad, Hyderabad, Raiwind) — `permission_needed` placeholders until rights-cleared photos exist.

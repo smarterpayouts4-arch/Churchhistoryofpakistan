@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Family memories">
+  <title>Family memories</title>
+  <!-- Stacked photographs — Design #1 album motif (no transforms for crisp SVG) -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- back plate -->
+    <rect x="20" y="8" width="30" height="24" rx="1.25" stroke="#AF8B58" stroke-width="1.85"/>
+    <!-- middle plate -->
+    <rect x="14" y="16" width="32" height="26" rx="1.25" stroke="#AF8B58" stroke-width="1.9"/>
+    <!-- front photograph -->
+    <rect x="8" y="26" width="36" height="28" rx="1.5" stroke="#6D2227" stroke-width="2.15"/>
+    <!-- image content -->
+    <path d="M12 48 L20 38 L26 44 L32 36 L42 48" stroke="#AF8B58" stroke-width="1.75"/>
+    <circle cx="16.5" cy="34" r="2.4" stroke="#AF8B58" stroke-width="1.6"/>
+    <!-- album tabs -->
+    <path d="M8 32 H5 M8 40 H5" stroke="#AF8B58" stroke-width="1.5"/>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Untold stories">
+  <title>Untold stories</title>
+  <!-- Open archival book with quill hint -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 13 C25.5 10.5 15 10.5 10 13.5 V48 C16.5 45.5 25.5 45.5 32 50 C38.5 45.5 47.5 45.5 54 48 V13.5 C49 10.5 38.5 10.5 32 13 Z" stroke="#6D2227" stroke-width="2.15"/>
+    <path d="M32 13.5 V49.5" stroke="#AF8B58" stroke-width="1.9"/>
+    <!-- text lines -->
+    <path d="M16 23 H27 M16 29 H28 M16 35 H25" stroke="#AF8B58" stroke-width="1.65"/>
+    <path d="M37 23 H48 M36 29 H48 M39 35 H48" stroke="#AF8B58" stroke-width="1.65"/>
+    <!-- tiny quill tip on gutter -->
+    <path d="M32 42 L35 46 L31 47 Z" stroke="#AF8B58" stroke-width="1.4" fill="none"/>
+  </g>
+</svg>

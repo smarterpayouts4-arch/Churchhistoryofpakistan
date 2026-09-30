@@ -1,0 +1,95 @@
+{
+  "purpose": "Verified exact-cathedral image sources that can be downloaded by a developer/Grokbot. Three cathedrals remain permission-needed to avoid redistributing copyrighted editorial/official photos.",
+  "verified_open_license_count": 5,
+  "permission_needed_count": 3,
+  "assets": [
+    {
+      "id": "faisalabad",
+      "cathedral": "St. John's Cathedral",
+      "status": "permission_needed",
+      "source_page": "",
+      "download_url": "",
+      "author": "",
+      "license": "",
+      "target_filename": "",
+      "notes": "No clearly reusable/open-licensed exact exterior photo was verified in this research pass. Obtain a photo from the diocese/photographer with written permission."
+    },
+    {
+      "id": "hyderabad",
+      "cathedral": "St. Thomas Cathedral",
+      "status": "permission_needed",
+      "source_page": "",
+      "download_url": "",
+      "author": "",
+      "license": "",
+      "target_filename": "",
+      "notes": "Getty/editorial images were found, but they are not reusable website assets without a license. Obtain written permission or a licensed photo."
+    },
+    {
+      "id": "karachi",
+      "cathedral": "Holy Trinity Cathedral",
+      "status": "open_license",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Trinity_Cathedral_Karachi.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Trinity_Cathedral_Karachi.jpg",
+      "author": "Calan",
+      "license": "Public domain (PD-self)",
+      "target_filename": "karachi-holy-trinity.jpg",
+      "notes": "Exact cathedral photo. Source file is public domain; attribution retained as good archival practice."
+    },
+    {
+      "id": "lahore",
+      "cathedral": "Cathedral Church of the Resurrection",
+      "status": "open_license",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Cathedral_Church_of_the_Resurrection,_from_front_gate.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/81/Cathedral_Church_of_the_Resurrection%2C_from_front_gate.jpg",
+      "author": "Ali lahoti",
+      "license": "CC BY-SA 4.0",
+      "target_filename": "lahore-resurrection.jpg",
+      "notes": "Exact cathedral photo; attribution and ShareAlike terms must be preserved."
+    },
+    {
+      "id": "multan",
+      "cathedral": "Cathedral of St. Mary the Virgin",
+      "status": "open_license",
+      "source_page": "https://commons.wikimedia.org/wiki/File:CATHEDRAL_OF_St._MARY_THE_VIRGIN_CHURCH_MULTAN.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/CATHEDRAL_OF_St._MARY_THE_VIRGIN_CHURCH_MULTAN.jpg/1280px-CATHEDRAL_OF_St._MARY_THE_VIRGIN_CHURCH_MULTAN.jpg",
+      "author": "Tahsin Shah",
+      "license": "CC BY-SA 4.0",
+      "target_filename": "multan-st-mary.jpg",
+      "notes": "Exact cathedral photo; 1280px Wikimedia rendition selected for web performance."
+    },
+    {
+      "id": "peshawar",
+      "cathedral": "St. John's Cathedral",
+      "status": "open_license",
+      "source_page": "https://commons.wikimedia.org/wiki/File:St._John%27s_Cathedral_Peshawar.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/c/c7/St._John%27s_Cathedral_Peshawar.jpg",
+      "author": "WaqasM.Khan1983",
+      "license": "CC BY-SA 4.0",
+      "target_filename": "peshawar-st-john.jpg",
+      "notes": "Exact cathedral photo; source image itself contains a caption/frame."
+    },
+    {
+      "id": "raiwind",
+      "cathedral": "Central Cathedral of Praying Hands",
+      "status": "permission_needed",
+      "source_page": "",
+      "download_url": "",
+      "author": "",
+      "license": "",
+      "target_filename": "",
+      "notes": "Current photos exist online, but a clearly reusable license was not verified. Request a high-resolution exterior from the Diocese of Raiwind."
+    },
+    {
+      "id": "sialkot",
+      "cathedral": "Holy Trinity Cathedral Church (Sialkot Cathedral)",
+      "status": "open_license",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Sialkot_Cathedral,_Pakistan_WLMP_fifty_five.jpg",
+      "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Sialkot_Cathedral%2C_Pakistan_WLMP_fifty_five.jpg",
+      "author": "PakGuru99",
+      "license": "CC BY-SA 3.0",
+      "target_filename": "sialkot-holy-trinity.jpg",
+      "notes": "Exact cathedral photo; attribution and ShareAlike terms must be preserved."
+    }
+  ]
+}

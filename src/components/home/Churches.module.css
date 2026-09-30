@@ -1,0 +1,131 @@
+/* -- Churches -- */
+.placesGrid {
+  display: grid;
+  /* Desktop: 3 cols; tablet/mobile set in media queries below */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.15rem;
+}
+
+.placeCard {
+  background:
+    linear-gradient(180deg, #fffaf0, #f7edd8);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-frame);
+  transition: transform 0.2s ease;
+}
+
+.placeCard:hover {
+  transform: translateY(-2px);
+}
+
+.placeMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-parchment-deep);
+  overflow: hidden;
+  border-bottom: 1px solid #a8926e;
+}
+
+.placeMedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: contrast(1.02) saturate(0.95);
+}
+
+.placeAwaiting {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  background:
+    linear-gradient(160deg, #d9c7a5, #c4b08e);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.rightsBadge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 2;
+  padding: 5px 8px;
+  background: rgb(41 37 34 / 0.9);
+  color: #fff8ef;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  max-width: calc(100% - 16px);
+  border: 1px solid rgb(251 245 233 / 0.2);
+}
+
+.rightsPending {
+  background: rgb(109 34 39 / 0.88);
+}
+
+.placeCopy {
+  padding: 1rem 1rem 1.15rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.placeCopy :global(.eyebrow) {
+  font-size: 0.6rem;
+  margin-bottom: 4px;
+}
+
+.placeCopy h3 {
+  font-size: 1.12rem;
+  color: var(--color-burgundy);
+  margin: 0.15rem 0;
+}
+
+.placeCopy p {
+  margin: 0.3rem 0;
+  color: var(--color-muted-brown);
+  font-size: 0.86rem;
+}
+
+.address {
+  font-size: 0.74rem !important;
+}
+
+.placeLink {
+  margin-top: auto;
+  padding-top: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.rightsNote {
+  margin-top: 1.5rem;
+  padding: 1rem 1.15rem;
+  border-left: 3px solid var(--color-antique-gold);
+  background: rgb(245 234 214 / 0.85);
+  color: var(--color-muted-brown);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 980px) {
+  .placesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .placesGrid {
+    grid-template-columns: 1fr;
+  }
+}

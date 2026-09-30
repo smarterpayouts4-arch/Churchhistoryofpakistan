@@ -1,0 +1,203 @@
+/**
+ * Draft content module — facts from reference/source-data/cathedrals.json only.
+ * Do not invent cathedral identities, photo credits, or licenses.
+ */
+
+export type PhotoStatus = "permission_needed" | "open_license" | string;
+
+export type CathedralRecord = {
+  id: string;
+  diocese: string;
+  cathedral: string;
+  city: string;
+  address: string;
+  verification: string;
+  verification_urls: string[];
+  photo_status: PhotoStatus;
+  photo_source_page: string;
+  photo_remote_url: string;
+  photo_author: string;
+  photo_license: string;
+  local_file: string;
+  fallback_file?: string;
+  notes: string;
+  map_query: string;
+  maps_search_url: string;
+};
+
+export const cathedrals: CathedralRecord[] = [
+  {
+    "id": "faisalabad",
+    "diocese": "Diocese of Faisalabad",
+    "cathedral": "St. John's Cathedral",
+    "city": "Gojra, Punjab",
+    "address": "Mission Road, Gojra 36120, Punjab, Pakistan",
+    "verification": "Official Diocese of Faisalabad site repeatedly identifies St. John's Cathedral, Gojra as the cathedral/event venue.",
+    "verification_urls": [
+      "https://dofcop.org/",
+      "https://dofcop.org/contact.html"
+    ],
+    "photo_status": "permission_needed",
+    "photo_source_page": "",
+    "photo_remote_url": "",
+    "photo_author": "",
+    "photo_license": "",
+    "local_file": "../assets/cathedrals/placeholders/faisalabad-st-john.svg",
+    "notes": "No clearly reusable/open-licensed exact exterior photo was verified in this research pass. Obtain a photo from the diocese/photographer with written permission.",
+    "map_query": "St. John's Cathedral, Gojra, Punjab",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=St.%20John%27s%20Cathedral%2C%20Gojra%2C%20Punjab"
+  },
+  {
+    "id": "hyderabad",
+    "diocese": "Diocese of Hyderabad",
+    "cathedral": "St. Thomas Cathedral",
+    "city": "Hyderabad, Sindh",
+    "address": "27 Liaqat Road, Civil Lines, Hyderabad, Pakistan",
+    "verification": "National Council of Churches in Pakistan lists the Diocese of Hyderabad at St Thomas Cathedral, 27 Liaqat Road, Civil Lines.",
+    "verification_urls": [
+      "https://nccpakistan.org.pk/member-churches/",
+      "https://dohcop.org/"
+    ],
+    "photo_status": "permission_needed",
+    "photo_source_page": "",
+    "photo_remote_url": "",
+    "photo_author": "",
+    "photo_license": "",
+    "local_file": "../assets/cathedrals/placeholders/hyderabad-st-thomas.svg",
+    "notes": "Getty/editorial images were found, but they are not reusable website assets without a license. Obtain written permission or a licensed photo.",
+    "map_query": "St. Thomas Cathedral, Hyderabad, Sindh",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=St.%20Thomas%20Cathedral%2C%20Hyderabad%2C%20Sindh"
+  },
+  {
+    "id": "karachi",
+    "diocese": "Diocese of Karachi",
+    "cathedral": "Holy Trinity Cathedral",
+    "city": "Karachi, Sindh",
+    "address": "Fatima Jinnah Road / Trinity Close area, Karachi, Pakistan",
+    "verification": "Holy Trinity Cathedral is documented as the seat of the Church of Pakistan Diocese of Karachi; NCCP lists the diocese at Trinity Close.",
+    "verification_urls": [
+      "https://nccpakistan.org.pk/member-churches/",
+      "https://en.wikipedia.org/wiki/Holy_Trinity_Cathedral,_Karachi"
+    ],
+    "photo_status": "open_license",
+    "photo_source_page": "https://commons.wikimedia.org/wiki/File:Trinity_Cathedral_Karachi.jpg",
+    "photo_remote_url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Trinity_Cathedral_Karachi.jpg",
+    "photo_author": "Calan",
+    "photo_license": "Public domain (PD-self)",
+    "local_file": "../assets/cathedrals/downloaded/karachi-holy-trinity.jpg",
+    "fallback_file": "../assets/cathedrals/placeholders/karachi-holy-trinity.svg",
+    "notes": "Exact cathedral photo. Source file is public domain; attribution retained as good archival practice.",
+    "map_query": "Holy Trinity Cathedral, Karachi, Sindh",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=Holy%20Trinity%20Cathedral%2C%20Karachi%2C%20Sindh"
+  },
+  {
+    "id": "lahore",
+    "diocese": "Diocese of Lahore",
+    "cathedral": "Cathedral Church of the Resurrection",
+    "city": "Lahore, Punjab",
+    "address": "Cathedral Close, The Mall, Lahore 54000, Pakistan",
+    "verification": "Official Diocese of Lahore history identifies the Cathedral Church of the Resurrection, constructed in 1887.",
+    "verification_urls": [
+      "https://copldc.org/about-us/",
+      "https://nccpakistan.org.pk/member-churches/"
+    ],
+    "photo_status": "open_license",
+    "photo_source_page": "https://commons.wikimedia.org/wiki/File:Cathedral_Church_of_the_Resurrection,_from_front_gate.jpg",
+    "photo_remote_url": "https://upload.wikimedia.org/wikipedia/commons/8/81/Cathedral_Church_of_the_Resurrection%2C_from_front_gate.jpg",
+    "photo_author": "Ali lahoti",
+    "photo_license": "CC BY-SA 4.0",
+    "local_file": "../assets/cathedrals/downloaded/lahore-resurrection.jpg",
+    "fallback_file": "../assets/cathedrals/placeholders/lahore-resurrection.svg",
+    "notes": "Exact cathedral photo; attribution and ShareAlike terms must be preserved.",
+    "map_query": "Cathedral Church of the Resurrection, Lahore, Punjab",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=Cathedral%20Church%20of%20the%20Resurrection%2C%20Lahore%2C%20Punjab"
+  },
+  {
+    "id": "multan",
+    "diocese": "Diocese of Multan",
+    "cathedral": "Cathedral of St. Mary the Virgin",
+    "city": "Multan, Punjab",
+    "address": "113 Qasim Road, Multan Cantt, Pakistan",
+    "verification": "NCCP lists the Diocese of Multan at Cathedral of St Mary the Virgin, 113 Qasim Road.",
+    "verification_urls": [
+      "https://nccpakistan.org.pk/member-churches/"
+    ],
+    "photo_status": "open_license",
+    "photo_source_page": "https://commons.wikimedia.org/wiki/File:CATHEDRAL_OF_St._MARY_THE_VIRGIN_CHURCH_MULTAN.jpg",
+    "photo_remote_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/CATHEDRAL_OF_St._MARY_THE_VIRGIN_CHURCH_MULTAN.jpg/1280px-CATHEDRAL_OF_St._MARY_THE_VIRGIN_CHURCH_MULTAN.jpg",
+    "photo_author": "Tahsin Shah",
+    "photo_license": "CC BY-SA 4.0",
+    "local_file": "../assets/cathedrals/downloaded/multan-st-mary.jpg",
+    "fallback_file": "../assets/cathedrals/placeholders/multan-st-mary.svg",
+    "notes": "Exact cathedral photo; 1280px Wikimedia rendition selected for web performance.",
+    "map_query": "Cathedral of St. Mary the Virgin, Multan, Punjab",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=Cathedral%20of%20St.%20Mary%20the%20Virgin%2C%20Multan%2C%20Punjab"
+  },
+  {
+    "id": "peshawar",
+    "diocese": "Diocese of Peshawar",
+    "cathedral": "St. John's Cathedral",
+    "city": "Peshawar, Khyber Pakhtunkhwa",
+    "address": "Saddar Road / 1 Sir Syed Road, Peshawar Cantonment, Pakistan",
+    "verification": "Current Diocese of Peshawar site identifies St. John's Cathedral and gives its Peshawar Cantonment address.",
+    "verification_urls": [
+      "https://peshawardiocese.org/",
+      "https://peshawardiocese.org/new-parishes-clergy/",
+      "https://nccpakistan.org.pk/member-churches/"
+    ],
+    "photo_status": "open_license",
+    "photo_source_page": "https://commons.wikimedia.org/wiki/File:St._John%27s_Cathedral_Peshawar.jpg",
+    "photo_remote_url": "https://upload.wikimedia.org/wikipedia/commons/c/c7/St._John%27s_Cathedral_Peshawar.jpg",
+    "photo_author": "WaqasM.Khan1983",
+    "photo_license": "CC BY-SA 4.0",
+    "local_file": "../assets/cathedrals/downloaded/peshawar-st-john.jpg",
+    "fallback_file": "../assets/cathedrals/placeholders/peshawar-st-john.svg",
+    "notes": "Exact cathedral photo; source image itself contains a caption/frame.",
+    "map_query": "St. John's Cathedral, Peshawar, Khyber Pakhtunkhwa",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=St.%20John%27s%20Cathedral%2C%20Peshawar%2C%20Khyber%20Pakhtunkhwa"
+  },
+  {
+    "id": "raiwind",
+    "diocese": "Diocese of Raiwind",
+    "cathedral": "Central Cathedral of Praying Hands",
+    "city": "Lahore, Punjab",
+    "address": "Waris/Warris Road, Lahore, Pakistan (Diocese office: 17 Warris Road)",
+    "verification": "A Diocese of Raiwind newsletter names Central Cathedral of Praying Hands, Lahore; a Church of Scotland World Mission post records its dedication on 9 October 2011 at Warris Road.",
+    "verification_urls": [
+      "https://d1yuutt686hfi0.cloudfront.net/media/documents/newsletter-diocese-of-raiwind-cop-spring-2019_6MWONSu.pdf",
+      "https://cofswmc.wordpress.com/tag/diocese-of-raiwind/",
+      "https://nccpakistan.org.pk/member-churches/"
+    ],
+    "photo_status": "permission_needed",
+    "photo_source_page": "",
+    "photo_remote_url": "",
+    "photo_author": "",
+    "photo_license": "",
+    "local_file": "../assets/cathedrals/placeholders/raiwind-praying-hands.svg",
+    "notes": "Current photos exist online, but a clearly reusable license was not verified. Request a high-resolution exterior from the Diocese of Raiwind.",
+    "map_query": "Central Cathedral of Praying Hands, Lahore, Punjab",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=Central%20Cathedral%20of%20Praying%20Hands%2C%20Lahore%2C%20Punjab"
+  },
+  {
+    "id": "sialkot",
+    "diocese": "Diocese of Sialkot",
+    "cathedral": "Holy Trinity Cathedral Church (Sialkot Cathedral)",
+    "city": "Sialkot, Punjab",
+    "address": "The Mall / Quaid-i-Azam Road, Sialkot Cantonment, Pakistan",
+    "verification": "Punjab government district page documents Holy Trinity Cathedral Church in Sialkot Cantonment; it is the cathedral of the Diocese of Sialkot.",
+    "verification_urls": [
+      "https://sialkot.punjab.gov.pk/important_places",
+      "https://nccpakistan.org.pk/member-churches/"
+    ],
+    "photo_status": "open_license",
+    "photo_source_page": "https://commons.wikimedia.org/wiki/File:Sialkot_Cathedral,_Pakistan_WLMP_fifty_five.jpg",
+    "photo_remote_url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Sialkot_Cathedral%2C_Pakistan_WLMP_fifty_five.jpg",
+    "photo_author": "PakGuru99",
+    "photo_license": "CC BY-SA 3.0",
+    "local_file": "../assets/cathedrals/downloaded/sialkot-holy-trinity.jpg",
+    "fallback_file": "../assets/cathedrals/placeholders/sialkot-holy-trinity.svg",
+    "notes": "Exact cathedral photo; attribution and ShareAlike terms must be preserved.",
+    "map_query": "Holy Trinity Cathedral Church (Sialkot Cathedral), Sialkot, Punjab",
+    "maps_search_url": "https://www.google.com/maps/search/?api=1&query=Holy%20Trinity%20Cathedral%20Church%20%28Sialkot%20Cathedral%29%2C%20Sialkot%2C%20Punjab"
+  }
+] as const;

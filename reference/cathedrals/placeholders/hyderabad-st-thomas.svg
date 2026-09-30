@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="t d">
+<title id="t">St. Thomas Cathedral</title><desc id="d">Archival placeholder for St. Thomas Cathedral, Hyderabad, Sindh</desc>
+<defs>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="9" result="n"/><feColorMatrix in="n" type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer></filter>
+  <pattern id="lines" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M0 41.5H42" stroke="#9a805f" stroke-opacity=".18"/></pattern>
+</defs>
+<rect width="1200" height="800" fill="#eee1c7"/><rect width="1200" height="800" fill="url(#lines)"/>
+<rect x="34" y="34" width="1132" height="732" rx="6" fill="none" stroke="#6c2426" stroke-width="3"/>
+<g fill="none" stroke="#6c2426" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+  <path d="M395 522V329l205-166 205 166v193"/>
+  <path d="M472 522V375h256v147M600 164v-70M560 130h80"/>
+  <path d="M535 522V414h130v108M330 522h540"/>
+</g>
+<text x="600" y="616" text-anchor="middle" font-family="Georgia,serif" font-size="48" fill="#2d2926">St. Thomas Cathedral</text>
+<text x="600" y="670" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" letter-spacing="3" fill="#6c2426">HYDERABAD, SINDH</text>
+<text x="600" y="722" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" letter-spacing="2" fill="#665949">PHOTOGRAPHY NEEDED • RIGHTS CLEARANCE PENDING</text>
+<rect width="1200" height="800" filter="url(#grain)" opacity=".65"/>
+</svg>
