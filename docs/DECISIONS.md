@@ -136,9 +136,35 @@ Design #1 Archival Heritage is a custom parchment/burgundy archival language. Pa
 
 ---
 
+## ADR-006 — Redesign: Emerald & Gilt palette, Fraunces + Inter
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted (owner, 2026-10-17) |
+| **Date** | 2026-10-17 |
+| **Supersedes** | ADR-002 palette (Design #1 parchment/burgundy) |
+
+### Context
+
+The owner asked for a modern redesign, with the layout informed by Mobbin references. From four researched palettes he chose **Emerald & Gilt**. Content, routes and functionality stay the same.
+
+### Decision
+
+- Palette: emerald `#0B5C47` (primary), emerald-950 `#062E25` (dark bands), gilt `#D8B65E` / gilt-ink `#86601A`, ivory `#F4F3EC`, ink `#14201B`, with oxblood `#7A2B2E` kept as a heritage accent. The full table and contrast ratios are in `docs/DESIGN_SYSTEM.md`.
+- The emerald draws on liturgical green (Ordinary Time). It is not claimed to be any official Church of Pakistan colour.
+- Type: Fraunces (display) + Inter (body) via `next/font`.
+- ADR-005 still applies: CSS Modules + tokens only.
+
+### Consequences
+
+- The legacy `--color-*` variables are now aliases to the new tokens.
+- The parchment textures and rule ornaments are retired from the UI. The assets stay in `public/` and `reference/` stays untouched.
+
+---
+
 ## Related open questions (do not invent resolutions)
 
-- **Palette confirm** — ADR-002 pending user confirmation (`docs/OPEN_QUESTIONS.md`).  
+- **Palette** — resolved by ADR-006 (Emerald & Gilt, owner-approved 2026-10-17).  
 - **Curator public display name** — required before launch captions; use Project Curator until confirmed.  
 - **Interviews / people** — forthcoming; no fictional records.  
 - **Three cathedrals** (Faisalabad, Hyderabad, Raiwind) — `permission_needed` placeholders until rights-cleared photos exist.

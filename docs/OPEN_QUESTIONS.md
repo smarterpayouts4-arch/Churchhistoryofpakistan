@@ -4,6 +4,8 @@ Tracked by Source Vault. Facts only from the source package and Heritage Forge b
 
 ## Palette: chat vs package
 
+**Resolved 2026-10-17:** the owner approved the **Emerald & Gilt** redesign palette (ADR-006, `docs/DESIGN_SYSTEM.md`). The burgundy notes below are kept for history only.
+
 | Source | Burgundy / oxblood | Notes |
 |---|---|---|
 | Chat brief (Heritage Forge) | `#7a2229` | Also referenced cream `#fbf7ef` in tokens comment |

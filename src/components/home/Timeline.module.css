@@ -18,7 +18,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0 1.5rem;
 }
 
@@ -106,7 +106,12 @@
   display: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1099px) {
+  .timeline {
+    grid-template-columns: 1fr;
+    max-width: 44rem;
+  }
+
   .timeline::before {
     top: 0;
     bottom: 0;

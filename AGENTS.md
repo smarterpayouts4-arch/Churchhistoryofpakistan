@@ -16,7 +16,7 @@ Strapline (package): *Preserving History • Honouring Our Forefathers • Inspi
 | Language | **TypeScript** (strict) |
 | Rendering | **Server Components by default** |
 | Styles | CSS Modules + `src/styles/tokens.css` (no Tailwind, shadcn, MUI, Lucide, Heroicons) |
-| Fonts | Cormorant Garamond + Source Sans 3 via `next/font` |
+| Fonts | Fraunces + Inter via `next/font` (Emerald & Gilt design, ADR-006) |
 | Local preview | `http://127.0.0.1:4000` |
 
 The app **is scaffolded**. Live editable content is `data/cms/`. Typed public loaders are `src/content/`. Root `content/` drafts are stale — do not wire new code there. `reference/` stays immutable.
