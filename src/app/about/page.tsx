@@ -152,13 +152,11 @@ export default async function AboutPage() {
           style={{ marginTop: "1.5rem" }}
         >
           <ConnectionBulletList bullets={bullets} pullQuote={pull} />
-          <p style={{ marginTop: "1.25rem" }}>
+          <nav className="linkRow" aria-label="Related pages">
             <Link href="/contribute">Contribute a memory</Link>
-            {" · "}
             <Link href="/sources">View sources</Link>
-            {" · "}
             <Link href="/about#profile">Curator profile</Link>
-          </p>
+          </nav>
         </ConnectionLayout>
       </div>
     </div>

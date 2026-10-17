@@ -31,11 +31,10 @@ export default async function ContributePage() {
 
         <ContributeForm contributionFields={homepage.contribution_fields} />
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/sources">Sources &amp; rights policy</Link>
-          {" · "}
           <Link href="/about">About the project</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );

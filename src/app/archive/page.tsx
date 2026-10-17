@@ -62,11 +62,10 @@ export default async function ArchivePage() {
           ))}
         </div>
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/contribute">Help add a verified record</Link>
-          {" · "}
           <Link href="/sources">Sources &amp; rights</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );

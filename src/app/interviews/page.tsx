@@ -72,11 +72,10 @@ export default async function InterviewsPage() {
           ))}
         </div>
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/contribute">Suggest an interview subject</Link>
-          {" · "}
           <Link href="/people">People records</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );

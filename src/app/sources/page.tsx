@@ -86,11 +86,10 @@ export default async function SourcesPage() {
           </p>
         </div>
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/churches">Churches &amp; places</Link>
-          {" · "}
           <Link href="/contribute">Contribute</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );

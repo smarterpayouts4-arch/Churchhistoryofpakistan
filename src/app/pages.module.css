@@ -4,12 +4,14 @@
   padding: 0;
 }
 
-.page h2 {
+.page :global(.pageBody) > h2,
+.page :global(.pageBody) > section > h2,
+.credits > h2 {
   margin: 2.5rem 0 1rem;
   font-size: var(--text-h2);
 }
 
-.page h2:first-child {
+.page :global(.pageBody) > h2:first-child {
   margin-top: 0;
 }
 
@@ -41,7 +43,9 @@
 
 .card > p,
 .card li,
-.credits > p {
+.credits > p,
+.credits li,
+.list li .meta {
   max-width: 75ch;
 }
 
@@ -98,6 +102,9 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* —— Contribute form —— */

@@ -57,13 +57,11 @@ export default async function PeoplePage() {
           ))}
         </div>
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/interviews">Interviews</Link>
-          {" · "}
           <Link href="/contribute">Contribute a memory</Link>
-          {" · "}
           <Link href="/sources">Sources</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );
