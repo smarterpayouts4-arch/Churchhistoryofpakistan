@@ -1,64 +1,93 @@
 /**
- * Design #1 — Archival Heritage
- * Source of truth: package docs/DESIGN_SYSTEM.md + GROKBOT_MASTER_PROMPT essential palette
- * Fonts (next/font): Cormorant Garamond (display) + Source Sans 3 (body)
- * Stack: CSS Modules only — no SaaS / UI kits
- * Target: WCAG 2.2 AA contrast + visible focus
+ * Redesign — "Emerald & Gilt" (modern museum) — chosen by the user 2026-10-17
+ * Evolves Design #1 Archival Heritage toward concept #2 "Modern Museum"
+ * (reference/design/five-concept-board.png); emerald after liturgical green.
+ * See docs/DESIGN_SYSTEM.md, docs/DECISIONS.md ADR-006, docs/OPEN_QUESTIONS.md.
  *
- * OPEN_QUESTION (Heritage Forge): chat brief used #7a2229 / #fbf7ef;
- * this file follows the package hexes below unless the user confirms otherwise.
+ * Fonts (next/font): Fraunces (display) + Inter (body/UI)
+ * Stack: CSS Modules + these tokens only — no UI kits / Tailwind
+ * Target: WCAG 2.2 AA contrast + visible focus (ratios in docs/DESIGN_SYSTEM.md)
+ * Translucent colours use the *-rgb channel tokens: rgb(var(--gilt-rgb) / 0.4)
  */
 
 :root {
-  /* —— Essential palette (package) —— */
-  --color-parchment: #f3e7cf; /* page background */
-  --color-paper: #fbf5e9; /* cards / elevated surfaces */
-  --color-burgundy: #6d2227; /* primary CTA */
-  --color-deep-burgundy: #4f171b;
-  --color-ink: #292522;
-  --color-muted-brown: #6e6255;
-  --color-antique-gold: #af8b58;
-  --color-border: #cdbb9c;
-  /* Existing parchment surfaces already used in the archive frames */
-  --color-parchment-deep: #efe0c5;
-  --color-parchment-wash: #f5ead6;
-  --color-media-well: #e5d6bb;
-  --color-letterbox: #1c1814;
+  /* —— Core palette —— */
+  --emerald-950: #062e25; /* dark bands: hero, timeline, footer, CTA panel */
+  --emerald-900: #0a4d3c; /* glow / raised surface on dark (gilt stays ≥5:1) */
+  --emerald-800: #0b5c47; /* primary: headings, links, buttons */
+  --emerald-700: #12735a; /* brighter mid emerald */
+  --emerald-300: #7fd1ae; /* decorative status dot on dark badges */
+  --emerald-100: #ddede6; /* tinted chips */
+  --ivory: #f4f3ec; /* page background */
+  --paper: #fffef9; /* cards / elevated surfaces */
+  --stone: #eae8de; /* alternate sections, page headers, notices */
+  --stone-deep: #dfdccf; /* media wells */
+  --ink: #14201b; /* body text */
+  --slate: #4c5a53; /* secondary / meta text */
+  --gilt: #d8b65e; /* accent on dark surfaces, rules, CTA on dark */
+  --gilt-hover: #e3c47a; /* hover of gilt buttons */
+  --gilt-ink: #86601a; /* accent text on light surfaces (AA) */
+  --oxblood: #7a2b2e; /* heritage accent from Design #1: status tags */
+  --line: #d8d4c6; /* hairlines on light */
+  --line-strong: #c3beac; /* input hover */
+  --mist: #bfd8cd; /* secondary text on dark */
+  --line-dark: rgb(var(--mist-rgb) / 0.18); /* hairlines on dark */
 
-  /* —— Aliases (user / Archive Design brief) —— */
-  --parchment: var(--color-parchment);
-  --paper: var(--color-paper);
-  --oxblood: var(--color-burgundy);
-  --oxblood-deep: var(--color-deep-burgundy);
-  --ink: var(--color-ink);
-  --ink-muted: var(--color-muted-brown);
-  --rule: var(--color-border);
-  --gold: var(--color-antique-gold);
+  /* —— RGB channels for translucent use —— */
+  --emerald-950-rgb: 6 46 37;
+  --emerald-900-rgb: 10 77 60;
+  --emerald-800-rgb: 11 92 71;
+  --gilt-rgb: 216 182 94;
+  --mist-rgb: 191 216 205;
+  --ivory-rgb: 244 243 236;
+  --paper-rgb: 255 254 249;
+  --oxblood-rgb: 122 43 46;
 
-  --color-oxblood: var(--color-burgundy);
-  --color-oxblood-hover: var(--color-deep-burgundy);
-  --color-rule: var(--color-border);
-  --color-ink-muted: var(--color-muted-brown);
-  --color-cream: var(--color-paper);
-  --color-on-burgundy: var(--color-paper);
-  --color-on-oxblood: var(--color-paper);
+  /* —— Legacy aliases (admin + older modules keep working, re-themed) —— */
+  --color-parchment: var(--ivory);
+  --color-paper: var(--paper);
+  --color-burgundy: var(--emerald-800);
+  --color-deep-burgundy: var(--emerald-950);
+  --color-ink: var(--ink);
+  --color-muted-brown: var(--slate);
+  --color-antique-gold: var(--gilt-ink);
+  --color-border: var(--line);
+  --color-parchment-deep: var(--stone);
+  --color-parchment-wash: var(--stone);
+  --color-media-well: var(--stone-deep);
+  --color-letterbox: #041f19;
+  --parchment: var(--ivory);
+  --oxblood-deep: var(--emerald-950);
+  --ink-muted: var(--slate);
+  --rule: var(--line);
+  --gold: var(--gilt-ink);
+  --color-oxblood: var(--emerald-800);
+  --color-oxblood-hover: var(--emerald-700);
+  --color-rule: var(--line);
+  --color-ink-muted: var(--slate);
+  --color-cream: var(--paper);
+  --color-on-burgundy: var(--paper);
+  --color-on-oxblood: var(--paper);
 
   /* —— Typography —— */
-  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  --font-body: var(--font-source-sans), "Source Sans 3", system-ui, sans-serif;
+  --font-display: var(--font-fraunces), "Fraunces", Georgia, serif;
+  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
 
-  --text-display: clamp(2.25rem, 4vw, 3.25rem);
-  --text-h1: clamp(1.875rem, 3vw, 2.5rem);
-  --text-h2: clamp(1.5rem, 2.4vw, 1.875rem);
-  --text-h3: 1.25rem;
+  --text-hero: clamp(2.75rem, 6.4vw, 5.75rem);
+  --text-display: clamp(2.5rem, 5vw, 4.25rem);
+  --text-h1: clamp(2.25rem, 4.4vw, 3.5rem);
+  --text-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --text-h3: 1.3rem;
+  --text-lead: clamp(1.075rem, 1.4vw, 1.25rem);
   --text-body: 1.0625rem;
   --text-small: 0.875rem;
-  --text-label: 0.75rem;
+  --text-label: 0.75rem; /* 12px minimum for any visible text */
 
-  --leading-display: 1.15;
+  --leading-display: 1.06;
+  --leading-heading: 1.15;
   --leading-body: 1.65;
-  --tracking-display: 0.01em;
-  --tracking-label: 0.08em;
+  --tracking-display: -0.02em;
+  --tracking-label: 0.14em;
 
   /* —— Space —— */
   --space-1: 0.25rem;
@@ -69,27 +98,38 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4rem;
-  --space-9: 6rem;
+  --space-9: clamp(4.5rem, 9vw, 7.5rem);
 
-  --measure: 40rem;
-  --page-max: 72rem;
-  --gutter: clamp(1rem, 4vw, 2rem);
+  --measure: 42rem;
+  --page-max: 76rem;
+  --gutter: clamp(1.15rem, 4vw, 2.5rem);
 
-  /* —— Radius / shadow / rule —— */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --shadow-frame: 0 1px 2px rgb(41 37 34 / 0.08), 0 8px 24px rgb(41 37 34 / 0.06);
+  /* —— Radius / shadow / motion —— */
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgb(var(--emerald-950-rgb) / 0.06);
+  --shadow-card: 0 1px 2px rgb(var(--emerald-950-rgb) / 0.05),
+    0 14px 34px -18px rgb(var(--emerald-950-rgb) / 0.22);
+  --shadow-lift: 0 2px 4px rgb(var(--emerald-950-rgb) / 0.06),
+    0 26px 48px -24px rgb(var(--emerald-950-rgb) / 0.32);
+  --shadow-frame: var(--shadow-card);
   --rule-width: 1px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 160ms;
+  --dur-med: 320ms;
 
   /* —— Focus (WCAG 2.2) —— */
-  --focus-ring: 2px solid var(--color-burgundy);
-  --focus-offset: 2px;
+  --focus-ring: 2px solid var(--gilt-ink);
+  --focus-offset: 3px;
 }
 
 html {
   color-scheme: light;
-  background: var(--color-parchment);
-  color: var(--color-ink);
+  background: var(--ivory);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -97,8 +137,10 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  background: var(--color-parchment);
-  color: var(--color-ink);
+  background: var(--ivory);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -106,83 +148,144 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: var(--leading-display);
+  font-variation-settings: "opsz" 96, "SOFT" 30;
+  font-weight: 400;
+  line-height: var(--leading-heading);
   letter-spacing: var(--tracking-display);
-  color: var(--color-burgundy);
+  color: var(--emerald-800);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  line-height: var(--leading-display);
+}
+
+h2 {
+  font-size: var(--text-h2);
+}
+
+h3 {
+  font-size: var(--text-h3);
+  font-variation-settings: "opsz" 36, "SOFT" 30;
+  letter-spacing: -0.01em;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 a {
-  color: var(--color-burgundy);
+  color: var(--emerald-800);
+  text-decoration-color: rgb(var(--emerald-800-rgb) / 0.35);
+  text-underline-offset: 0.18em;
+  transition: color var(--dur-fast) ease, text-decoration-color var(--dur-fast) ease;
 }
 
 a:hover {
-  color: var(--color-deep-burgundy);
+  color: var(--emerald-700);
+  text-decoration-color: currentColor;
 }
 
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgb(var(--gilt-rgb) / 0.45);
+  color: var(--ink);
 }
 
 .rule {
   border: 0;
-  border-top: var(--rule-width) solid var(--color-border);
+  border-top: var(--rule-width) solid var(--line);
   margin: var(--space-6) 0;
 }
 
 .frame {
-  border: var(--rule-width) solid var(--color-border);
-  background: var(--color-paper);
-  box-shadow: var(--shadow-frame);
+  border: var(--rule-width) solid var(--line);
+  background: var(--paper);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-md);
 }
 
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: 0.7rem 1.35rem;
-  border: var(--rule-width) solid var(--color-burgundy);
-  border-radius: var(--radius-sm);
-  background: var(--color-burgundy);
-  color: var(--color-on-burgundy);
-  font-family: var(--font-body);
-  font-size: var(--text-small);
-  font-weight: 600;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  background: var(--color-deep-burgundy);
-  border-color: var(--color-deep-burgundy);
-  color: var(--color-on-burgundy);
-}
-
+/* —— Buttons —— */
+.btn-primary,
 .btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: 0.7rem 1.35rem;
-  border: var(--rule-width) solid var(--color-burgundy);
-  border-radius: var(--radius-sm);
-  background: var(--color-paper);
-  color: var(--color-burgundy);
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--emerald-800);
+  border-radius: var(--radius-pill);
   font-family: var(--font-body);
-  font-size: var(--text-small);
+  font-size: 0.9375rem;
   font-weight: 600;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0.005em;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) ease;
+}
+
+.btn-primary {
+  background: var(--emerald-800);
+  color: var(--ivory);
+  box-shadow: 0 10px 24px -14px rgb(var(--emerald-950-rgb) / 0.6);
+}
+
+.btn-primary:hover {
+  background: var(--emerald-950);
+  border-color: var(--emerald-950);
+  color: var(--ivory);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: progress;
+  transform: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--emerald-800);
 }
 
 .btn-secondary:hover {
-  background: var(--color-parchment);
+  background: var(--emerald-100);
+  color: var(--emerald-950);
+}
+
+/* Gilt variant for dark bands */
+.btn-gilt {
+  background: var(--gilt);
+  border-color: var(--gilt);
+  color: var(--emerald-950);
+}
+
+.btn-gilt:hover {
+  background: var(--gilt-hover);
+  border-color: var(--gilt-hover);
+  color: var(--emerald-950);
+}
+
+/* Ghost variant for dark bands */
+.btn-ghost-light {
+  border-color: rgb(var(--ivory-rgb) / 0.35);
+  color: var(--ivory);
+}
+
+.btn-ghost-light:hover {
+  background: rgb(var(--ivory-rgb) / 0.1);
+  border-color: var(--ivory);
+  color: var(--ivory);
 }
 
 .sr-only {

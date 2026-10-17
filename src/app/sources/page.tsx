@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { sources } from "@/content/sources";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
@@ -16,13 +17,17 @@ export default async function SourcesPage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Transparency</p>
-        <h1>Sources &amp; Photograph Credits</h1>
-        <p className={styles.intro}>
-          Historical claims on this site remain connected to their sources.
-          Accessed date for the register below: {sources.accessed}.
-        </p>
+      <PageHeader
+        eyebrow="Transparency"
+        title={<>Sources &amp; Photograph Credits</>}
+        intro={
+            <>
+              Historical claims on this site remain connected to their sources.
+          Sources in the register below were last accessed on {sources.accessed}.
+            </>
+          }
+      />
+      <div className="shell pageBody">
 
         <h2>Institutional sources</h2>
         <ul className={styles.list}>
@@ -76,10 +81,8 @@ export default async function SourcesPage() {
           <p className={styles.meta} style={{ marginTop: "1rem" }}>
             Faisalabad, Hyderabad, and Raiwind remain permission-needed
             placeholders. Founder/curator portraits are user-supplied and publicly credited to Javed
-            Qadir Bakhsh. Image rights detail also lives in{" "}
-            <code>docs/IMAGE_RIGHTS_AND_CREDITS.md</code> and the remote asset
-            manifest path noted in content (
-            <code>{sources.image_sources_file}</code>).
+            Qadir Bakhsh. Full image rights details are kept in the project&apos;s
+            image rights and credits register.
           </p>
         </div>
 

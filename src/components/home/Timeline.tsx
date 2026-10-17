@@ -12,17 +12,8 @@ export async function Timeline() {
     >
       <div className="shell">
         <div className="sectionHeading sectionHeadingCentered">
-          <div className="doubleRule" aria-hidden="true" />
-          <p className="eyebrow">Selected documented milestones</p>
+          <p className="eyebrow eyebrowLight">Selected documented milestones</p>
           <h2 id="timeline-heading">A Journey Through Time</h2>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="ruleOrnament"
-            src="/media/textures/rule-ornament.svg"
-            alt=""
-            width={280}
-            height={24}
-          />
         </div>
         <ol className={styles.timeline}>
           {homepage.timeline.map((entry) => (
@@ -30,9 +21,10 @@ export async function Timeline() {
               <span className={styles.year}>{entry.year}</span>
               <h3>{entry.title}</h3>
               <p>{entry.copy}</p>
-              <p>
+              <p className={styles.sourceRow}>
                 <a href={entry.source} rel="noopener noreferrer" target="_blank">
-                  Source
+                  Source <span aria-hidden="true">↗</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </p>
             </li>

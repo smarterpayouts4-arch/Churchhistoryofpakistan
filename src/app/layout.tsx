@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { cormorant, sourceSans } from "@/lib/fonts";
+import { fraunces, inter } from "@/lib/fonts";
 import { SITE_DESCRIPTION, siteUrl } from "@/lib/site";
 import { loadHomepage } from "@/content/homepage";
 import "@/styles/globals.css";
@@ -39,7 +39,7 @@ export default async function RootLayout({
 }>) {
   const homepage = await loadHomepage();
   return (
-    <html lang="en" className={`${cormorant.variable} ${sourceSans.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <body>
         <a className="skipLink" href="#main">
           Skip to content

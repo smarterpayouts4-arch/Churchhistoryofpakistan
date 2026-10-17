@@ -6,6 +6,7 @@ import {
 } from "@/content/family-archives";
 import { loadHomepage } from "@/content/homepage";
 import { ArchiveCard } from "@/components/ui/ArchiveCard";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/FamilyArchives.module.css";
 
@@ -24,10 +25,12 @@ export default async function ArchivePage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Documents • photographs • memories</p>
-        <h1>Archive</h1>
-        <p className={styles.intro}>{homepage.page_context.archive_intro}</p>
+      <PageHeader
+        eyebrow="Documents • photographs • memories"
+        title="Archive"
+        intro={homepage.page_context.archive_intro}
+      />
+      <div className="shell pageBody">
 
         <p className="forthcoming" style={{ marginBottom: "1.75rem" }}>
           <strong>Provenance note.</strong> {FAMILY_ARCHIVE_NOTE}

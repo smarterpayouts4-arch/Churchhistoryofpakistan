@@ -4,13 +4,14 @@ import { Forthcoming } from "@/components/ui/Forthcoming";
 import { InterviewPlayCard } from "@/components/home/InterviewPlayCard";
 import { loadFeaturedInterviews } from "@/content/featured-interviews";
 import { loadHomepage } from "@/content/homepage";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
 
 export const metadata: Metadata = {
   title: "Interviews",
   description:
-    "Youth motivational programs (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.",
+    "Youth motivational programmes (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.",
 };
 
 export default async function InterviewsPage() {
@@ -21,16 +22,18 @@ export default async function InterviewsPage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Youth empowerment</p>
-        <h1>Interviews</h1>
-        <p className={styles.intro}>{homepage.page_context.interviews_intro}</p>
+      <PageHeader
+        eyebrow="Youth empowerment"
+        title="Interviews"
+        intro={homepage.page_context.interviews_intro}
+      />
+      <div className="shell pageBody">
 
         <Forthcoming title="Oral-history interviews still forthcoming">
           Additional oral-history interviews (verified interviewees, roles,
           transcripts, and citations) remain forthcoming. The videos below are
-          youth motivational programs published on the Facebook page · not Family
-          Archive stills and not invented interview records.
+          youth motivational programmes published on the Facebook page; they are
+          not Family Archive stills or interview records.
         </Forthcoming>
 
         <div className={homeStyles.interviewGrid} style={{ marginTop: "2rem" }}>

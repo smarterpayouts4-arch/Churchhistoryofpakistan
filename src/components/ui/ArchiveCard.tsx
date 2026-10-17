@@ -21,20 +21,14 @@ export function ArchiveCard({
           alt={item.alt}
           fill
           style={{ objectFit: "contain", objectPosition: "center" }}
-          sizes="(max-width: 768px) 100vw, (max-width: 980px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 400px"
           className={styles.archivePhoto}
         />
         <div className={styles.archiveOverlay} aria-hidden="true">
           <span>{item.provenance}</span>
         </div>
       </div>
-      <Title
-        style={
-          Title === "h2"
-            ? { fontSize: "1.15rem", color: "var(--color-ink)" }
-            : undefined
-        }
-      >
+      <Title className={styles.archiveTitle}>
         {item.title}
       </Title>
       <p className={styles.archiveCaption}>{item.caption}</p>

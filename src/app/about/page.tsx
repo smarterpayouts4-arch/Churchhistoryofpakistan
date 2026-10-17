@@ -7,6 +7,7 @@ import {
   ConnectionBulletList,
   ConnectionLayout,
 } from "@/components/ui/ConnectionLayout";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/MyConnection.module.css";
 
@@ -27,12 +28,16 @@ export default async function AboutPage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">About the project</p>
-        <h1>About</h1>
-        <p className={styles.intro}>
-          {homepage.hero.intro} {homepage.hero.purpose}
-        </p>
+      <PageHeader
+        eyebrow="About the project"
+        title="About"
+        intro={
+            <>
+              {homepage.hero.intro} {homepage.hero.purpose}
+            </>
+          }
+      />
+      <div className="shell pageBody">
 
         <section
           id="profile"

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useState } from "react";
 import styles from "./Interviews.module.css";
 
@@ -56,14 +57,13 @@ export function InterviewPlayCard({
           onClick={startPlayback}
           aria-label={`Play ${title}`}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             className={styles.interviewCoverImage}
             src={thumbSrc}
             alt=""
             width={1080}
             height={1350}
-            decoding="async"
+            sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 400px"
           />
           <span className={styles.interviewPlayIcon} aria-hidden="true">
             <svg viewBox="0 0 64 64" width="64" height="64" focusable="false">

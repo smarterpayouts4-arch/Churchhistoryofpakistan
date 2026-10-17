@@ -13,15 +13,15 @@ export async function ChurchesPreview() {
   );
 
   return (
-    <section id="churches" className="section sectionPaper" aria-labelledby="churches-heading">
+    <section id="churches" className="section sectionWash" aria-labelledby="churches-heading">
       <div className="shell">
         <div className="sectionHeading sectionHeadingSplit">
           <div>
             <p className="eyebrow">Eight dioceses • one shared history</p>
             <h2 id="churches-heading">Churches &amp; Places</h2>
             <p className="headingNote">
-              Cathedral seats of the Church of Pakistan · identities from verified
-              diocesan sources, not design mock labels.
+              Cathedral seats of the Church of Pakistan, identified from verified
+              diocesan sources.
             </p>
           </div>
           <Link className="sectionLink" href="/churches">

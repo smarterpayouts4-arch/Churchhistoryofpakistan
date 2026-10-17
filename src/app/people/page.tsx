@@ -4,13 +4,14 @@ import { Forthcoming } from "@/components/ui/Forthcoming";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { loadHomepage } from "@/content/homepage";
 import { loadPeopleFrames } from "@/content/people-frames";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
 
 export const metadata: Metadata = {
   title: "People",
   description:
-    "People records for History: Church of Pakistan. Biographies forthcoming · no invented sample entries.",
+    "People records for History: Church of Pakistan. Biographies forthcoming.",
 };
 
 export default async function PeoplePage() {
@@ -21,10 +22,12 @@ export default async function PeoplePage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Clergy &amp; lay witness</p>
-        <h1>People</h1>
-        <p className={styles.intro}>{homepage.page_context.people_intro}</p>
+      <PageHeader
+        eyebrow={<>Clergy &amp; lay witness</>}
+        title="People"
+        intro={homepage.page_context.people_intro}
+      />
+      <div className="shell pageBody">
 
         <Forthcoming title="People records forthcoming">
           Named biographies are still forthcoming. The frames below are thematic
@@ -41,7 +44,7 @@ export default async function PeoplePage() {
                   fill
                   style={{ objectFit: "contain", objectPosition: "center" }}
                   className={homeStyles.peoplePhoto}
-                  sizes="(max-width: 768px) 100vw, (max-width: 980px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 400px"
                 />
               </div>
               <p className="eyebrow">People archive</p>

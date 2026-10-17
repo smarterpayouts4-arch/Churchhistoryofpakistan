@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
 import { ContributeForm } from "./ContributeForm";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
@@ -15,16 +16,17 @@ export default async function ContributePage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">{homepage.page_context.contribute_eyebrow}</p>
-        <h1>Contribute</h1>
-        <p className={styles.intro}>{homepage.page_context.contribute_intro}</p>
+      <PageHeader
+        eyebrow={homepage.page_context.contribute_eyebrow}
+        title="Contribute"
+        intro={homepage.page_context.contribute_intro}
+      />
+      <div className="shell pageBody">
 
         <div className={styles.notice}>
-          <strong>Honest intake status.</strong> This form does not pretend to
-          succeed when no backend is configured. If{" "}
-          <code>CONTRIBUTE_WEBHOOK_URL</code> is unset, nothing is stored or
-          emailed. You will see a clear “not submitted” message.
+          <strong>Honest intake status.</strong> This form never pretends to
+          succeed. While online intake is not yet connected, nothing you enter is
+          stored or emailed, and you will see a clear “not submitted” message.
         </div>
 
         <ContributeForm contributionFields={homepage.contribution_fields} />

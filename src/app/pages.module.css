@@ -1,11 +1,23 @@
+/* Secondary routes. The PageHeader band carries the eyebrow/h1/intro;
+   .pageBody (global) supplies the vertical rhythm. */
 .page {
-  padding: var(--space-8) 0 var(--space-9);
+  padding: 0;
+}
+
+.page h2 {
+  margin: 2.5rem 0 1rem;
+  font-size: var(--text-h2);
+}
+
+.page h2:first-child {
+  margin-top: 0;
 }
 
 .intro {
-  max-width: 42rem;
-  color: var(--color-muted-brown);
+  max-width: var(--measure);
   margin: 0 0 var(--space-6);
+  color: var(--slate);
+  font-size: var(--text-lead);
 }
 
 .grid {
@@ -14,29 +26,37 @@
 }
 
 .card {
-  background: var(--color-paper);
-  border: 1px solid var(--color-border);
-  padding: var(--space-5);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
 }
 
 .card h2,
 .card h3 {
   margin-top: 0;
-  color: var(--color-ink);
+  color: var(--emerald-800);
+}
+
+.card > p,
+.card li,
+.credits > p {
+  max-width: 75ch;
 }
 
 .meta {
   font-size: var(--text-small);
-  color: var(--color-muted-brown);
+  color: var(--slate);
 }
 
 .media {
   position: relative;
   aspect-ratio: 16 / 10;
-  background: var(--color-media-well);
   margin-bottom: var(--space-4);
   overflow: hidden;
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--stone-deep);
 }
 
 .media img {
@@ -51,34 +71,58 @@
   padding: 0;
   margin: 0;
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .list li {
-  background: var(--color-paper);
-  border: 1px solid var(--color-border);
-  padding: var(--space-4);
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
 }
 
+.list li > strong > a {
+  display: inline-block;
+  padding-block: 0.55rem;
+  margin-block: -0.55rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.list li .meta {
+  margin: 0.4rem 0 0;
+}
+
+.urlList a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* —— Contribute form —— */
 .form {
   display: grid;
-  gap: var(--space-4);
-  max-width: 40rem;
+  gap: 1.25rem;
+  max-width: 44rem;
   min-width: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  box-shadow: var(--shadow-card);
 }
 
 .field {
   display: grid;
-  gap: var(--space-2);
+  gap: 0.45rem;
   min-width: 0;
 }
 
 .field label {
-  font-weight: 700;
-  font-size: var(--text-small);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-burgundy);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .field input,
@@ -88,11 +132,30 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-paper);
-  color: var(--color-ink);
+  min-height: 48px;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--ivory);
+  color: var(--ink);
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease,
+    background-color var(--dur-fast) ease;
+}
+
+.field input[type="file"] {
+  padding: 0.6rem;
+}
+
+.field input:hover,
+.field textarea:hover {
+  border-color: var(--slate);
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--emerald-800);
+  background: var(--paper);
+  box-shadow: 0 0 0 3px rgb(var(--emerald-800-rgb) / 0.15);
 }
 
 .field textarea {
@@ -100,24 +163,80 @@
   resize: vertical;
 }
 
+.checkField label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 0.75rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--ivory);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.checkField input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  min-height: 0;
+  flex-shrink: 0;
+  margin: 0.1rem 0 0;
+  padding: 0;
+  accent-color: var(--emerald-800);
+}
+
+.submit {
+  justify-self: start;
+}
+
 .notice {
-  border-left: 3px solid var(--color-antique-gold);
-  background: var(--color-parchment-wash);
-  padding: var(--space-4);
-  color: var(--color-muted-brown);
-  margin-bottom: var(--space-5);
+  max-width: 82ch;
+  margin: 0 0 var(--space-5);
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--gilt);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: var(--stone);
+  color: var(--slate);
 }
 
 .notice strong {
-  color: var(--color-burgundy);
+  color: var(--emerald-800);
+}
+
+.noticeOk {
+  border-left-color: var(--emerald-800);
+}
+
+.noticeError {
+  border-left-color: var(--oxblood);
+}
+
+.noticeError strong {
+  color: var(--oxblood);
+}
+
+.form .notice {
+  margin: 0;
 }
 
 .credits {
-  margin-top: var(--space-6);
+  margin-top: var(--space-7);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: var(--radius-md);
+  background: var(--stone);
+}
+
+.credits h2 {
+  margin-top: 0;
 }
 
 .credits ul {
   padding-left: 1.2rem;
+}
+
+.credits li {
+  margin-bottom: 0.5rem;
 }
 
 .places {
@@ -128,22 +247,23 @@
 
 .extraGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1rem;
 }
 
 .extraCard {
   margin: 0;
-  background: var(--color-paper);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-frame);
   overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
 }
 
 .extraCard .media {
   margin-bottom: 0;
   aspect-ratio: 4 / 3;
+  border-radius: 0;
 }
 
 @media (max-width: 760px) {

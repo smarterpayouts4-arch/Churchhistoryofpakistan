@@ -26,21 +26,15 @@ export function PlaceCard({
           }
           fill
           style={{ objectFit: "contain", objectPosition: "center" }}
-          sizes="(max-width: 768px) 100vw, (max-width: 980px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 400px"
         />
         <span className={`${styles.rightsBadge} ${open ? "" : styles.rightsPending}`}>
           {open ? "Reusable photo verified" : "Photo permission pending"}
         </span>
       </div>
       <div className={styles.placeCopy}>
-        <p className="eyebrow">{cathedral.diocese}</p>
-        <Title
-          style={
-            Title === "h2"
-              ? { fontSize: "1.15rem", color: "var(--color-ink)", margin: "0.2rem 0" }
-              : undefined
-          }
-        >
+        <p className={styles.placeDiocese}>{cathedral.diocese}</p>
+        <Title className={styles.placeTitle}>
           {cathedral.cathedral}
         </Title>
         <p>{cathedral.city}</p>

@@ -1,15 +1,19 @@
-import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 
-export const cormorant = Cormorant_Garamond({
+/**
+ * Redesign (Emerald & Gilt): Fraunces (display serif, optical sizing) + Inter (body/UI).
+ * Self-hosted at build time by next/font — no runtime Google Fonts requests (CSP-safe).
+ */
+export const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-cormorant",
+  axes: ["opsz", "SOFT"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
-export const sourceSans = Source_Sans_3({
+export const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  variable: "--font-source-sans",
+  variable: "--font-inter",
   display: "swap",
 });

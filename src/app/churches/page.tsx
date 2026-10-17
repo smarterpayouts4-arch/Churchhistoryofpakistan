@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { PlaceCard } from "@/components/ui/PlaceCard";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Churches.module.css";
 
@@ -16,14 +17,18 @@ export default async function ChurchesPage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Eight dioceses • one shared history</p>
-        <h1>Churches &amp; Places</h1>
-        <p className={styles.intro}>
-          Cathedral seats of the Church of Pakistan dioceses, drawn from the
+      <PageHeader
+        eyebrow="Eight dioceses • one shared history"
+        title={<>Churches &amp; Places</>}
+        intro={
+            <>
+              Cathedral seats of the Church of Pakistan dioceses, drawn from the
           verified content register. Photo badges reflect rights status · three
           remain placeholders pending permission.
-        </p>
+            </>
+          }
+      />
+      <div className="shell pageBody">
 
         <div className={styles.places}>
           {cathedrals.map((c) => (
@@ -60,7 +65,7 @@ export default async function ChurchesPage() {
                     </a>
                   </p>
                   {c.verification_urls.length > 0 ? (
-                    <ul className={styles.meta} style={{ paddingLeft: "1.1rem" }}>
+                    <ul className={`${styles.meta} ${styles.urlList}`} style={{ paddingLeft: "1.1rem" }}>
                       {c.verification_urls.map((url) => (
                         <li key={url}>
                           <a href={url} rel="noopener noreferrer" target="_blank">
