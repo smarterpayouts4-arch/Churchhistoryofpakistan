@@ -317,3 +317,54 @@ body {
 .forthcomingBody {
   margin-top: 0.75rem;
 }
+
+/* —— Mobile density (≤640px): tighter rhythm so more content is visible
+   per screen. Desktop spacing above is unchanged. —— */
+@media (max-width: 640px) {
+  .section {
+    padding: 2.75rem 0;
+  }
+
+  .sectionHeading {
+    margin-bottom: 1.35rem;
+  }
+
+  .sectionHeading h2 {
+    font-size: 1.9rem;
+  }
+
+  .sectionHeadingSplit {
+    gap: 0.75rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .headingNote {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .pageHeader {
+    padding: 2.25rem 0 1.75rem;
+  }
+
+  .pageHeaderIntro {
+    font-size: 1rem;
+  }
+
+  .pageBody {
+    padding: 1.75rem 0 3rem;
+  }
+
+  .forthcoming {
+    padding: 0.9rem 1rem 0.9rem 1.2rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .linkRow {
+    margin-top: 1.5rem;
+  }
+}

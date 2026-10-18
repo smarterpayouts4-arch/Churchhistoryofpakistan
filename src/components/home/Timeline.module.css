@@ -134,3 +134,23 @@
     font-size: 1rem;
   }
 }
+
+@media (max-width: 640px) {
+  .timeline li {
+    padding: 0 0 1.1rem 1.9rem;
+  }
+
+  .year {
+    margin-bottom: 0.35rem;
+    font-size: 1.9rem;
+  }
+
+  .timeline h3 {
+    font-size: 1.05rem;
+  }
+
+  .timeline p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}

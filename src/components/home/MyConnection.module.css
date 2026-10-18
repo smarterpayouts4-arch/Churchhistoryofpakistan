@@ -99,3 +99,17 @@
     max-width: 400px;
   }
 }
+
+@media (max-width: 640px) {
+  .connectionPortrait {
+    max-width: 260px;
+  }
+
+  .connectionPull {
+    margin-top: 1.35rem;
+  }
+
+  .connectionList {
+    gap: 0.8rem;
+  }
+}

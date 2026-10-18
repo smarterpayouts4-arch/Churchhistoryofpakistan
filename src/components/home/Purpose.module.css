@@ -76,16 +76,60 @@
   }
 }
 
+/* Mobile: compact 2-column numbered cards (target pattern). Full copy is
+   kept — density comes from smaller type/spacing, not truncation. All four
+   items fit in roughly one viewport. */
 @media (max-width: 640px) {
   .purposeGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .purposeCard {
+    padding: 0.75rem 0.7rem 0.85rem;
+    border-radius: var(--radius-md);
   }
 
   .purposeTop {
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .purposeNum {
+    font-size: 1.55rem;
+  }
+
+  .purposeIconPad {
+    width: 34px;
+    height: 34px;
+  }
+
+  .purposeIconPad img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .purposeCard h3 {
+    margin-bottom: 0.35rem;
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.25;
   }
 
   .purposeCard p {
-    font-size: 1rem;
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 360px) {
+  .purposeGrid {
+    gap: 0.55rem;
+  }
+
+  .purposeCard {
+    padding: 0.65rem 0.6rem 0.75rem;
+  }
+
+  .purposeCard:active {
+    transform: scale(0.99);
   }
 }

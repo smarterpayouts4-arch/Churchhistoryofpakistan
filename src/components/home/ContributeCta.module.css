@@ -78,3 +78,18 @@
     white-space: normal;
   }
 }
+
+@media (max-width: 640px) {
+  .contribute {
+    padding: 2rem 0;
+  }
+
+  .contributeInner {
+    padding: 1.35rem 1.15rem;
+    gap: 1.25rem;
+  }
+
+  .contributeCopy p {
+    font-size: 1rem;
+  }
+}

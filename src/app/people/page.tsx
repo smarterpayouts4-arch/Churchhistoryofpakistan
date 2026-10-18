@@ -44,7 +44,7 @@ export default async function PeoplePage() {
                   fill
                   style={{ objectFit: "contain", objectPosition: "center" }}
                   className={homeStyles.peoplePhoto}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 400px"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1100px) 50vw, 400px"
                 />
               </div>
               <p className="eyebrow">People archive</p>

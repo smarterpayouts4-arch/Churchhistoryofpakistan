@@ -195,13 +195,99 @@
   }
 }
 
+/* Mobile: compact 2-column story cards — small image on top, eyebrow-style
+   provenance, 2-line title, 3-line excerpt, small meta (target pattern).
+   Captions are clamped here; the full caption remains in the card markup
+   and on the dedicated Archive page at desktop widths. */
 @media (max-width: 640px) {
   .archiveGrid,
   .archiveGridFull {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .archiveCard {
+    padding: 0.45rem 0.45rem 0.7rem;
+    border-radius: var(--radius-md);
+  }
+
+  .archiveFrame {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 0.55rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .archiveOverlay {
+    padding: 0.35rem;
+  }
+
+  .archiveOverlay span {
+    padding: 2px 7px;
+    font-size: 0.75rem; /* 12px */
+  }
+
+  .archiveCard h2,
+  .archiveCard h3,
+  .archiveTitle {
+    margin: 0 0.3rem 0.3rem;
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.5em;
   }
 
   .archiveCaption {
-    font-size: 1rem;
+    margin: 0 0.3rem 0.55rem;
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.45;
+    -webkit-line-clamp: 3;
+  }
+
+  .archivePublicRecord {
+    margin: 0 0.3rem 0.55rem;
+    padding: 0.55rem 0.6rem;
+  }
+
+  .archivePublicRecordNote {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .archivePublicRecordRefs li {
+    font-size: 0.75rem; /* 12px */
+  }
+
+  .provenance,
+  .archiveDate,
+  .archiveStatus {
+    margin-left: 0.3rem;
+    padding: 2px 7px;
+    font-size: 0.75rem; /* 12px */
+  }
+
+  .archiveMetaRow {
+    margin: 0.3rem 0.3rem 0.45rem;
+    gap: 0.35rem;
+  }
+
+  .archiveSource {
+    margin: 0 0.3rem 0.3rem;
+    font-size: 0.75rem; /* 12px */
+    line-height: 1.45;
+  }
+
+  .archiveFrame {
+    box-shadow: inset 0 0 0 1px rgb(var(--emerald-950-rgb) / 0.08);
+  }
+
+  .archiveCard:active {
+    transform: scale(0.99);
   }
 }

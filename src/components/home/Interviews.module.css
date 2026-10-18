@@ -196,12 +196,98 @@
   }
 }
 
+/* Mobile: compact 2-column video/people cards. The tall 4:5 poster stage
+   becomes a landscape 3:2 thumbnail (object-position centred on the
+   faces so portrait covers are not cropped through them), with a 44px play disc. The whole cover button
+   fills the thumbnail, so the tap target stays well above 44px.
+   Desktop keeps the original 4:5 cover cards. */
 @media (max-width: 640px) {
   .interviewGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .interviewCard {
+    padding: 0.45rem 0.45rem 0.7rem;
+    border-radius: var(--radius-md);
+  }
+
+  .interviewMedia {
+    /* 3:2 (not 16:9): the covers are portrait stills with faces centred
+       around 40-50% height — 16:9 would crop through the faces. */
+    aspect-ratio: 3 / 2;
+    margin-bottom: 0.55rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .peopleMedia {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 0.55rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .interviewCoverImage {
+    object-position: 50% 60%;
+  }
+
+  .interviewPlayIcon svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .interviewMeta {
+    margin: 0 0.3rem 0.3rem;
+    font-size: 0.75rem; /* 12px */
+  }
+
+  .interviewCard :global(.eyebrow) {
+    margin: 0 0.3rem 0.3rem;
+    font-size: 0.75rem; /* 12px */
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .interviewCard h2,
+  .interviewCard h3 {
+    margin: 0 0.3rem 0.3rem;
+    font-size: 0.9375rem !important; /* 15px; also overrides inline sizes on sub-pages */
+    line-height: 1.25;
+    min-height: 2.5em;
   }
 
   .interviewCard > p {
-    font-size: 1rem;
+    margin: 0 0.3rem;
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.45;
+  }
+
+  .interviewCard > p:nth-of-type(2) {
+    -webkit-line-clamp: 2;
+    min-height: 2.9em;
+  }
+
+  .interviewCard > p:last-of-type {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .interviewStatus {
+    margin: 0.5rem 0.3rem 0;
+    font-size: 0.75rem; /* 12px */
+  }
+
+  .interviewMedia,
+  .peopleMedia {
+    box-shadow: inset 0 0 0 1px rgb(var(--emerald-950-rgb) / 0.08);
+  }
+
+  .interviewCard:active {
+    transform: scale(0.99);
+  }
+
+  .interviewCoverButton:active .interviewPlayIcon {
+    transform: scale(0.94);
   }
 }

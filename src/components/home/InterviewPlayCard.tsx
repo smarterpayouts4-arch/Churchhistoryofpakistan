@@ -63,7 +63,7 @@ export function InterviewPlayCard({
             alt=""
             width={1080}
             height={1350}
-            sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 400px"
+            sizes="(max-width: 640px) 50vw, (max-width: 1000px) 50vw, 400px"
           />
           <span className={styles.interviewPlayIcon} aria-hidden="true">
             <svg viewBox="0 0 64 64" width="64" height="64" focusable="false">

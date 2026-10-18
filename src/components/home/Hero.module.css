@@ -70,7 +70,7 @@
 
 .strapDot {
   color: var(--gilt);
-  font-size: 0.7em;
+  font-size: 0.95em; /* decorative separator kept >=12px computed */
   vertical-align: 0.15em;
   padding-inline: 0.15rem;
 }
@@ -181,5 +181,33 @@
 @media (max-width: 420px) {
   .actions > * {
     width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 2.5rem 0 2rem;
+  }
+
+  .heroGrid {
+    gap: 1.75rem;
+  }
+
+  .lede {
+    font-size: 1rem;
+  }
+
+  .actions {
+    margin-top: 1.5rem;
+  }
+
+  .portraitWrap {
+    width: min(64vw, 240px);
+  }
+
+  .quote {
+    margin-top: 1.75rem;
+    padding-top: 1.1rem;
+    font-size: 1.2rem;
   }
 }
