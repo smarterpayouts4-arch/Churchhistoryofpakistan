@@ -9,6 +9,7 @@ export type InterviewPlayCardProps = {
   videoSrc: string;
   /** Preferred 4:5 cover; falls back to posterSrc. */
   coverSrc?: string;
+  coverPosition?: string;
   posterSrc: string;
   alt: string;
   width: number;
@@ -23,6 +24,7 @@ export function InterviewPlayCard({
   title,
   videoSrc,
   coverSrc,
+  coverPosition,
   posterSrc,
   alt,
   width,
@@ -64,6 +66,7 @@ export function InterviewPlayCard({
             width={1080}
             height={1350}
             sizes="(max-width: 640px) 50vw, (max-width: 1000px) 50vw, 400px"
+            style={coverPosition ? { objectPosition: coverPosition } : undefined}
           />
           <span className={styles.interviewPlayIcon} aria-hidden="true">
             <svg viewBox="0 0 64 64" width="64" height="64" focusable="false">

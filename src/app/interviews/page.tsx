@@ -42,6 +42,7 @@ export default async function InterviewsPage() {
                 title={item.title}
                 videoSrc={item.videoSrc}
                 coverSrc={item.coverSrc}
+                coverPosition={item.coverPosition}
                 posterSrc={item.posterSrc}
                 alt={item.alt}
                 width={item.width}

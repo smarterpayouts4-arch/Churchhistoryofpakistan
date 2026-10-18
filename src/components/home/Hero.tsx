@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
 import { loadSiteSettings } from "@/content/site";
-import { loadFamilyArchiveHomePreview } from "@/content/family-archives";
-import { MediaImage } from "@/components/ui/MediaImage";
+import { HeroBand } from "./HeroBand";
 import styles from "./Hero.module.css";
 
 /**
@@ -13,11 +12,11 @@ import styles from "./Hero.module.css";
  * the Purpose section intro (see Purpose.tsx) — nothing is deleted.
  */
 export async function Hero() {
-  const [{ hero, strapline }, site, band] = await Promise.all([
+  const [{ hero, strapline }, site] = await Promise.all([
     loadHomepage(),
     loadSiteSettings(),
-    loadFamilyArchiveHomePreview(3).catch(() => []),
   ]);
+  const band = hero.band_images ?? [];
   const colonIdx = hero.title.indexOf(":");
   const strapParts = strapline
     .split(/\s*[·•]\s*/)
@@ -63,22 +62,7 @@ export async function Hero() {
           </div>
         </div>
 
-        {band.length ? (
-          <div className={styles.band} aria-hidden="true">
-            {band.map((item) => (
-              <div key={item.id} className={styles.bandItem}>
-                <MediaImage
-                  src={item.imageSrc}
-                  alt=""
-                  fill
-                  sizes="(max-width: 640px) 33vw, 400px"
-                  className={styles.bandImg}
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-            ))}
-          </div>
-        ) : null}
+        <HeroBand images={band} />
       </div>
     </section>
   );

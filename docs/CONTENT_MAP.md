@@ -26,7 +26,7 @@ Images: `/media/…` paths (repo `public/media/`) or Vercel Blob URLs when
 |---|---|---|---|
 | Hero eyebrow, title, short lead (~40 words), motto | `home/Hero.tsx` | Home tab | `homepage.json` `hero`, `strapline` |
 | Hero buttons | `home/Hero.tsx` | Site & Pages → Hero buttons | `site.json` `hero_ctas` |
-| Hero image band (3 archive photos, decorative) | `home/Hero.tsx` | Family Archives tab (first 3 items) | `family-archives.json` `items[].imageSrc` |
+| Hero photo band (rotating, per-photo focal position) | `home/Hero.tsx` + `home/HeroBand.tsx` | Home tab → Hero photo band (`src`/`alt`/`position`) | `homepage.json` `hero.band_images` (existing published photos only) |
 | Hero purpose paragraph → Purpose intro | `home/Purpose.tsx` | Home tab (`hero.purpose`) | `homepage.json` `hero.purpose` |
 | Purpose heading/cards | `home/Purpose.tsx` | Site & Pages (heading) + Home tab (cards) | `site.json`, `homepage.json` `purpose_cards` |
 | Featured Interviews | `home/Interviews.tsx` | Featured Interviews tab + Site & Pages headings | `featured-interviews.json`, `site.json` |
@@ -43,7 +43,7 @@ Images: `/media/…` paths (repo `public/media/`) or Vercel Blob URLs when
 |---|---|---|---|
 | `/about` | homepage intro + curator profile + site about header | Home / Curator profile / Site & Pages | `homepage.json`, `curator-profile.json`, `site.json` |
 | `/archive` | family archive items + note, archive intro | Family Archives (+ Site & Pages eyebrow) | `family-archives.json`, `homepage.json`, `site.json` |
-| `/interviews` | interview items, intros, forthcoming panel | Featured Interviews / Site & Pages | `featured-interviews.json`, `homepage.json`, `site.json` |
+| `/interviews` | interview items (incl. per-cover mobile focal `coverPosition`), intros, forthcoming panel | Featured Interviews / Site & Pages | `featured-interviews.json`, `homepage.json`, `site.json` |
 | `/churches` | cathedral records (name/address/verification/photos/rights) | Churches (+ Site & Pages header/rights) | `cathedrals.json`, `site.json` |
 | `/people` | people stills + forthcoming copy | People / Site & Pages | `people-frames.json`, `site.json` |
 | `/contribute` | form labels = `contribution_fields`, intro, intake notice | Home / Site & Pages | `homepage.json`, `site.json` |

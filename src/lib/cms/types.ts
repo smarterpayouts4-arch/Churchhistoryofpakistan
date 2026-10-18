@@ -36,6 +36,8 @@ export type FeaturedInterview = {
   posterSrc: string;
   /** Optional 4:5 Facebook cover thumbnail; UI falls back to posterSrc. */
   coverSrc?: string;
+  /** CSS object-position for the mobile 3:2 cover crop, e.g. "50% 20%" — keeps the speaker's face framed. */
+  coverPosition?: string;
   alt: string;
   sourceUrl: string;
   provenance: string;
@@ -95,6 +97,13 @@ export type TimelineEntry = {
   source: string;
 };
 
+export type HeroBandImage = {
+  src: string;
+  alt: string;
+  /** CSS object-position, e.g. "50% 20%" — keeps faces framed in the band crop. */
+  position: string;
+};
+
 export type HomepageContent = {
   site_title: string;
   strapline: string;
@@ -105,6 +114,7 @@ export type HomepageContent = {
     intro: string;
     purpose: string;
     portrait: string;
+    band_images?: HeroBandImage[];
   };
   purpose_cards: PurposeCard[];
   connection: string[];

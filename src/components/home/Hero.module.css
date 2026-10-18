@@ -81,28 +81,91 @@
   margin-top: 2rem;
 }
 
-/* Quiet archival strip: existing public archive images, decorative. */
+/* Hero photo band: single cinematic frame, gentle crossfade (HeroBand). */
 .band {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
   margin-top: clamp(2rem, 5vw, 3.5rem);
   padding-top: 1.25rem;
   border-top: 1px solid var(--line-dark);
 }
 
-.bandItem {
+.bandFrame {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   border-radius: var(--radius-sm);
   background: var(--emerald-900);
 }
 
+@media (min-width: 760px) {
+  .bandFrame { aspect-ratio: 21 / 9; }
+}
+
+.bandSlide {
+  position: absolute;
+  inset: 0;
+  transition: opacity 1.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bandSlide { transition: none; }
+}
+
 .bandImg {
-  object-fit: cover;
-  filter: saturate(0.92) contrast(1.02) sepia(0.05);
+  filter: saturate(0.94) contrast(1.02) sepia(0.04);
+}
+
+.bandCaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 1.6rem 1rem 0.7rem;
+  background: linear-gradient(transparent, rgb(var(--emerald-950-rgb) / 0.78));
+  color: var(--ivory);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  right: 0;
+}
+
+.bandDots {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.35rem;
+}
+
+.bandDotBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.bandDot,
+.bandDotActive {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgb(var(--mist-rgb) / 0.45);
+}
+
+.bandDotActive {
+  width: 22px;
+  border-radius: 999px;
+  background: var(--gilt);
+}
+
+.bandDotBtn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 @media (max-width: 640px) {
@@ -110,8 +173,7 @@
   .heroTitle { font-size: clamp(2.6rem, 13vw, 3.4rem); }
   .lede { font-size: 1rem; }
   .actions { margin-top: 1.5rem; }
-  .band { gap: 0.5rem; margin-top: 1.75rem; }
-  .bandItem { aspect-ratio: 4 / 3; }
+  .band { margin-top: 1.75rem; }
 }
 
 @media (max-width: 420px) {

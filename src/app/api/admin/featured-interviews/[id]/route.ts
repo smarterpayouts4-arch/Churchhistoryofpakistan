@@ -56,6 +56,10 @@ export async function PUT(req: NextRequest, ctx: Ctx) {
       ? { posterSrc: parsed.data.posterSrc }
       : {}),
   };
+  if (parsed.data.coverPosition !== undefined) {
+    if (parsed.data.coverPosition) next.coverPosition = parsed.data.coverPosition;
+    else delete next.coverPosition;
+  }
   if (parsed.data.coverSrc !== undefined) {
     if (parsed.data.coverSrc) next.coverSrc = parsed.data.coverSrc;
     else delete next.coverSrc;

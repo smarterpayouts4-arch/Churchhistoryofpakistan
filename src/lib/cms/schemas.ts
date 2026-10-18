@@ -71,6 +71,7 @@ export const featuredInterviewSchema = z.object({
   videoSrc: z.string().min(1).max(500),
   posterSrc: z.string().min(1).max(500),
   coverSrc: z.string().min(1).max(500).optional(),
+  coverPosition: z.string().max(40).optional(),
   alt: z.string().min(1).max(1000),
   sourceUrl: z.string().min(1).max(1000),
   provenance: z.string().min(1).max(300),
@@ -97,6 +98,7 @@ export const featuredInterviewPatchSchema = z.object({
   videoSrc: publicMediaPath.optional(),
   posterSrc: publicMediaPath.optional(),
   coverSrc: z.union([z.literal(""), publicMediaPath]).optional(),
+  coverPosition: z.string().max(40).optional(),
 });
 
 export const curatorProfileSchema = z.object({
@@ -174,6 +176,16 @@ export const homepageContentSchema = z.object({
     intro: z.string().min(1).max(8000),
     purpose: z.string().min(1).max(4000),
     portrait: z.string().min(1).max(500),
+    band_images: z
+      .array(
+        z.object({
+          src: z.string().min(1).max(1000),
+          alt: z.string().max(1000),
+          position: z.string().min(1).max(40),
+        }),
+      )
+      .max(6)
+      .optional(),
   }),
   purpose_cards: z.array(purposeCardSchema).min(1),
   connection: z.array(z.string().min(1)).min(1),

@@ -265,6 +265,58 @@ export function HomepageEditor({
           />
         </div>
 
+        <h3 style={{ margin: "0.5rem 0 0" }}>Hero photo band (rotating)</h3>
+        <p className={styles.hint}>
+          One wide photograph under the hero buttons, crossfading every few seconds.
+          Use landscape photos. “Focal position” keeps faces framed — e.g. <code>50% 18%</code>
+          shows the upper part of the photo, <code>50% 50%</code> the centre.
+        </p>
+        {(home.hero.band_images ?? []).map((img, i) => (
+          <article key={i} className={styles.panel} style={{ padding: "0.85rem" }}>
+            <div className={styles.grid2}>
+              <label className={styles.label}>
+                Image path
+                <input className={styles.input} value={img.src} onChange={(e) => {
+                  const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, src: e.target.value };
+                  setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+                }} />
+              </label>
+              <label className={styles.label}>
+                Focal position
+                <input className={styles.input} value={img.position} placeholder="50% 20%" onChange={(e) => {
+                  const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, position: e.target.value };
+                  setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+                }} />
+              </label>
+            </div>
+            <label className={styles.label} style={{ marginTop: "0.6rem" }}>
+              Caption / alt text
+              <input className={styles.input} value={img.alt} onChange={(e) => {
+                const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, alt: e.target.value };
+                setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+              }} />
+            </label>
+            <div className={styles.rowActions} style={{ marginTop: "0.6rem" }}>
+              <button type="button" className={styles.dangerBtn} onClick={() => {
+                const list = (home.hero.band_images ?? []).filter((_, n) => n !== i);
+                setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+              }}>Remove</button>
+            </div>
+            <div style={{ marginTop: "0.6rem" }}>
+              <ImageCropUpload destination="uploads" onUploaded={(path) => {
+                const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, src: path };
+                setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+              }} />
+            </div>
+          </article>
+        ))}
+        <div className={styles.rowActions}>
+          <button type="button" className={styles.secondaryBtn} onClick={() => {
+            const list = [...(home.hero.band_images ?? []), { src: "", alt: "", position: "50% 25%" }];
+            setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+          }}>+ Add band photo</button>
+        </div>
+
         <h3 style={{ margin: "0.5rem 0 0" }}>Purpose cards</h3>
         {home.purpose_cards.map((card, i) => (
           <article key={i} className={styles.panel} style={{ padding: "0.85rem" }}>
