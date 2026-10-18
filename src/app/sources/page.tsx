@@ -3,6 +3,7 @@ import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { sources } from "@/content/sources";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
@@ -12,24 +13,24 @@ export const metadata: Metadata = {
 };
 
 export default async function SourcesPage() {
-  const cathedrals = await loadCathedralItems();
+  const [cathedrals, site] = await Promise.all([loadCathedralItems(), loadSiteSettings()]);
+  const copy = site.pages.sources;
   const credited = cathedrals.filter((c) => c.photo_status === "open_license");
 
   return (
     <div className={styles.page}>
       <PageHeader
-        eyebrow="Transparency"
-        title={<>Sources &amp; Photograph Credits</>}
+        eyebrow={copy.eyebrow}
+        title={copy.title}
         intro={
             <>
-              Historical claims on this site remain connected to their sources.
-          Sources in the register below were last accessed on {sources.accessed}.
+              {copy.intro_strong} {copy.intro_tail} {sources.accessed}.
             </>
           }
       />
       <div className="shell pageBody">
 
-        <h2>Institutional sources</h2>
+        <h2>{copy.institutional_heading}</h2>
         <ul className={styles.list}>
           {sources.institutional.map((s) => (
             <li key={s.url}>

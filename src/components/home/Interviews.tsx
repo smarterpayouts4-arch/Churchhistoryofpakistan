@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { loadHomeFeaturedInterviews } from "@/content/featured-interviews";
+import { loadSiteSettings } from "@/content/site";
 import { InterviewPlayCard } from "./InterviewPlayCard";
 import styles from "./Interviews.module.css";
 
@@ -9,18 +10,19 @@ import styles from "./Interviews.module.css";
  * (never object-fit:cover on the video itself).
  */
 export async function Interviews() {
-  const homeFeaturedInterviews = await loadHomeFeaturedInterviews();
+  const [homeFeaturedInterviews, site] = await Promise.all([loadHomeFeaturedInterviews(), loadSiteSettings()]);
+  const copy = site.home_sections.interviews;
 
   return (
     <section id="interviews" className="section" aria-labelledby="interviews-heading">
       <div className="shell">
         <div className="sectionHeading sectionHeadingSplit">
           <div>
-            <p className="eyebrow">Youth empowerment</p>
-            <h2 id="interviews-heading">Featured Interviews</h2>
+            <p className="eyebrow">{copy.eyebrow}</p>
+            <h2 id="interviews-heading">{copy.heading}</h2>
           </div>
           <Link className="sectionLink" href="/interviews">
-            View all →
+            {copy.view_all_label} →
           </Link>
         </div>
         <div className={styles.interviewGrid}>
@@ -42,9 +44,7 @@ export async function Interviews() {
           ))}
         </div>
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>
-          <strong>Youth motivational programmes</strong> from the History: Church of
-          Pakistan Facebook page (Rab Ki Khidmat / Youth Empowerment). Additional
-          oral-history interviews remain forthcoming.
+          <strong>{copy.note_heading}</strong> {copy.note_body}
         </p>
       </div>
     </section>

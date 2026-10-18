@@ -1,8 +1,9 @@
 import { loadHomepage } from "@/content/homepage";
+import { loadSiteSettings } from "@/content/site";
 import styles from "./Timeline.module.css";
 
 export async function Timeline() {
-  const homepage = await loadHomepage();
+  const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
 
   return (
     <section
@@ -12,8 +13,8 @@ export async function Timeline() {
     >
       <div className="shell">
         <div className="sectionHeading sectionHeadingCentered">
-          <p className="eyebrow eyebrowLight">Selected documented milestones</p>
-          <h2 id="timeline-heading">A Journey Through Time</h2>
+          <p className="eyebrow eyebrowLight">{site.home_sections.timeline.eyebrow}</p>
+          <h2 id="timeline-heading">{site.home_sections.timeline.heading}</h2>
         </div>
         <ol className={styles.timeline}>
           {homepage.timeline.map((entry) => (

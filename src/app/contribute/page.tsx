@@ -3,6 +3,7 @@ import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
 import { ContributeForm } from "./ContributeForm";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContributePage() {
-  const homepage = await loadHomepage();
+  const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
 
   return (
     <div className={styles.page}>
@@ -24,9 +25,7 @@ export default async function ContributePage() {
       <div className="shell pageBody">
 
         <div className={styles.notice}>
-          <strong>Honest intake status.</strong> This form never pretends to
-          succeed. While online intake is not yet connected, nothing you enter is
-          stored or emailed, and you will see a clear “not submitted” message.
+          <strong>{site.pages.contribute_notice.strong}</strong> {site.pages.contribute_notice.body}
         </div>
 
         <ContributeForm contributionFields={homepage.contribution_fields} />

@@ -239,3 +239,98 @@ export const cathedralsFileSchema = z.object({
   note: z.string().min(1).max(4000),
   items: z.array(cathedralRecordSchema).min(1).max(20),
 });
+
+const siteText = (max: number) => z.string().min(1).max(max);
+const siteNavItemSchema = z.object({
+  href: z.string().min(1).max(300),
+  label: siteText(120),
+});
+
+export const siteSettingsSchema = z.object({
+  seo: z.object({ description: siteText(2000), title_suffix: siteText(200) }),
+  nav: z.object({
+    primary: z.array(siteNavItemSchema).min(1).max(12),
+    footer: z.array(siteNavItemSchema).min(1).max(12),
+  }),
+  footer: z.object({
+    explore_title: siteText(200),
+    about_title: siteText(200),
+    about_copy: siteText(2000),
+    curator_link_label: siteText(120),
+  }),
+  hero_ctas: z.object({
+    primary_label: siteText(120),
+    primary_href: siteText(300),
+    secondary_label: siteText(120),
+    secondary_href: siteText(300),
+  }),
+  home_sections: z.object({
+    purpose: z.object({ eyebrow: siteText(300), heading: siteText(300) }),
+    interviews: z.object({
+      eyebrow: siteText(300),
+      heading: siteText(300),
+      view_all_label: siteText(120),
+      note_heading: siteText(300),
+      note_body: siteText(4000),
+    }),
+    churches: z.object({
+      eyebrow: siteText(300),
+      heading: siteText(300),
+      note: siteText(2000),
+      view_label: siteText(120),
+      rights_note: siteText(4000),
+      rights_note_strong: siteText(200),
+    }),
+    timeline: z.object({ eyebrow: siteText(300), heading: siteText(300) }),
+    archives: z.object({
+      eyebrow: siteText(300),
+      heading: siteText(300),
+      view_label: siteText(120),
+      note_strong: siteText(300),
+      note_link_label: siteText(200),
+    }),
+    connection: z.object({ eyebrow: siteText(300), heading: siteText(300) }),
+    guiding: z.object({ eyebrow: siteText(300) }),
+  }),
+  pages: z.object({
+    archive: z.object({ eyebrow: siteText(300), provenance_strong: siteText(300) }),
+    churches: z.object({
+      eyebrow: siteText(300),
+      title: siteText(300),
+      intro: siteText(4000),
+      rights_note_strong: siteText(200),
+      rights_note: siteText(4000),
+      rights_note_link_label: siteText(120),
+      rights_note_tail: siteText(500),
+    }),
+    sources: z.object({
+      eyebrow: siteText(300),
+      title: siteText(300),
+      intro_strong: siteText(1000),
+      intro_tail: siteText(1000),
+      institutional_heading: siteText(300),
+    }),
+    about: z.object({ eyebrow: siteText(300), title: siteText(300) }),
+    people: z.object({
+      eyebrow: siteText(300),
+      forthcoming_title: siteText(300),
+      forthcoming_body: siteText(2000),
+      card_eyebrow: siteText(200),
+      card_note: siteText(2000),
+      status_label: siteText(120),
+    }),
+    interviews_page: z.object({
+      forthcoming_title: siteText(300),
+      forthcoming_body: siteText(4000),
+    }),
+    contribute_notice: z.object({ strong: siteText(300), body: siteText(4000) }),
+    not_found: z.object({
+      eyebrow: siteText(200),
+      title: siteText(300),
+      intro: siteText(2000),
+      home_label: siteText(120),
+      archive_label: siteText(120),
+      sources_label: siteText(120),
+    }),
+  }),
+});

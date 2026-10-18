@@ -91,6 +91,7 @@ Rotate `ADMIN_SESSION_SECRET` to invalidate all existing sessions.
 | Section | Storage | Public pages |
 |---|---|---|
 | Homepage (hero, purpose, connection, timeline, contribution labels) | `data/cms/homepage.json` | `/`, `/about`, `/contribute` |
+| Site & Pages (SEO description, header/footer navigation, footer text, hero buttons, home section headings, inner-page headers/notices, 404) | `data/cms/site.json` | every public page (layout, header, footer, home sections, `/archive`, `/churches`, `/sources`, `/about`, `/people`, `/interviews`, `/contribute`, 404) |
 | Churches / dioceses (8 cathedral records) | `data/cms/cathedrals.json` | `/`, `/churches`, `/sources` |
 | Family Archives CRUD | `data/cms/family-archives.json` | `/`, `/archive` |
 | Featured Interviews (title, copy, featuredOnHome) | `data/cms/featured-interviews.json` | `/`, `/interviews` |
@@ -180,3 +181,51 @@ Use **Log out** on the dashboard. That clears the session cookie via `POST /api/
 - `GET|PUT /api/admin/curator-profile`
 - `POST /api/admin/upload` (multipart: `file`, optional `destination`)
 - `GET /api/admin/media-inspect` (read-only native dimensions and crop-risk assessment)
+
+## Site & Pages tab
+
+Sign in → open the **Site & Pages** tab (first tab). It controls the global
+marketing/UI wording that used to be hard-coded in components:
+
+- **Header & footer navigation** — add/remove/relabel links (label + href).
+- **Footer** — column titles, the “About this archive” text, curator-login label.
+- **SEO** — site description (search/social) and the page-title suffix.
+- **Hero buttons** — labels and destinations.
+- **Home section headings** — eyebrows, headings, “view all” labels and short
+  notes for Purpose, Featured Interviews, Churches & Places, Timeline,
+  Family Archives, My Connection and the Guiding Principle eyebrow.
+- **Inner pages** — About/Archive/Churches/Sources page-header wording,
+  People & Interviews forthcoming panels, the Contribute intake notice,
+  and the 404 page text.
+
+Save → `PUT /api/admin/site` (admin session required; zod-validated) →
+`data/cms/site.json` → the whole layout revalidates.
+
+Deliberately **not** free-text editable, by design:
+
+- The curator's confirmed name/role line (AGENTS.md rule: do not rename the
+  curator) and the motto/strapline wording — factual identity, kept exact.
+- The Sources register entries themselves (`src/content/sources.ts`) and
+  cathedral verification/citation fields remain in their citation-backed
+  homes (Churches / Family Archives tabs) so links and credits stay checkable.
+
+## Persistence on Vercel (important limitation)
+
+The CMS is file/JSON-based by repo design (`data/cms/*.json`, atomic
+tmp-file rename in `src/lib/cms/store.ts`; uploads under `public/media/`).
+On a **local or single-instance host with a writable filesystem**, admin
+saves and uploads persist exactly as tested.
+
+On **Vercel production**, the deployed filesystem is **ephemeral/read-only
+at runtime**: a save or upload made through the live admin may succeed
+in-memory/instance-locally (or fail on a read-only mount) but will **not
+survive redeploys or instance recycling**, and uploaded files are not
+committed to git. This is a known architectural limitation, not a silent
+failure — do not rely on live-admin edits as the production source of truth.
+
+**Production workflow until a persistent store is approved:** make content
+edits locally (or in any writable preview), commit the changed
+`data/cms/*.json` (and any new `public/media/…` files) to git, and push —
+Vercel then deploys the edited content. No paid/external database or
+storage service has been introduced; adopting one (e.g. Vercel Blob/KV)
+requires a new ADR in `docs/DECISIONS.md` first.

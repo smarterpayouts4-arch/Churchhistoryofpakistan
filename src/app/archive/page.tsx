@@ -7,6 +7,7 @@ import {
 import { loadHomepage } from "@/content/homepage";
 import { ArchiveCard } from "@/components/ui/ArchiveCard";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/FamilyArchives.module.css";
 
@@ -17,23 +18,24 @@ export const metadata: Metadata = {
 };
 
 export default async function ArchivePage() {
-  const [familyArchiveItems, FAMILY_ARCHIVE_NOTE, homepage] = await Promise.all([
+  const [familyArchiveItems, FAMILY_ARCHIVE_NOTE, homepage, site] = await Promise.all([
     loadFamilyArchiveItems(),
     loadFamilyArchiveNote(),
     loadHomepage(),
+    loadSiteSettings(),
   ]);
 
   return (
     <div className={styles.page}>
       <PageHeader
-        eyebrow="Documents • photographs • memories"
+        eyebrow={site.pages.archive.eyebrow}
         title="Archive"
         intro={homepage.page_context.archive_intro}
       />
       <div className="shell pageBody">
 
         <p className="forthcoming" style={{ marginBottom: "1.75rem" }}>
-          <strong>Provenance note.</strong> {FAMILY_ARCHIVE_NOTE}
+          <strong>{site.pages.archive.provenance_strong}</strong> {FAMILY_ARCHIVE_NOTE}
         </p>
 
         <div className={homeStyles.archiveGridFull}>

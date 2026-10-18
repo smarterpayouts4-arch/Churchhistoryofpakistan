@@ -162,6 +162,43 @@ The owner asked for a modern redesign, with the layout informed by Mobbin refere
 
 ---
 
+## ADR-007 — Site-wide settings CMS (`data/cms/site.json`) + production persistence limit
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted (owner mandate, 2026-10-18) |
+| **Date** | 2026-10-18 |
+
+### Context
+
+The curator admin already covered Homepage, Churches, Family Archives,
+Featured Interviews, People frames, Curator profile and media uploads, but
+global marketing/UI wording (navigation labels, footer text, SEO, hero
+buttons, section headings, inner-page headers/notices, 404) was still
+hard-coded in components.
+
+### Decision
+
+- Add `data/cms/site.json` in the established file-CMS pattern (typed
+  loader `src/content/site.ts`, zod schema `siteSettingsSchema`,
+  `GET|PUT /api/admin/site` behind `requireAdminApi`, atomic writes via
+  `src/lib/cms/store.ts`, new **Site & Pages** admin tab).
+- All covered public strings now read from CMS; no hard-coded duplicates
+  remain for those areas. Confirmed-identity strings (curator name/role,
+  motto) and citation registers stay code-/citation-locked on purpose.
+- **Persistence:** file CMS persists on writable hosts. On Vercel the
+  runtime filesystem is ephemeral, so production content changes must be
+  committed to git (JSON + media) and redeployed. No external/paid store
+  is introduced without a further ADR. See `docs/ADMIN.md`.
+
+### Consequences
+
+- Admin can reword the entire public site's marketing/UI copy without code.
+- Production editors must follow the commit-and-deploy workflow above
+  until/unless a persistent store is adopted.
+
+---
+
 ## Related open questions (do not invent resolutions)
 
 - **Palette** — resolved by ADR-006 (Emerald & Gilt, owner-approved 2026-10-17).  

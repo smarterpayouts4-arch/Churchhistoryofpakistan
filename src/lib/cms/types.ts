@@ -153,3 +153,91 @@ export type CathedralsFile = {
   note: string;
   items: CathedralRecord[];
 };
+
+export type SiteNavItem = { href: string; label: string };
+
+/** Global/site-wide settings — data/cms/site.json (curator-editable marketing & UI copy). */
+export type SiteSettings = {
+  seo: { description: string; title_suffix: string };
+  nav: { primary: SiteNavItem[]; footer: SiteNavItem[] };
+  footer: {
+    explore_title: string;
+    about_title: string;
+    about_copy: string;
+    curator_link_label: string;
+  };
+  hero_ctas: {
+    primary_label: string;
+    primary_href: string;
+    secondary_label: string;
+    secondary_href: string;
+  };
+  home_sections: {
+    purpose: { eyebrow: string; heading: string };
+    interviews: {
+      eyebrow: string;
+      heading: string;
+      view_all_label: string;
+      note_heading: string;
+      note_body: string;
+    };
+    churches: {
+      eyebrow: string;
+      heading: string;
+      note: string;
+      view_label: string;
+      rights_note: string;
+      rights_note_strong: string;
+    };
+    timeline: { eyebrow: string; heading: string };
+    archives: {
+      eyebrow: string;
+      heading: string;
+      view_label: string;
+      note_strong: string;
+      note_link_label: string;
+    };
+    connection: { eyebrow: string; heading: string };
+    guiding: { eyebrow: string };
+  };
+  pages: {
+    archive: { eyebrow: string; provenance_strong: string };
+    churches: {
+      eyebrow: string;
+      title: string;
+      intro: string;
+      rights_note_strong: string;
+      rights_note: string;
+      rights_note_link_label: string;
+      rights_note_tail: string;
+    };
+    sources: {
+      eyebrow: string;
+      title: string;
+      intro_strong: string;
+      intro_tail: string;
+      institutional_heading: string;
+    };
+    about: { eyebrow: string; title: string };
+    people: {
+      eyebrow: string;
+      forthcoming_title: string;
+      forthcoming_body: string;
+      card_eyebrow: string;
+      card_note: string;
+      status_label: string;
+    };
+    interviews_page: { forthcoming_title: string; forthcoming_body: string };
+    contribute_notice: { strong: string; body: string };
+    not_found: {
+      eyebrow: string;
+      title: string;
+      intro: string;
+      home_label: string;
+      archive_label: string;
+      sources_label: string;
+    };
+  };
+};
+
+export type SiteSettingsFile = SiteSettings;

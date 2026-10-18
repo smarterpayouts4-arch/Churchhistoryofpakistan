@@ -5,6 +5,7 @@ import { InterviewPlayCard } from "@/components/home/InterviewPlayCard";
 import { loadFeaturedInterviews } from "@/content/featured-interviews";
 import { loadHomepage } from "@/content/homepage";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
 
@@ -15,9 +16,10 @@ export const metadata: Metadata = {
 };
 
 export default async function InterviewsPage() {
-  const [featuredInterviews, homepage] = await Promise.all([
+  const [featuredInterviews, homepage, site] = await Promise.all([
     loadFeaturedInterviews(),
     loadHomepage(),
+    loadSiteSettings(),
   ]);
 
   return (
@@ -29,11 +31,8 @@ export default async function InterviewsPage() {
       />
       <div className="shell pageBody">
 
-        <Forthcoming title="Oral-history interviews still forthcoming">
-          Additional oral-history interviews (verified interviewees, roles,
-          transcripts, and citations) remain forthcoming. The videos below are
-          youth motivational programmes published on the Facebook page; they are
-          not Family Archive stills or interview records.
+        <Forthcoming title={site.pages.interviews_page.forthcoming_title}>
+          {site.pages.interviews_page.forthcoming_body}
         </Forthcoming>
 
         <div className={homeStyles.interviewGrid} style={{ marginTop: "2rem" }}>

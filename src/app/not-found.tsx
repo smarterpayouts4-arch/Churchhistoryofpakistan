@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Page not found",
   robots: { index: false },
 };
 
-export default function NotFound() {
+export default async function NotFound() {
+  const site = await loadSiteSettings();
+  const copy = site.pages.not_found;
   return (
     <div>
-      <PageHeader
-        eyebrow="Error 404"
-        title="Page not found"
-        intro="The page you were looking for could not be found. It may have moved, or the address may be mistyped."
-      />
+      <PageHeader eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro} />
       <div className="shell pageBody">
         <p
           aria-hidden="true"
@@ -33,9 +32,9 @@ export default function NotFound() {
           404
         </p>
         <nav className="linkRow" aria-label="Helpful links" style={{ marginTop: 0 }}>
-          <Link href="/">Return home</Link>
-          <Link href="/archive">Browse the archive</Link>
-          <Link href="/sources">Sources &amp; credits</Link>
+          <Link href="/">{copy.home_label}</Link>
+          <Link href="/archive">{copy.archive_label}</Link>
+          <Link href="/sources">{copy.sources_label}</Link>
         </nav>
       </div>
     </div>

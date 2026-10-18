@@ -1,8 +1,9 @@
 import { loadHomepage } from "@/content/homepage";
+import { loadSiteSettings } from "@/content/site";
 import styles from "./GuidingPrinciple.module.css";
 
 export async function GuidingPrinciple() {
-  const homepage = await loadHomepage();
+  const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
 
   return (
     <section className={styles.guiding} aria-labelledby="guiding-heading">
@@ -11,7 +12,7 @@ export async function GuidingPrinciple() {
           ❝
         </span>
         <p className="eyebrow" id="guiding-heading">
-          Our Guiding Principle
+          {site.home_sections.guiding.eyebrow}
         </p>
         <blockquote className={styles.guidingQuote}>
           “{homepage.guiding_principle.replace(/\.$/, "")}.”

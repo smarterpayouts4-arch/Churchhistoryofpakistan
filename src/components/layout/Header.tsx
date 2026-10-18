@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { primaryNav } from "@/content/nav";
+import type { SiteNavItem } from "@/lib/cms/types";
 import styles from "./Header.module.css";
 
-export function Header({ siteName }: { siteName: string }) {
+export function Header({ siteName, navItems = primaryNav }: { siteName: string; navItems?: SiteNavItem[] }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -106,7 +107,7 @@ export function Header({ siteName }: { siteName: string }) {
           aria-label="Primary"
         >
           <ul className={styles.navList}>
-            {primaryNav.map((item) => {
+            {navItems.map((item) => {
               const current =
                 item.href === "/"
                   ? pathname === "/"

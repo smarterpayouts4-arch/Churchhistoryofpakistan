@@ -8,6 +8,7 @@ import type {
   FeaturedInterview,
   HomepageContent,
   PeopleFrame,
+  SiteSettings,
 } from "@/lib/cms/types";
 import { ImageCropUpload } from "./ImageCropUpload";
 import { HomepageEditor } from "./HomepageEditor";
@@ -16,9 +17,11 @@ import { FamilyArchivesEditor } from "./FamilyArchivesEditor";
 import { FeaturedInterviewsEditor } from "./FeaturedInterviewsEditor";
 import { CuratorProfileEditor } from "./CuratorProfileEditor";
 import { PeopleFramesEditor } from "./PeopleFramesEditor";
+import { SiteEditor } from "./SiteEditor";
 import styles from "@/app/admin/admin.module.css";
 
 type Tab =
+  | "site"
   | "home"
   | "churches"
   | "archives"
@@ -35,6 +38,7 @@ type Props = {
   initialInterviews: FeaturedInterview[];
   initialPeopleFrames: PeopleFrame[];
   initialProfile: CuratorProfileFile;
+  initialSite: SiteSettings;
 };
 
 export function AdminDashboard({
@@ -45,6 +49,7 @@ export function AdminDashboard({
   initialInterviews,
   initialPeopleFrames,
   initialProfile,
+  initialSite,
 }: Props) {
   const [tab, setTab] = useState<Tab>("home");
   const [message, setMessage] = useState<string | null>(null);
@@ -70,6 +75,7 @@ export function AdminDashboard({
       <div className={styles.tabs} role="tablist" aria-label="Curator sections">
         {(
           [
+            ["site", "Site & Pages"],
             ["home", "Home"],
             ["churches", "Churches"],
             ["archives", "Family Archives"],
@@ -98,6 +104,16 @@ export function AdminDashboard({
         </p>
       ) : null}
       {message ? <p className={styles.success}>{message}</p> : null}
+
+      {tab === "site" ? (
+        <SiteEditor
+          initialSite={initialSite}
+          pending={pending}
+          setPending={setPending}
+          setMessage={setMessage}
+          setError={setError}
+        />
+      ) : null}
 
       {tab === "home" ? (
         <HomepageEditor

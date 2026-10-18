@@ -1,4 +1,5 @@
 import { loadHomepage } from "@/content/homepage";
+import { loadSiteSettings } from "@/content/site";
 import styles from "./Purpose.module.css";
 
 const PURPOSE_ICONS = [
@@ -9,14 +10,14 @@ const PURPOSE_ICONS = [
 ] as const;
 
 export async function Purpose() {
-  const homepage = await loadHomepage();
+  const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
 
   return (
     <section id="purpose" className="section" aria-labelledby="purpose-heading">
       <div className="shell">
         <div className={`sectionHeading ${styles.purposeHeading}`}>
-          <p className="eyebrow">Why this archive exists</p>
-          <h2 id="purpose-heading">Our Purpose</h2>
+          <p className="eyebrow">{site.home_sections.purpose.eyebrow}</p>
+          <h2 id="purpose-heading">{site.home_sections.purpose.heading}</h2>
         </div>
         <ol className={styles.purposeGrid}>
           {homepage.purpose_cards.map((card, i) => (

@@ -9,6 +9,7 @@ import type {
   FeaturedInterviewsFile,
   HomepageFile,
   PeopleFramesFile,
+  SiteSettingsFile,
 } from "./types";
 
 const CMS_DIR = path.join(process.cwd(), "data", "cms");
@@ -91,4 +92,12 @@ export async function getCathedrals(): Promise<CathedralsFile> {
 
 export async function saveCathedrals(data: CathedralsFile): Promise<void> {
   await writeJson("cathedrals.json", data);
+}
+
+export async function getSiteSettings(): Promise<SiteSettingsFile> {
+  return readJson<SiteSettingsFile>("site.json");
+}
+
+export async function saveSiteSettings(data: SiteSettingsFile): Promise<void> {
+  await writeJson("site.json", data);
 }

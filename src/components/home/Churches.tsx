@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
+import { loadSiteSettings } from "@/content/site";
 import { PlaceCard } from "@/components/ui/PlaceCard";
 import styles from "./Churches.module.css";
 
@@ -7,7 +8,8 @@ import styles from "./Churches.module.css";
 const HOME_IDS = ["karachi", "lahore", "multan", "peshawar"] as const;
 
 export async function ChurchesPreview() {
-  const cathedrals = await loadCathedralItems();
+  const [cathedrals, site] = await Promise.all([loadCathedralItems(), loadSiteSettings()]);
+  const copy = site.home_sections.churches;
   const featured = HOME_IDS.map((id) => cathedrals.find((c) => c.id === id)!).filter(
     Boolean,
   );
@@ -17,15 +19,12 @@ export async function ChurchesPreview() {
       <div className="shell">
         <div className="sectionHeading sectionHeadingSplit">
           <div>
-            <p className="eyebrow">Eight dioceses • one shared history</p>
-            <h2 id="churches-heading">Churches &amp; Places</h2>
-            <p className="headingNote">
-              Cathedral seats of the Church of Pakistan, identified from verified
-              diocesan sources.
-            </p>
+            <p className="eyebrow">{copy.eyebrow}</p>
+            <h2 id="churches-heading">{copy.heading}</h2>
+            <p className="headingNote">{copy.note}</p>
           </div>
           <Link className="sectionLink" href="/churches">
-            View gallery →
+            {copy.view_label} →
           </Link>
         </div>
         <div className={styles.placesGrid}>
@@ -38,10 +37,7 @@ export async function ChurchesPreview() {
           ))}
         </div>
         <p className={styles.rightsNote}>
-          <strong>Photo integrity:</strong> homepage highlights four verified
-          open-license cathedral photographs. The full gallery covers all eight
-          dioceses; Faisalabad, Hyderabad, and Raiwind remain permission-pending
-          SVG placeholders until diocesan-approved images arrive.
+          <strong>{copy.rights_note_strong}</strong> {copy.rights_note}
         </p>
       </div>
     </section>

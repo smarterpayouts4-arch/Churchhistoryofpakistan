@@ -3,6 +3,7 @@ import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { PlaceCard } from "@/components/ui/PlaceCard";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Churches.module.css";
 
@@ -13,20 +14,15 @@ export const metadata: Metadata = {
 };
 
 export default async function ChurchesPage() {
-  const cathedrals = await loadCathedralItems();
+  const [cathedrals, site] = await Promise.all([loadCathedralItems(), loadSiteSettings()]);
+  const copy = site.pages.churches;
 
   return (
     <div className={styles.page}>
       <PageHeader
-        eyebrow="Eight dioceses • one shared history"
-        title={<>Churches &amp; Places</>}
-        intro={
-            <>
-              Cathedral seats of the Church of Pakistan dioceses, drawn from the
-          verified content register. Photo badges reflect rights status · three
-          remain placeholders pending permission.
-            </>
-          }
+        eyebrow={copy.eyebrow}
+        title={copy.title}
+        intro={copy.intro}
       />
       <div className="shell pageBody">
 
@@ -80,9 +76,8 @@ export default async function ChurchesPage() {
         </div>
 
         <p className={homeStyles.rightsNote}>
-          <strong>Photo integrity:</strong> Faisalabad, Hyderabad, and Raiwind use
-          SVG placeholders until licensed or diocesan-approved images are supplied.
-          See <Link href="/sources">Sources</Link> for the institutional register.
+          <strong>{copy.rights_note_strong}</strong> {copy.rights_note}{" "}
+          <Link href="/sources">{copy.rights_note_link_label}</Link> {copy.rights_note_tail}
         </p>
       </div>
     </div>

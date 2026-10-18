@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
+import { loadSiteSettings } from "@/content/site";
 import { CURATOR_DISPLAY_NAME, CURATOR_ROLE_LINE } from "@/content/nav";
 import { MediaImage } from "@/components/ui/MediaImage";
 import styles from "./Hero.module.css";
 
 export async function Hero() {
-  const { hero, strapline, guiding_principle } = await loadHomepage();
+  const [{ hero, strapline, guiding_principle }, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
   const colonIdx = hero.title.indexOf(":");
   const strapParts = strapline
     .split(/\s*[·•]\s*/)
@@ -43,11 +44,11 @@ export async function Hero() {
           <p className={styles.lede}>{hero.intro}</p>
           <p className={styles.purpose}>{hero.purpose}</p>
           <div className={styles.actions}>
-            <Link className="btn-primary btn-gilt" href="/archive">
-              Explore the Archive <span aria-hidden="true">→</span>
+            <Link className="btn-primary btn-gilt" href={site.hero_ctas.primary_href}>
+              {site.hero_ctas.primary_label} <span aria-hidden="true">→</span>
             </Link>
-            <Link className="btn-secondary btn-ghost-light" href="/interviews">
-              Watch Interviews
+            <Link className="btn-secondary btn-ghost-light" href={site.hero_ctas.secondary_href}>
+              {site.hero_ctas.secondary_label}
             </Link>
           </div>
         </div>

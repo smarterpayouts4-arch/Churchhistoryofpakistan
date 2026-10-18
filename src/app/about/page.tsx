@@ -8,6 +8,7 @@ import {
   ConnectionLayout,
 } from "@/components/ui/ConnectionLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/MyConnection.module.css";
 
@@ -18,9 +19,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [homepage, curator] = await Promise.all([
+  const [homepage, curator, site] = await Promise.all([
     loadHomepage(),
     loadCuratorProfile(),
+    loadSiteSettings(),
   ]);
   const bullets = homepage.connection.slice(0, 3);
   const pull = homepage.connection[3];
@@ -29,8 +31,8 @@ export default async function AboutPage() {
   return (
     <div className={styles.page}>
       <PageHeader
-        eyebrow="About the project"
-        title="About"
+        eyebrow={site.pages.about.eyebrow}
+        title={site.pages.about.title}
         intro={
             <>
               {homepage.hero.intro} {homepage.hero.purpose}

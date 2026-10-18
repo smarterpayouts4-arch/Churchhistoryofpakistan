@@ -1,14 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { footerNav, CURATOR_DISPLAY_NAME, CURATOR_ROLE_LINE } from "@/content/nav";
+import type { SiteNavItem } from "@/lib/cms/types";
 import styles from "./Footer.module.css";
 
 export function Footer({
   siteName,
   strapline,
+  navItems = footerNav,
+  exploreTitle = "Explore",
+  aboutTitle = "About this archive",
+  aboutCopy = "A local digital heritage archive. Historical claims remain citation-backed; photographs show rights status.",
+  curatorLinkLabel = "Curator login",
 }: {
   siteName: string;
   strapline: string;
+  navItems?: SiteNavItem[];
+  exploreTitle?: string;
+  aboutTitle?: string;
+  aboutCopy?: string;
+  curatorLinkLabel?: string;
 }) {
   const year = new Date().getFullYear();
   return (
@@ -33,10 +44,10 @@ export function Footer({
           </p>
         </div>
         <div>
-          <p className={styles.colTitle}>Explore</p>
+          <p className={styles.colTitle}>{exploreTitle}</p>
           <nav aria-label="Footer">
             <ul className={styles.nav}>
-              {footerNav.map((item) => (
+              {navItems.map((item) => (
                 <li key={item.href + item.label}>
                   <Link href={item.href}>{item.label}</Link>
                 </li>
@@ -45,13 +56,12 @@ export function Footer({
           </nav>
         </div>
         <div className={styles.noteCol}>
-          <p className={styles.colTitle}>About this archive</p>
+          <p className={styles.colTitle}>{aboutTitle}</p>
           <p className={styles.copy}>
-            © {year} {siteName}. A local digital heritage archive. Historical claims
-            remain citation-backed; photographs show rights status.
+            © {year} {siteName}. {aboutCopy}
           </p>
           <Link href="/admin/login" className={styles.curatorLink}>
-            Curator login
+            {curatorLinkLabel}
           </Link>
         </div>
       </div>
