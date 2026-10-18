@@ -199,6 +199,50 @@ hard-coded in components.
 
 ---
 
+## ADR-008 — Vercel-native storage: KV (documents) + Blob (media); Blog
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted (owner mandate, 2026-10-18) |
+| **Date** | 2026-10-18 |
+| **Supersedes** | the production-persistence limitation noted in ADR-007 (once env vars are connected) |
+
+### Context
+
+Owner asked for the easiest durable storage so curator edits persist on
+Vercel, plus a blog. The CMS content is whole-file JSON documents; media is
+binary uploads. A Blob store (`churchhistory-media`, iad1, public) was
+provisioned via the Vercel MCP on 2026-10-18; KV/Blob still need a one-time
+"Connect to Project" click in the dashboard to inject env vars (see
+`docs/ADMIN.md` for the exact steps — no code can do that click).
+
+### Decision
+
+- Documents → **Vercel KV / Upstash Redis** (`@vercel/kv` is deprecated;
+  the adapter speaks the Upstash REST API directly, env
+  `KV_REST_API_URL`/`KV_REST_API_TOKEN`), one JSON doc per `cms:<file>` key.
+  No ORM/schema migration; the JSON-document shape maps 1:1 (Postgres would
+  have needed a table design for identical data). File store remains the
+  local/dev fallback; first KV read seeds from `data/cms/*.json`.
+- Media → **Vercel Blob** (`@vercel/blob` `put`, env `BLOB_READ_WRITE_TOKEN`)
+  when configured; existing `/media/…` paths unchanged.
+- Blog posts are a new CMS document (`blog.json`) through the same adapter,
+  with a Blog admin tab and Markdown rendering sanitised via
+  `marked` + `sanitize-html` (no raw HTML injection).
+- Hero simplified (owner steer, same date): typographic hero, one short
+  lead, motto verbatim, portrait only in My Connection, purpose paragraph
+  moved to the Purpose intro. See `docs/CONTENT_MAP.md`.
+
+### Consequences
+
+- With KV+Blob connected, admin edits/blog/uploads persist across Vercel
+  deploys. Without them, behaviour is exactly the previous file mode.
+- Tests: file-mode save flows per tab, KV adapter against a local
+  Upstash-REST mock (seed, auto-seed, save, blog), Blob upload path is
+  code-reviewed only until the store is connected (no token exists yet).
+
+---
+
 ## Related open questions (do not invent resolutions)
 
 - **Palette** — resolved by ADR-006 (Emerald & Gilt, owner-approved 2026-10-17).  

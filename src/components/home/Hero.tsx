@@ -1,12 +1,23 @@
 import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
 import { loadSiteSettings } from "@/content/site";
-import { CURATOR_DISPLAY_NAME, CURATOR_ROLE_LINE } from "@/content/nav";
+import { loadFamilyArchiveHomePreview } from "@/content/family-archives";
 import { MediaImage } from "@/components/ui/MediaImage";
 import styles from "./Hero.module.css";
 
+/**
+ * Clean typographic hero (Oct 2026, owner steer): eyebrow, title, motto,
+ * ONE short lead, two CTAs, then a quiet archival image band.
+ * The curator portrait lives in My Connection only; hero.portrait stays
+ * in the CMS for that section. The longer purpose paragraph renders as
+ * the Purpose section intro (see Purpose.tsx) — nothing is deleted.
+ */
 export async function Hero() {
-  const [{ hero, strapline, guiding_principle }, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
+  const [{ hero, strapline }, site, band] = await Promise.all([
+    loadHomepage(),
+    loadSiteSettings(),
+    loadFamilyArchiveHomePreview(3).catch(() => []),
+  ]);
   const colonIdx = hero.title.indexOf(":");
   const strapParts = strapline
     .split(/\s*[·•]\s*/)
@@ -15,7 +26,7 @@ export async function Hero() {
 
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
-      <div className={`shell ${styles.heroGrid}`}>
+      <div className="shell">
         <div className={styles.heroCopy}>
           <p className="eyebrow eyebrowLight">{hero.eyebrow}</p>
           <h1 id="hero-title" className={styles.heroTitle}>
@@ -42,7 +53,6 @@ export async function Hero() {
             ))}
           </p>
           <p className={styles.lede}>{hero.intro}</p>
-          <p className={styles.purpose}>{hero.purpose}</p>
           <div className={styles.actions}>
             <Link className="btn-primary btn-gilt" href={site.hero_ctas.primary_href}>
               {site.hero_ctas.primary_label} <span aria-hidden="true">→</span>
@@ -52,30 +62,23 @@ export async function Hero() {
             </Link>
           </div>
         </div>
-        <div className={styles.portraitWrap}>
-          <div className={styles.arch}>
-            <div className={styles.heroPortraitFrame}>
-              <MediaImage
-                className={styles.heroPortrait}
-                src={hero.portrait}
-                alt={`Portrait of ${CURATOR_DISPLAY_NAME}`}
-                width={1122}
-                height={1402}
-                priority
-                sizes="(max-width: 760px) 90vw, 440px"
-              />
-            </div>
+
+        {band.length ? (
+          <div className={styles.band} aria-hidden="true">
+            {band.map((item) => (
+              <div key={item.id} className={styles.bandItem}>
+                <MediaImage
+                  src={item.imageSrc}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 33vw, 400px"
+                  className={styles.bandImg}
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            ))}
           </div>
-          <div className={styles.portraitLabel}>
-            <strong>{CURATOR_DISPLAY_NAME}</strong>
-            <span>{CURATOR_ROLE_LINE}</span>
-          </div>
-        </div>
-      </div>
-      <div className="shell">
-        <blockquote className={styles.quote}>
-          “{guiding_principle.replace(/\.$/, "")}.”
-        </blockquote>
+        ) : null}
       </div>
     </section>
   );

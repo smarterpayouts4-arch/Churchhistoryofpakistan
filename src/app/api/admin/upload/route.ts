@@ -74,6 +74,28 @@ export async function POST(req: NextRequest) {
   const destRel =
     DESTINATIONS[destKey as keyof typeof DESTINATIONS] || DESTINATIONS.uploads;
   const filename = safeFilename(file.name || "upload.jpg");
+
+  // Vercel Blob (ADR-008): when BLOB_READ_WRITE_TOKEN exists, uploads go to
+  // Blob and the public URL is returned. Existing /media/... paths keep
+  // working unchanged. Local/dev without the token keeps the file store.
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const { put } = await import("@vercel/blob");
+    const buf = Buffer.from(await file.arrayBuffer());
+    const blob = await put(`${destKey}/${filename}`, buf, {
+      access: "public",
+      contentType: file.type,
+      addRandomSuffix: false,
+    });
+    return NextResponse.json({
+      ok: true,
+      path: blob.url,
+      filename,
+      bytes: buf.length,
+      contentType: file.type,
+      storage: "vercel-blob",
+    });
+  }
+
   const absDir = path.join(process.cwd(), destRel);
   await fs.mkdir(absDir, { recursive: true });
   const absPath = path.join(absDir, filename);

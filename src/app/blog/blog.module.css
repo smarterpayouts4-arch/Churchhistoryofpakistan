@@ -1,0 +1,29 @@
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:2rem; }
+@media (max-width:640px){ .grid{ grid-template-columns:1fr 1fr; gap:.75rem; } }
+.card { background:var(--paper); border:1px solid var(--line); display:flex; flex-direction:column; overflow:hidden; text-decoration:none; color:inherit; box-shadow: var(--shadow-frame, 0 1px 3px rgb(var(--ink-rgb,20 32 27)/.06)); }
+.card:hover .cardTitle { color:var(--emerald-800); text-decoration:underline; }
+.media { aspect-ratio:3/2; background:var(--stone-deep); position:relative; overflow:hidden; }
+.media img { object-fit:cover; object-position:50% 22%; }
+.cardBody { padding:1rem 1.1rem 1.2rem; display:grid; gap:.45rem; }
+.meta { font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--gilt-ink); font-weight:700; margin:0; }
+.cardTitle { font-family:var(--font-display); font-size:1.25rem; line-height:1.2; margin:0; color:var(--ink); }
+.excerpt { color:var(--slate); font-size:.95rem; margin:0; }
+.featured { grid-column:1 / -1; }
+.featured .media { aspect-ratio:21/9; }
+.featured .cardTitle { font-size:clamp(1.6rem,3.4vw,2.4rem); }
+.empty { margin-top:2rem; border:1px solid var(--line); background:var(--stone); padding:2rem 1.5rem; text-align:center; }
+.empty h2 { font-family:var(--font-display); margin:.2rem 0 .5rem; }
+.article { max-width:46rem; margin:0 auto; }
+.articleMeta { color:var(--slate); font-size:.9rem; }
+.heroMedia { aspect-ratio:21/10; position:relative; background:var(--stone-deep); overflow:hidden; margin:1.5rem 0; }
+.heroMedia img { object-fit:cover; object-position:50% 22%; }
+.body { font-size:1.08rem; line-height:1.75; color:var(--ink); }
+.body p:first-of-type::first-letter { font-family:var(--font-display); font-size:3.2em; float:left; line-height:.85; padding:.06em .12em 0 0; color:var(--emerald-800); }
+.body h2 { font-family:var(--font-display); line-height:1.2; margin:1.8em 0 .5em; }
+.body h3 { font-family:var(--font-display); margin:1.5em 0 .4em; }
+.body blockquote { border-left:3px solid var(--gilt); margin:1.8em 0; padding:.4em 0 .4em 1.2em; font-family:var(--font-display); font-size:1.35em; line-height:1.45; color:var(--emerald-950); }
+.body img { max-width:100%; height:auto; }
+.body a { color:var(--emerald-800); }
+.tags { display:flex; flex-wrap:wrap; gap:.4rem; margin:1.2rem 0; padding:0; list-style:none; }
+.tags li { border:1px solid var(--line); background:var(--stone); padding:.25rem .6rem; font-size:.8rem; border-radius:999px; }
+.related { margin-top:3rem; border-top:1px solid var(--line); padding-top:1.5rem; }

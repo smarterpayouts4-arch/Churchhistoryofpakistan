@@ -83,9 +83,9 @@ export const featuredInterviewSchema = z.object({
 const publicMediaPath = z
   .string()
   .min(1)
-  .max(500)
-  .refine((v) => v.startsWith("/media/"), {
-    message: "Path must start with /media/",
+  .max(1000)
+  .refine((v) => v.startsWith("/media/") || /^https:\/\//i.test(v), {
+    message: "Path must start with /media/ or be an https URL (Vercel Blob)",
   });
 
 export const featuredInterviewPatchSchema = z.object({
@@ -333,4 +333,27 @@ export const siteSettingsSchema = z.object({
       sources_label: siteText(120),
     }),
   }),
+});
+
+export const blogPostSchema = z.object({
+  id: z.string().min(1).max(120),
+  title: z.string().min(1).max(300),
+  slug: z
+    .string()
+    .min(1)
+    .max(120)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase words joined by hyphens"),
+  excerpt: z.string().min(1).max(1000),
+  coverSrc: z.string().max(1000),
+  coverAlt: z.string().max(1000),
+  body: z.string().min(1).max(100000),
+  author: z.string().min(1).max(200),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD"),
+  tags: z.array(z.string().min(1).max(60)).max(12),
+  status: z.enum(["draft", "published"]),
+  featured: z.boolean(),
+});
+
+export const blogFileSchema = z.object({
+  posts: z.array(blogPostSchema).max(500),
 });

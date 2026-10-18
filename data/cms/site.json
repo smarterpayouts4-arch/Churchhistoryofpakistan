@@ -30,6 +30,10 @@
         "label": "People"
       },
       {
+        "href": "/blog",
+        "label": "Blog"
+      },
+      {
         "href": "/contribute",
         "label": "Contribute"
       }
@@ -58,6 +62,10 @@
       {
         "href": "/people",
         "label": "People"
+      },
+      {
+        "href": "/blog",
+        "label": "Blog"
       },
       {
         "href": "/sources",

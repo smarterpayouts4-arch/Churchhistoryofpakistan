@@ -229,3 +229,50 @@ edits locally (or in any writable preview), commit the changed
 Vercel then deploys the edited content. No paid/external database or
 storage service has been introduced; adopting one (e.g. Vercel Blob/KV)
 requires a new ADR in `docs/DECISIONS.md` first.
+
+## Storage (Vercel KV + Blob) — ADR-008
+
+The CMS now runs behind a storage adapter (`src/lib/cms/store.ts`):
+
+- **Documents** (all CMS JSON, incl. blog): if `KV_REST_API_URL` and
+  `KV_REST_API_TOKEN` are set, documents live in **Vercel KV / Upstash Redis**
+  (Vercel Marketplace) as one JSON document per key (`cms:homepage.json`, …,
+  `cms:blog.json`). This matches the repo's whole-file JSON shape exactly.
+  On first read, a missing key is seeded from the bundled `data/cms/*.json`,
+  so no content is lost. Without those env vars, the local file store is used.
+- **Media**: if `BLOB_READ_WRITE_TOKEN` is set, admin uploads go to **Vercel
+  Blob** and the returned `https://…public.blob.vercel-storage.com/…` URL is
+  stored in the image field. Existing `/media/…` files keep working unchanged.
+
+Check which backend a server is using: `node scripts/storage-check.mjs`
+(names/booleans only). Explicit re-seed (files win): set the KV env vars and
+run `node scripts/seed-storage.mjs` (add `--dry-run` to preview).
+
+### Oscar's one-time setup (about 10 minutes, Vercel dashboard)
+
+1. Open the project → **Storage** → **Create** → choose **KV (Upstash Redis)**
+   from the Marketplace → create → **Connect to Project** (Production +
+   Preview). This injects `KV_REST_API_URL`, `KV_REST_API_TOKEN` (and
+   `KV_REST_API_READ_ONLY_TOKEN`, `KV_URL`) automatically.
+2. Storage → the already-created Blob store **churchhistory-media** →
+   **Connect to Project** (Production + Preview). This injects
+   `BLOB_READ_WRITE_TOKEN`.
+3. Redeploy. The first page load seeds KV from the current site content;
+   from then on, admin saves and blog posts persist across deploys, and new
+   uploads land in Blob. Nothing else changes — same admin, same screens.
+
+Until step 1–2 are done, production keeps using the bundled JSON files
+(read-only on Vercel), exactly as documented in the persistence note above.
+
+## Blog — how to publish a post
+
+1. Sign in → **Blog** tab → **+ New post**.
+2. Title (slug/address fills in automatically; edit if needed), excerpt,
+   cover image (upload or paste a `/media/…` path / Blob URL) + alt text,
+   author, date, tags (comma-separated).
+3. Write the body in Markdown: `##` headings, `**bold**`, `*italic*`,
+   `> pull-quote`, `-` lists, `[text](https://…)`. Raw HTML is stripped.
+4. Status → **Published**, optionally Featured → **Save blog posts**.
+   The post appears at `/blog`, gets its own `/blog/<slug>` page, and is
+   added to `/sitemap.xml` and `/blog/rss.xml` automatically.
+   Drafts are hidden from all public pages.

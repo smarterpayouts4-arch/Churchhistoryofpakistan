@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireAdminPage } from "@/lib/auth/require-admin";
 import {
+  getBlogPosts,
   getCathedrals,
   getCuratorProfileFile,
   getFamilyArchives,
@@ -23,7 +24,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const session = await requireAdminPage();
-  const [archives, interviews, profile, homepage, cathedrals, peopleFrames, siteSettings] =
+  const [archives, interviews, profile, homepage, cathedrals, peopleFrames, siteSettings, blog] =
     await Promise.all([
       getFamilyArchives(),
       getFeaturedInterviews(),
@@ -32,6 +33,7 @@ export default async function AdminDashboardPage() {
       getCathedrals(),
       getPeopleFrames(),
       getSiteSettings(),
+      getBlogPosts(),
     ]);
 
   return (
@@ -65,6 +67,7 @@ export default async function AdminDashboardPage() {
           initialPeopleFrames={peopleFrames.frames}
           initialProfile={profile}
           initialSite={siteSettings}
+          initialBlogPosts={blog.posts}
         />
       </div>
     </div>

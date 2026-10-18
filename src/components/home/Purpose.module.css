@@ -134,3 +134,11 @@
     transform: scale(0.99);
   }
 }
+
+.purposeIntro {
+  max-width: 44rem;
+  margin: 0 0 1.75rem;
+  font-size: var(--text-lead);
+  line-height: 1.65;
+  color: var(--slate);
+}

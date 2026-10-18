@@ -1,17 +1,16 @@
-/* -- Hero: deep emerald museum band with arched portrait -- */
+/* -- Hero: clean typographic museum band (no portrait; portrait lives in My Connection) -- */
 .hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  padding: clamp(3rem, 7vw, 5.5rem) 0 clamp(2.25rem, 5vw, 3.25rem);
   background:
-    radial-gradient(44rem 30rem at 85% 20%, rgb(var(--emerald-900-rgb) / 0.75), transparent 65%),
+    radial-gradient(44rem 30rem at 85% 0%, rgb(var(--emerald-900-rgb) / 0.75), transparent 65%),
     radial-gradient(30rem 22rem at 0% 100%, rgb(var(--gilt-rgb) / 0.12), transparent 60%),
     var(--emerald-950);
   color: var(--ivory);
 }
 
 .hero::before {
-  /* faint archival grid */
   content: "";
   position: absolute;
   inset: 0;
@@ -20,21 +19,15 @@
   pointer-events: none;
 }
 
-.heroGrid {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
-  gap: clamp(2.5rem, 6vw, 5.5rem);
-  align-items: center;
-}
-
 .heroCopy {
+  position: relative;
+  max-width: 54rem;
   min-width: 0;
 }
 
 .heroTitle {
-  margin: 0 0 1.5rem;
-  font-size: var(--text-hero);
+  margin: 0 0 1.25rem;
+  font-size: clamp(3rem, 8vw, 6.5rem);
   font-variation-settings: "opsz" 144, "SOFT" 30;
   font-weight: 350;
   line-height: 0.98;
@@ -52,15 +45,13 @@
   margin-bottom: 0.12em;
 }
 
-.titleMain {
-  display: block;
-}
+.titleMain { display: block; }
 
 .strapline {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 0.6rem;
-  margin: 0 0 1.75rem;
+  margin: 0 0 1.5rem;
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -70,159 +61,59 @@
 
 .strapDot {
   color: var(--gilt);
-  font-size: 0.95em; /* decorative separator kept >=12px computed */
+  font-size: 0.95em;
   vertical-align: 0.15em;
   padding-inline: 0.15rem;
 }
 
 .lede {
-  max-width: 36rem;
-  margin: 0 0 1rem;
+  max-width: 38rem;
+  margin: 0;
   font-size: var(--text-lead);
   line-height: 1.6;
   color: var(--ivory);
-}
-
-.purpose {
-  max-width: 34rem;
-  margin: 0;
-  color: var(--mist);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 2.25rem;
+  margin-top: 2rem;
 }
 
-.portraitWrap {
+/* Quiet archival strip: existing public archive images, decorative. */
+.band {
   position: relative;
-  justify-self: end;
-  width: min(100%, 440px);
-}
-
-.portraitWrap::before {
-  content: "";
-  position: absolute;
-  inset: -8% -12% auto auto;
-  width: 75%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(var(--gilt-rgb) / 0.22), transparent 65%);
-  pointer-events: none;
-}
-
-.heroPortrait {
-  filter: saturate(0.96) contrast(1.02) sepia(0.04);
-}
-
-.arch {
-  position: relative;
-  padding: 12px;
-  border: 1px solid rgb(var(--gilt-rgb) / 0.45);
-  border-radius: 999px 999px var(--radius-md) var(--radius-md);
-}
-
-.heroPortraitFrame {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border-radius: 999px 999px var(--radius-sm) var(--radius-sm);
-  background: var(--emerald-900);
-  box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.7);
-}
-
-.heroPortrait {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 18%;
-}
-
-.portraitLabel {
-  position: relative;
-  z-index: 1;
   display: grid;
-  gap: 0.2rem;
-  width: min(88%, 22rem);
-  margin: -2.75rem auto 0;
-  padding: 0.95rem 1.2rem;
-  border-radius: var(--radius-sm);
-  background: var(--paper);
-  border-left: 3px solid var(--gilt);
-  box-shadow: var(--shadow-lift);
-  color: var(--ink);
-}
-
-.portraitLabel strong {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 36, "SOFT" 30;
-  font-weight: 500;
-  font-size: 1.1rem;
-  color: var(--emerald-800);
-}
-
-.portraitLabel span {
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  color: var(--slate);
-}
-
-.quote {
-  position: relative;
-  margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
-  padding: 1.6rem 0 0;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  padding-top: 1.25rem;
   border-top: 1px solid var(--line-dark);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(1.3rem, 2.4vw, 1.85rem);
-  line-height: 1.3;
-  color: var(--gilt);
 }
 
-@media (max-width: 860px) {
-  .heroGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .portraitWrap {
-    justify-self: center;
-    width: min(100%, 360px);
-  }
+.bandItem {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--emerald-900);
 }
 
-@media (max-width: 420px) {
-  .actions > * {
-    width: 100%;
-  }
+.bandImg {
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.02) sepia(0.05);
 }
 
 @media (max-width: 640px) {
-  .hero {
-    padding: 2.5rem 0 2rem;
-  }
+  .hero { padding: 2.25rem 0 1.75rem; }
+  .heroTitle { font-size: clamp(2.6rem, 13vw, 3.4rem); }
+  .lede { font-size: 1rem; }
+  .actions { margin-top: 1.5rem; }
+  .band { gap: 0.5rem; margin-top: 1.75rem; }
+  .bandItem { aspect-ratio: 4 / 3; }
+}
 
-  .heroGrid {
-    gap: 1.75rem;
-  }
-
-  .lede {
-    font-size: 1rem;
-  }
-
-  .actions {
-    margin-top: 1.5rem;
-  }
-
-  .portraitWrap {
-    width: min(64vw, 240px);
-  }
-
-  .quote {
-    margin-top: 1.75rem;
-    padding-top: 1.1rem;
-    font-size: 1.2rem;
-  }
+@media (max-width: 420px) {
+  .actions > * { width: 100%; }
 }

@@ -241,3 +241,21 @@ export type SiteSettings = {
 };
 
 export type SiteSettingsFile = SiteSettings;
+
+export type BlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  coverSrc: string;
+  coverAlt: string;
+  body: string;
+  author: string;
+  /** ISO date (YYYY-MM-DD). */
+  date: string;
+  tags: string[];
+  status: "draft" | "published";
+  featured: boolean;
+};
+
+export type BlogFile = { posts: BlogPost[] };

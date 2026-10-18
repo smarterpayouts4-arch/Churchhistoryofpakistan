@@ -19,6 +19,7 @@ export async function Purpose() {
           <p className="eyebrow">{site.home_sections.purpose.eyebrow}</p>
           <h2 id="purpose-heading">{site.home_sections.purpose.heading}</h2>
         </div>
+        <p className={styles.purposeIntro}>{homepage.hero.purpose}</p>
         <ol className={styles.purposeGrid}>
           {homepage.purpose_cards.map((card, i) => (
             <li key={card.title} className={styles.purposeCard}>
