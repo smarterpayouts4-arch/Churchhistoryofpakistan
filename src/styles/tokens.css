@@ -247,6 +247,16 @@ a:hover {
   transform: translateY(-1px);
 }
 
+.btn-primary:active,
+.btn-secondary:active,
+.btn-gilt:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-secondary:active {
+  background: var(--emerald-100);
+}
+
 .btn-primary:disabled {
   opacity: 0.65;
   cursor: progress;

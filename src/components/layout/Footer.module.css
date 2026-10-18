@@ -47,6 +47,9 @@
 }
 
 .colTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   margin: 0 0 1rem;
   font-size: var(--text-label);
   font-weight: 600;
@@ -75,8 +78,20 @@
   transition: color var(--dur-fast) ease;
 }
 
+.colTitle::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-dark);
+}
+
+.nav a {
+  transition: color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
+}
+
 .nav a:hover {
   color: var(--gilt);
+  transform: translateX(2px);
 }
 
 .copy {
@@ -128,6 +143,10 @@
   letter-spacing: -0.035em;
   white-space: nowrap;
   color: rgb(var(--mist-rgb) / 0.16);
+  background: linear-gradient(180deg, rgb(var(--mist-rgb) / 0.28), rgb(var(--mist-rgb) / 0.05));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   user-select: none;
 }
 
@@ -149,6 +168,5 @@
   .wordmark {
     font-size: clamp(1.5rem, 8.6vw, 2.5rem);
     white-space: normal;
-    color: rgb(var(--mist-rgb) / 0.22);
   }
 }

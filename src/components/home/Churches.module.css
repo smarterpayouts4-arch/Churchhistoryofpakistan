@@ -17,8 +17,23 @@
 }
 
 .placeCard:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-card);
+  border-color: var(--line-strong);
+}
+
+.placeMedia img {
+  filter: saturate(0.94) contrast(1.02) sepia(0.05);
+}
+
+@media (hover: hover) {
+  .placeMedia img {
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .placeCard:hover .placeMedia img {
+    transform: scale(1.03);
+  }
 }
 
 .placeMedia {
@@ -58,6 +73,7 @@
   padding: 4px 10px;
   border-radius: var(--radius-pill);
   background: rgb(var(--emerald-950-rgb) / 0.88);
+  letter-spacing: 0.05em;
   color: var(--ivory);
   font-size: 0.75rem;
   font-weight: 600;

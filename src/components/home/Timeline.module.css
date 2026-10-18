@@ -48,6 +48,7 @@
   border-radius: 50%;
   background: var(--emerald-950);
   border: 2px solid var(--gilt);
+  box-shadow: 0 0 0 5px rgb(var(--gilt-rgb) / 0.14);
 }
 
 .year {
@@ -59,7 +60,13 @@
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.03em;
+  font-feature-settings: "lnum" 1;
   color: var(--gilt);
+  transition: color var(--dur-fast) ease;
+}
+
+.timeline li:hover .year {
+  color: var(--gilt-hover);
 }
 
 .timeline h3 {

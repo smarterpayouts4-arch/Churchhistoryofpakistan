@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { fraunces, inter } from "@/lib/fonts";
 import { SITE_DESCRIPTION, siteUrl } from "@/lib/site";
 import { loadHomepage } from "@/content/homepage";
@@ -45,6 +46,7 @@ export default async function RootLayout({
           Skip to content
         </a>
         <Header siteName={homepage.site_title} />
+        <ScrollReveal />
         <main id="main">{children}</main>
         <Footer siteName={homepage.site_title} strapline={homepage.strapline} />
         <p className="sr-only">{homepage.strapline}</p>

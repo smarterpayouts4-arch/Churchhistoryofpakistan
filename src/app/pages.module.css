@@ -87,8 +87,8 @@
 
 .list li > strong > a {
   display: inline-block;
-  padding-block: 0.55rem;
-  margin-block: -0.55rem;
+  padding-block: 0.92rem;
+  margin-block: -0.92rem;
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 1.1rem;
@@ -333,4 +333,30 @@
   .credits {
     padding: 1rem;
   }
+}
+
+/* Premium form detail: styled file selector, soft inset depth */
+.field input[type="file"]::file-selector-button {
+  min-height: 44px;
+  margin-right: 0.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--emerald-800);
+  border-radius: var(--radius-pill);
+  background: var(--emerald-800);
+  color: var(--ivory);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) ease;
+}
+
+.field input[type="file"]::file-selector-button:hover {
+  background: var(--emerald-950);
+}
+
+.field input,
+.field textarea,
+.field select {
+  box-shadow: inset 0 1px 2px rgb(var(--emerald-950-rgb) / 0.05);
 }

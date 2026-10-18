@@ -178,6 +178,19 @@ body {
   background: var(--emerald-100);
 }
 
+.sectionLink:active {
+  transform: scale(0.98);
+}
+
+.linkRow a {
+  transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease,
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.linkRow a:active {
+  transform: scale(0.98);
+}
+
 /* Legacy archival ornaments are retired in the redesign */
 .doubleRule,
 .ruleOrnament {
@@ -367,4 +380,68 @@ body {
   .linkRow {
     margin-top: 1.5rem;
   }
+}
+
+/* —— Premium finish (Phase 2): editorial details, no palette/copy changes —— */
+
+/* Scroll reveal (JS-gated via .reveal-ready; visible without JS / reduced motion) */
+html.reveal-ready main .section,
+html.reveal-ready main .pageHeader,
+html.reveal-ready main .pageBody {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 700ms ease, transform 700ms var(--ease-out);
+}
+
+html.reveal-ready main .is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.reveal-ready main .section,
+  html.reveal-ready main .pageHeader,
+  html.reveal-ready main .pageBody {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Animated underline for prose links (buttons/pills keep their own styling) */
+:is(.pageBody, .section) :is(p, li) a:not([class]) {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur-med) var(--ease-out), color var(--dur-fast) ease;
+  padding-bottom: 1px;
+}
+
+:is(.pageBody, .section) :is(p, li) a:not([class]):hover {
+  background-size: 100% 1px;
+}
+
+/* Section headings: tighter display tracking + a short gilt rule under split headings */
+.sectionHeading h2,
+.pageHeader h1 {
+  letter-spacing: -0.028em;
+}
+
+.sectionHeadingSplit {
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Inner page headers: faint archival rule texture (echoes the hero grid) */
+.pageHeader {
+  background-image:
+    linear-gradient(rgb(var(--emerald-950-rgb) / 0.035) 1px, transparent 1px),
+    radial-gradient(60rem 22rem at 100% 0%, rgb(var(--gilt-rgb) / 0.14), transparent 60%);
+  background-size: 100% 88px, auto;
+}
+
+.pageHeaderIntro {
+  text-wrap: pretty;
 }

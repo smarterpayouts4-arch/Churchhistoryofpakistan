@@ -26,7 +26,7 @@
 }
 
 .purposeCard:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-card);
   border-color: var(--line-strong);
 }
@@ -41,6 +41,7 @@
 .purposeNum {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-feature-settings: "lnum" 1;
   font-size: 2.75rem;
   font-weight: 300;
   line-height: 1;

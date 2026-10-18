@@ -20,8 +20,13 @@
 }
 
 .interviewCard:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-card);
+  border-color: var(--line-strong);
+}
+
+.peoplePhoto {
+  filter: saturate(0.94) contrast(1.02) sepia(0.05);
 }
 
 /* Locked Facebook 4:5 cover stage. Thumbnail uses object-fit: cover;
@@ -71,7 +76,8 @@
   object-fit: cover;
   object-position: center center;
   display: block;
-  transition: transform 600ms var(--ease-out);
+  filter: saturate(0.95) contrast(1.02) sepia(0.04);
+  transition: transform 600ms var(--ease-out), filter 600ms ease;
 }
 
 .interviewCoverButton:hover .interviewCoverImage {
@@ -95,6 +101,7 @@
 
 .interviewPlayDisc {
   fill: rgb(var(--ivory-rgb) / 0.94);
+  /* fine gilt ring echoes the Emerald & Gilt frame system */
   stroke: rgb(var(--gilt-rgb) / 0.9);
   stroke-width: 1.5;
   filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.35));
@@ -289,5 +296,18 @@
 
   .interviewCoverButton:active .interviewPlayIcon {
     transform: scale(0.94);
+  }
+}
+
+/* Very small phones: in-card eyebrows may wrap (a nowrap label wider than
+   the card would otherwise expand the layout viewport and cause overflow). */
+@media (max-width: 380px) {
+  .interviewCard :global(.eyebrow) {
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  .interviewCard :global(.eyebrow)::before {
+    width: 0.75rem;
   }
 }

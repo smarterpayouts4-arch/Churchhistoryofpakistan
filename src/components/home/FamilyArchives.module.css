@@ -22,8 +22,24 @@
 }
 
 .archiveCard:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-card);
+  border-color: var(--line-strong);
+}
+
+/* Warm archival grade, consistent across all card imagery */
+.archivePhoto {
+  filter: saturate(0.94) contrast(1.02) sepia(0.05);
+}
+
+@media (hover: hover) {
+  .archiveFrame img {
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .archiveCard:hover .archiveFrame img {
+    transform: scale(1.03);
+  }
 }
 
 .archiveFrame {
