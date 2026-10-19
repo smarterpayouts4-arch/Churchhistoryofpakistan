@@ -34,7 +34,7 @@ export default async function BlogIndexPage() {
             <p className="eyebrow">The journal begins soon</p>
             <h2>First stories are being prepared</h2>
             <p>When the curator publishes the first article, it will appear here. Until then, explore the photographs, interviews and family records in the archive.</p>
-            <p><Link href="/archive">Enter the Archive</Link> · <Link href="/contribute">Share Your Story</Link></p>
+            <p><Link className="tapLink" href="/archive">Enter the Archive</Link> · <Link className="tapLink" href="/contribute">Share Your Story</Link></p>
           </div>
         ) : (
           <div className={blog.grid}>
