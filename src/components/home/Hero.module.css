@@ -37,6 +37,7 @@
 
 .titleLead {
   display: block;
+  font-family: var(--font-display-italic);
   font-size: 0.56em;
   font-style: italic;
   font-weight: 300;

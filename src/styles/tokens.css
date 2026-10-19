@@ -71,6 +71,7 @@
 
   /* —— Typography —— */
   --font-display: var(--font-fraunces), "Fraunces", Georgia, serif;
+  --font-display-italic: var(--font-fraunces-italic), "Fraunces", Georgia, serif;
   --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
 
   --text-hero: clamp(2.75rem, 6.4vw, 5.75rem);

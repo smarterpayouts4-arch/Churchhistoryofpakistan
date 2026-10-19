@@ -72,6 +72,18 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
+      {
+        // Archival media files are stable, content-named assets. A week of
+        // browser/CDN caching (with background revalidation) removes repeat
+        // download cost without risking permanently stale imagery.
+        source: "/media/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=604800, stale-while-revalidate=86400",
+          },
+        ],
+      },
     ];
   },
 };

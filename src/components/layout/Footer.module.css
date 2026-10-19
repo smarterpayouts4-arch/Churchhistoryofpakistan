@@ -39,7 +39,7 @@
 
 .strap {
   margin: 1.1rem 0 0;
-  font-family: var(--font-display);
+  font-family: var(--font-display-italic);
   font-style: italic;
   font-size: 1.05rem;
   line-height: 1.5;
