@@ -124,7 +124,7 @@ export function BlogEditor({ initialPosts, pending, setPending, setMessage, setE
                     <label className={styles.label}>Excerpt (short summary for cards & search)
                       <textarea className={styles.textarea} value={editing.excerpt} onChange={(e) => patch(editing.id, { excerpt: e.target.value })} />
                     </label>
-                    <label className={styles.label}>Cover image path or URL
+                    <label className={styles.label}>Cover image path or URL (use a wide photo at least 1200px across so it stays sharp)
                       <input className={styles.input} value={editing.coverSrc} onChange={(e) => patch(editing.id, { coverSrc: e.target.value })} placeholder="/media/… or https://…blob.vercel-storage.com/…" />
                     </label>
                     <ImageCropUpload destination="uploads" onUploaded={(path) => patch(editing.id, { coverSrc: path })} />

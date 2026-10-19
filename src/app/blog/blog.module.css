@@ -18,7 +18,7 @@
 .heroMedia { aspect-ratio:21/10; position:relative; background:var(--stone-deep); overflow:hidden; margin:1.5rem 0; }
 .heroMedia img { object-fit:cover; object-position:50% 22%; }
 .body { font-size:1.08rem; line-height:1.75; color:var(--ink); }
-.body p:first-of-type::first-letter { font-family:var(--font-display); font-size:3.2em; float:left; line-height:.85; padding:.06em .12em 0 0; color:var(--emerald-800); }
+.body > p:first-of-type::first-letter { font-family:var(--font-display); font-size:3.2em; float:left; line-height:.85; padding:.06em .12em 0 0; color:var(--emerald-800); }
 .body h2 { font-family:var(--font-display); line-height:1.2; margin:1.8em 0 .5em; }
 .body h3 { font-family:var(--font-display); margin:1.5em 0 .4em; }
 .body blockquote { border-left:3px solid var(--gilt); margin:1.8em 0; padding:.4em 0 .4em 1.2em; font-family:var(--font-display); font-size:1.35em; line-height:1.45; color:var(--emerald-950); }

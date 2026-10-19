@@ -39,7 +39,7 @@ export async function FamilyArchives() {
         </div>
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>
           <strong>{copy.note_strong}</strong> {FAMILY_ARCHIVE_NOTE}{" "}
-          <Link href="/archive">{copy.note_link_label}</Link>.
+          <Link className="tapLink" href="/archive">{copy.note_link_label}</Link>.
         </p>
       </div>
     </section>

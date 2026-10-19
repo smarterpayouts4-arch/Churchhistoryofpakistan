@@ -54,7 +54,7 @@ export default async function ArchivePage() {
                 {item.sourceUrl ? (
                   <>
                     {" · "}
-                    <a href={item.sourceUrl} rel="noopener noreferrer">
+                    <a className="tapLink" href={item.sourceUrl} rel="noopener noreferrer">
                       Open source
                     </a>
                   </>

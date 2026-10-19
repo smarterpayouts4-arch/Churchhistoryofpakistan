@@ -116,8 +116,8 @@
   }
 
   .purposeCard p {
-    font-size: 0.8125rem; /* 13px */
-    line-height: 1.5;
+    font-size: 0.9375rem; /* 15px — readable card copy on small phones */
+    line-height: 1.55;
   }
 }
 

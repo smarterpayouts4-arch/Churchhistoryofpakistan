@@ -62,7 +62,7 @@ export default async function InterviewsPage() {
               >
                 {item.provenance}
                 {" · "}
-                <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">
+                <a className="tapLink" href={item.sourceUrl} rel="noopener noreferrer" target="_blank">
                   Source reel
                 </a>
                 {" · "}

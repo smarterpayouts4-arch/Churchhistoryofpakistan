@@ -22,7 +22,7 @@ export function ArchivePublicRecord({ item }: Props) {
         <ul className={styles.archivePublicRecordRefs}>
           {refs.map((ref) => (
             <li key={ref.url}>
-              <a href={ref.url} rel="noopener noreferrer">
+              <a className="tapLink" href={ref.url} rel="noopener noreferrer">
                 {ref.label}
               </a>
               {ref.note ? (

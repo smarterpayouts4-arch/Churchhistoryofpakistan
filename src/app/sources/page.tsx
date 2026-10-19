@@ -69,6 +69,7 @@ export default async function SourcesPage() {
                 · Photo: {c.photo_author} / {c.photo_license}.{" "}
                 {c.photo_source_page ? (
                   <a
+                    className="tapLink"
                     href={c.photo_source_page}
                     rel="noopener noreferrer"
                     target="_blank"

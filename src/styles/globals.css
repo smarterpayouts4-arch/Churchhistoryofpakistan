@@ -146,7 +146,9 @@ body {
 
 .sectionHeading h2 {
   margin: 0 0 0.35em;
-  font-size: var(--text-display);
+  /* Section headings sit one step below page H1s in the hierarchy
+     (was --text-display at up to 68px, larger than inner-page H1s). */
+  font-size: clamp(2rem, 3.8vw, 3.25rem);
   line-height: var(--leading-display);
 }
 
@@ -180,6 +182,17 @@ body {
 
 .sectionLink:active {
   transform: scale(0.98);
+}
+
+/* Inline links inside small meta text: keep the type size, but give the
+   link a full 44px-tall hit area (compensated with negative margins so
+   line spacing does not change). */
+.tapLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.2rem;
+  margin-block: -0.8rem;
 }
 
 .linkRow a {
@@ -267,6 +280,17 @@ body {
   flex-wrap: wrap;
   gap: 0.6rem;
   margin-top: 2.5rem;
+}
+
+/* Inline links inside small meta text: keep the type size, but give the
+   link a full 44px-tall hit area (compensated with negative margins so
+   line spacing does not change). */
+.tapLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.2rem;
+  margin-block: -0.8rem;
 }
 
 .linkRow a {

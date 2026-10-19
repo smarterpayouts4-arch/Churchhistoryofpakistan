@@ -38,6 +38,7 @@ export default async function ChurchesPage() {
                         <>
                           {" · "}
                           <a
+                            className="tapLink"
                             href={c.photo_source_page}
                             rel="noopener noreferrer"
                             target="_blank"
@@ -77,7 +78,7 @@ export default async function ChurchesPage() {
 
         <p className={homeStyles.rightsNote}>
           <strong>{copy.rights_note_strong}</strong> {copy.rights_note}{" "}
-          <Link href="/sources">{copy.rights_note_link_label}</Link> {copy.rights_note_tail}
+          <Link className="tapLink" href="/sources">{copy.rights_note_link_label}</Link> {copy.rights_note_tail}
         </p>
       </div>
     </div>
