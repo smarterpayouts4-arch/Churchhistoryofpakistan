@@ -282,17 +282,6 @@ body {
   margin-top: 2.5rem;
 }
 
-/* Inline links inside small meta text: keep the type size, but give the
-   link a full 44px-tall hit area (compensated with negative margins so
-   line spacing does not change). */
-.tapLink {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding-inline: 0.2rem;
-  margin-block: -0.8rem;
-}
-
 .linkRow a {
   display: inline-flex;
   align-items: center;
