@@ -21,6 +21,7 @@ const ROUTES = [
   "/people",
   "/contribute",
   "/sources",
+  "/blog",
 ];
 
 const REQUIRED_FILES = [

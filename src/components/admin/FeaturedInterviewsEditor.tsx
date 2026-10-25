@@ -46,6 +46,7 @@ export function FeaturedInterviewsEditor({
             videoSrc: item.videoSrc,
             posterSrc: item.posterSrc,
             coverSrc: item.coverSrc ?? "",
+            coverPosition: item.coverPosition ?? "",
           }),
         },
       );
@@ -129,6 +130,17 @@ export function FeaturedInterviewsEditor({
               destination="uploads"
               onUploaded={(path) => patchInterview(item.id, { posterSrc: path })}
             />
+            <label className={styles.label}>
+              Cover focal position (mobile crop; e.g. 50% 20% keeps upper faces)
+              <input
+                className={styles.input}
+                value={item.coverPosition ?? ""}
+                placeholder="50% 35%"
+                onChange={(e) =>
+                  patchInterview(item.id, { coverPosition: e.target.value })
+                }
+              />
+            </label>
             <label className={styles.label}>
               Cover path (optional)
               <input

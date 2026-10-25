@@ -3,10 +3,12 @@ import { loadHomepage } from "@/content/homepage";
 import { loadFamilyArchiveHomePreview } from "@/content/family-archives";
 import { CURATOR_DISPLAY_NAME } from "@/content/nav";
 import { MediaImage } from "@/components/ui/MediaImage";
+import { loadSiteSettings } from "@/content/site";
+import { HeroBand } from "./HeroBand";
 import styles from "./Hero.module.css";
 
 export async function Hero() {
-  const [{ hero, strapline }, records] = await Promise.all([loadHomepage(), loadFamilyArchiveHomePreview(1)]);
+  const [{ hero, strapline }, records, site] = await Promise.all([loadHomepage(), loadFamilyArchiveHomePreview(1), loadSiteSettings()]);
   const featured = records[0];
   const colon = hero.title.indexOf(":");
   return (
@@ -19,8 +21,8 @@ export async function Hero() {
           </h1>
           <p className={styles.lede}>{hero.purpose}</p>
           <div className={styles.actions}>
-            <Link className="btn-primary" href="/archive">Explore the archive <span aria-hidden="true">↗</span></Link>
-            <Link className={styles.textLink} href="/about">Our story <span aria-hidden="true">→</span></Link>
+            <Link className="btn-primary" href={site.hero_ctas.primary_href}>{site.hero_ctas.primary_label} <span aria-hidden="true">↗</span></Link>
+            <Link className={styles.textLink} href={site.hero_ctas.secondary_href}>{site.hero_ctas.secondary_label} <span aria-hidden="true">→</span></Link>
           </div>
           <Link className={styles.curator} href="/about#profile">
             <MediaImage src={hero.portrait} alt="" width={64} height={64} sizes="48px" />
@@ -28,7 +30,10 @@ export async function Hero() {
             <span aria-hidden="true">↗</span>
           </Link>
         </div>
-        {featured && <figure className={styles.featured}>
+        {hero.band_images?.length ? <figure className={styles.featured}>
+          <div className={styles.imageTopline}><span>From the collection</span><span>Family archive</span></div>
+          <HeroBand images={hero.band_images} />
+        </figure> : featured && <figure className={styles.featured}>
           <div className={styles.imageTopline}><span>From the collection</span><span>01 / Family archive</span></div>
           <Link href={`/archive#${featured.id}`} className={styles.photoLink} aria-label={`View ${featured.title}`}>
             <MediaImage src={featured.imageSrc} alt={featured.alt} fill priority sizes="(max-width: 760px) 95vw, 50vw" />

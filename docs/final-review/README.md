@@ -40,3 +40,7 @@ The reviewed local redesign passes its build and functional checks. This is a ve
 The next valuable improvements are operational/content work: finish contribution delivery and attachment handling end-to-end before enabling public intake; supply reviewed legal/privacy pages; obtain permission-cleared images for the three pending church seats; add verified biographies and accurate video captions/transcripts. The existing admin upload dynamic-filesystem tracing warning remains and should be addressed during deployment preparation.
 
 Screenshots plus responsive and keyboard checks do not establish full WCAG compliance. This pass did not perform a screen-reader audit, validate every external source, modify production settings, test successful external contribution delivery, or exercise authenticated CMS edits. Existing launch constraints in the onboarding briefing still apply.
+
+## Superseded by merged-site verification
+
+These screenshots describe commit 42e755b before integration with newer main. See [the merge review](../merge-review/README.md) for the current combined site and validation.

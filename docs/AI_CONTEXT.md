@@ -52,7 +52,7 @@ src/app/          # App Router pages, admin, API routes
 src/content/      # typed public loaders (use these)
 src/components/   # home, layout, admin, ui
 src/lib/          # cms, auth, site, fonts
-data/cms/         # live editable JSON
+data/cms/         # live editable JSON (KV when KV_REST_API_* set; see docs/CONTENT_MAP.md, ADR-008)
 public/media/     # rights-cleared publishable media
 docs/             # design, rights, open questions, finish briefing
 reference/        # immutable package — do not rewrite

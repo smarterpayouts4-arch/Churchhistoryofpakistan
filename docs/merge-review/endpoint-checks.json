@@ -1,0 +1,65 @@
+[
+  {
+    "route": "/blog",
+    "method": "GET",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "route": "/blog/rss.xml",
+    "method": "GET",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "route": "/sitemap.xml",
+    "method": "GET",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "route": "/no-such-page-xyz",
+    "method": "GET",
+    "status": 404,
+    "expected": 404,
+    "pass": true
+  },
+  {
+    "route": "/admin",
+    "method": "GET",
+    "status": 307,
+    "expected": 307,
+    "pass": true
+  },
+  {
+    "route": "/api/admin/blog",
+    "method": "GET",
+    "status": 401,
+    "expected": 401,
+    "pass": true
+  },
+  {
+    "route": "/api/admin/site",
+    "method": "GET",
+    "status": 401,
+    "expected": 401,
+    "pass": true
+  },
+  {
+    "route": "/api/admin/upload",
+    "method": "POST",
+    "status": 401,
+    "expected": 401,
+    "pass": true
+  },
+  {
+    "route": "/api/admin/login/preview",
+    "method": "POST",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  }
+]

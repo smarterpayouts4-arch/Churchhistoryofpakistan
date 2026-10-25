@@ -26,7 +26,7 @@ export function PlaceCard({
           }
           fill
           style={{ objectFit: "contain", objectPosition: "center" }}
-          sizes="(max-width: 768px) 100vw, (max-width: 980px) 50vw, 33vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 1100px) 50vw, 400px"
         />
         <span className={`${styles.rightsBadge} ${open ? "" : styles.rightsPending}`}>
           {open ? "Reusable photo verified" : "Photo permission pending"}

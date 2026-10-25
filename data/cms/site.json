@@ -1,0 +1,181 @@
+{
+  "seo": {
+    "description": "Enter the living memory of the Church of Pakistan: photographs, documents, interviews and family stories that honour our forefathers, preserve their sacrifice and service, and keep their legacy alive for generations to come.",
+    "title_suffix": "Preserving Our Heritage"
+  },
+  "nav": {
+    "primary": [
+      {
+        "href": "/",
+        "label": "Home"
+      },
+      {
+        "href": "/about",
+        "label": "About"
+      },
+      {
+        "href": "/archive",
+        "label": "Archive"
+      },
+      {
+        "href": "/interviews",
+        "label": "Interviews"
+      },
+      {
+        "href": "/churches",
+        "label": "Churches"
+      },
+      {
+        "href": "/people",
+        "label": "People"
+      },
+      {
+        "href": "/blog",
+        "label": "Blog"
+      },
+      {
+        "href": "/contribute",
+        "label": "Contribute"
+      }
+    ],
+    "footer": [
+      {
+        "href": "/",
+        "label": "Home"
+      },
+      {
+        "href": "/about",
+        "label": "About"
+      },
+      {
+        "href": "/archive",
+        "label": "Archive"
+      },
+      {
+        "href": "/interviews",
+        "label": "Interviews"
+      },
+      {
+        "href": "/churches",
+        "label": "Churches"
+      },
+      {
+        "href": "/people",
+        "label": "People"
+      },
+      {
+        "href": "/blog",
+        "label": "Blog"
+      },
+      {
+        "href": "/sources",
+        "label": "Sources"
+      },
+      {
+        "href": "/contribute",
+        "label": "Contribute"
+      }
+    ]
+  },
+  "footer": {
+    "explore_title": "Explore",
+    "about_title": "About this archive",
+    "about_copy": "A local digital heritage archive. Historical claims remain citation-backed; photographs show rights status.",
+    "curator_link_label": "Curator login"
+  },
+  "hero_ctas": {
+    "primary_label": "Enter the Archive",
+    "primary_href": "/archive",
+    "secondary_label": "Watch Interviews",
+    "secondary_href": "/interviews"
+  },
+  "home_sections": {
+    "purpose": {
+      "eyebrow": "Lest we forget",
+      "heading": "Our Purpose"
+    },
+    "interviews": {
+      "eyebrow": "Youth empowerment",
+      "heading": "Featured Interviews",
+      "view_all_label": "View all",
+      "note_heading": "Youth motivational programmes",
+      "note_body": "from the History: Church of Pakistan Facebook page (Rab Ki Khidmat / Youth Empowerment). Additional oral-history interviews remain forthcoming."
+    },
+    "churches": {
+      "eyebrow": "Eight dioceses • one shared history",
+      "heading": "Churches & Places",
+      "note": "Cathedral seats of the Church of Pakistan, identified from verified diocesan sources.",
+      "view_label": "View gallery",
+      "rights_note": "homepage highlights four verified open-license cathedral photographs. The full gallery covers all eight dioceses; Faisalabad, Hyderabad, and Raiwind remain permission-pending SVG placeholders until diocesan-approved images arrive.",
+      "rights_note_strong": "Photo integrity:"
+    },
+    "timeline": {
+      "eyebrow": "Selected documented milestones",
+      "heading": "A Journey Through Time"
+    },
+    "archives": {
+      "eyebrow": "Documents • photographs • memories",
+      "heading": "From the Family Archives",
+      "view_label": "View more",
+      "note_strong": "Family Archive provenance.",
+      "note_link_label": "See all published holdings"
+    },
+    "connection": {
+      "eyebrow": "More than history — a personal promise",
+      "heading": "My Connection to the Church"
+    },
+    "guiding": {
+      "eyebrow": "Our Guiding Principle"
+    }
+  },
+  "pages": {
+    "archive": {
+      "eyebrow": "Documents • photographs • memories",
+      "provenance_strong": "Provenance note."
+    },
+    "churches": {
+      "eyebrow": "Eight dioceses • one shared history",
+      "title": "Churches & Places",
+      "intro": "Cathedral seats of the Church of Pakistan dioceses, drawn from the verified content register. Photo badges reflect rights status · three remain placeholders pending permission.",
+      "rights_note_strong": "Photo integrity:",
+      "rights_note": "Faisalabad, Hyderabad, and Raiwind use SVG placeholders until licensed or diocesan-approved images are supplied.",
+      "rights_note_link_label": "Sources",
+      "rights_note_tail": "for the institutional register."
+    },
+    "sources": {
+      "eyebrow": "Transparency",
+      "title": "Sources & Photograph Credits",
+      "intro_strong": "Historical claims on this site remain connected to their sources.",
+      "intro_tail": "Sources in the register below were last accessed on",
+      "institutional_heading": "Institutional sources"
+    },
+    "about": {
+      "eyebrow": "About the project",
+      "title": "About"
+    },
+    "people": {
+      "eyebrow": "Clergy & lay witness",
+      "forthcoming_title": "People records forthcoming",
+      "forthcoming_body": "Named biographies are still forthcoming. The frames below are thematic stills · not named biography cards.",
+      "card_eyebrow": "People archive",
+      "card_note": "Verified biography slots open when citation-backed records arrive.",
+      "status_label": "Forthcoming"
+    },
+    "interviews_page": {
+      "forthcoming_title": "Oral-history interviews still forthcoming",
+      "forthcoming_body": "Additional oral-history interviews (verified interviewees, roles, transcripts, and citations) remain forthcoming. The videos below are youth motivational programmes published on the Facebook page; they are not Family Archive stills or interview records."
+    },
+    "contribute_notice": {
+      "strong": "Online contributions are not open yet.",
+      "body": "Please check back before sending photographs, documents, or personal information. You can still explore the archive and learn about the project below."
+    },
+    "not_found": {
+      "eyebrow": "Error 404",
+      "title": "Page not found",
+      "intro": "The page you were looking for could not be found. It may have moved, or the address may be mistyped.",
+      "home_label": "Return home",
+      "archive_label": "Browse the archive",
+      "sources_label": "Sources & credits"
+    }
+  }
+}

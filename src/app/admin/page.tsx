@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireAdminPage } from "@/lib/auth/require-admin";
 import {
+  getBlogPosts,
   getCathedrals,
   getCuratorProfileFile,
   getFamilyArchives,
   getFeaturedInterviews,
   getHomepage,
   getPeopleFrames,
+  getSiteSettings,
 } from "@/lib/cms/store";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { LogoutButton } from "@/components/admin/LogoutButton";
@@ -22,7 +24,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const session = await requireAdminPage();
-  const [archives, interviews, profile, homepage, cathedrals, peopleFrames] =
+  const [archives, interviews, profile, homepage, cathedrals, peopleFrames, siteSettings, blog] =
     await Promise.all([
       getFamilyArchives(),
       getFeaturedInterviews(),
@@ -30,6 +32,8 @@ export default async function AdminDashboardPage() {
       getHomepage(),
       getCathedrals(),
       getPeopleFrames(),
+      getSiteSettings(),
+      getBlogPosts(),
     ]);
 
   return (
@@ -46,6 +50,9 @@ export default async function AdminDashboardPage() {
             </p>
           </div>
           <span className={styles.spacer} />
+          <Link className={styles.inspectLink} href="/" target="_blank">
+            View live site
+          </Link>
           <Link className={styles.inspectLink} href="/admin/inspect">
             Inspect media
           </Link>
@@ -59,6 +66,8 @@ export default async function AdminDashboardPage() {
           initialInterviews={interviews.items}
           initialPeopleFrames={peopleFrames.frames}
           initialProfile={profile}
+          initialSite={siteSettings}
+          initialBlogPosts={blog.posts}
         />
       </div>
     </div>

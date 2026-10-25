@@ -7,6 +7,8 @@ import {
   ConnectionBulletList,
   ConnectionLayout,
 } from "@/components/ui/ConnectionLayout";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/MyConnection.module.css";
 
@@ -17,9 +19,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [homepage, curator] = await Promise.all([
+  const [homepage, curator, site] = await Promise.all([
     loadHomepage(),
     loadCuratorProfile(),
+    loadSiteSettings(),
   ]);
   const bullets = homepage.connection.slice(0, 3);
   const pull = homepage.connection[3];
@@ -27,12 +30,16 @@ export default async function AboutPage() {
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">About the project</p>
-        <h1>About</h1>
-        <p className={styles.intro}>
-          {homepage.hero.intro} {homepage.hero.purpose}
-        </p>
+      <PageHeader
+        eyebrow={site.pages.about.eyebrow}
+        title={site.pages.about.title}
+        intro={
+            <>
+              {homepage.hero.intro} {homepage.hero.purpose}
+            </>
+          }
+      />
+      <div className="shell pageBody">
 
         <section
           id="profile"
@@ -147,13 +154,11 @@ export default async function AboutPage() {
           style={{ marginTop: "1.5rem" }}
         >
           <ConnectionBulletList bullets={bullets} pullQuote={pull} />
-          <p style={{ marginTop: "1.25rem" }}>
+          <nav className="linkRow" aria-label="Related pages">
             <Link href="/contribute">Contribute a memory</Link>
-            {" · "}
             <Link href="/sources">View sources</Link>
-            {" · "}
             <Link href="/about#profile">Curator profile</Link>
-          </p>
+          </nav>
         </ConnectionLayout>
       </div>
     </div>

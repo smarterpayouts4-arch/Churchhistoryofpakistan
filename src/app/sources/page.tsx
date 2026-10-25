@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { sources } from "@/content/sources";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
@@ -11,20 +13,24 @@ export const metadata: Metadata = {
 };
 
 export default async function SourcesPage() {
-  const cathedrals = await loadCathedralItems();
+  const [cathedrals, site] = await Promise.all([loadCathedralItems(), loadSiteSettings()]);
+  const copy = site.pages.sources;
   const credited = cathedrals.filter((c) => c.photo_status === "open_license");
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Transparency</p>
-        <h1>Sources &amp; Photograph Credits</h1>
-        <p className={styles.intro}>
-          Historical claims on this site remain connected to their sources.
-          Accessed date for the register below: {sources.accessed}.
-        </p>
+      <PageHeader
+        eyebrow={copy.eyebrow}
+        title={copy.title}
+        intro={
+            <>
+              {copy.intro_strong} {copy.intro_tail} {sources.accessed}.
+            </>
+          }
+      />
+      <div className="shell pageBody">
 
-        <h2>Institutional sources</h2>
+        <h2>{copy.institutional_heading}</h2>
         <ul className={styles.list}>
           {sources.institutional.map((s) => (
             <li key={s.url}>
@@ -63,6 +69,7 @@ export default async function SourcesPage() {
                 · Photo: {c.photo_author} / {c.photo_license}.{" "}
                 {c.photo_source_page ? (
                   <a
+                    className="tapLink"
                     href={c.photo_source_page}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -76,18 +83,15 @@ export default async function SourcesPage() {
           <p className={styles.meta} style={{ marginTop: "1rem" }}>
             Faisalabad, Hyderabad, and Raiwind remain permission-needed
             placeholders. Founder/curator portraits are user-supplied and publicly credited to Javed
-            Qadir Bakhsh. Image rights detail also lives in{" "}
-            <code>docs/IMAGE_RIGHTS_AND_CREDITS.md</code> and the remote asset
-            manifest path noted in content (
-            <code>{sources.image_sources_file}</code>).
+            Qadir Bakhsh. Full image rights details are kept in the project&apos;s
+            image rights and credits register.
           </p>
         </div>
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/churches">Churches &amp; places</Link>
-          {" · "}
           <Link href="/contribute">Contribute</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );

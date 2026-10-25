@@ -198,3 +198,74 @@ section[id], article[id], h1[id], h2[id] {
   }
 
 }
+
+/* Shared secondary-route structure retained from newer main. */
+/* —— Inner page header (shared by all secondary routes) —— */
+.pageHeader {
+  position: relative;
+  padding: clamp(3.5rem, 8vw, 6rem) 0 clamp(2.5rem, 5vw, 3.75rem);
+  background:
+    radial-gradient(60rem 22rem at 100% 0%, rgb(var(--gilt-rgb) / 0.14), transparent 60%),
+    var(--stone);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.pageHeader::after {
+  content: "";
+  position: absolute;
+  right: var(--gutter);
+  bottom: -1px;
+  width: min(14rem, 30%);
+  height: 2px;
+  background: var(--gilt);
+}
+
+.pageHeader h1 {
+  margin: 0 0 0.35em;
+  max-width: 18ch;
+}
+
+.pageHeaderIntro {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: var(--text-lead);
+  line-height: 1.6;
+  color: var(--slate);
+}
+
+.pageBody {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(4rem, 8vw, 6.5rem);
+}
+
+/* Inline row of related links (pill style) */
+.linkRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2.5rem;
+}
+
+.linkRow a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.linkRow a:hover {
+  border-color: var(--emerald-800);
+  background: var(--emerald-100);
+}
+
+
+.forthcomingBody { margin-top: .75rem; }
+.tapLink { display: inline-flex; align-items: center; min-height: 44px; }
+
+@media (max-width: 760px) { .pageHeader { padding: 2.5rem 0 2rem; } .pageBody { padding: 2rem 0 3rem; } }

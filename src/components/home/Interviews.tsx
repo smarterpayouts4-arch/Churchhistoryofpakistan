@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { loadHomeFeaturedInterviews } from "@/content/featured-interviews";
+import { loadSiteSettings } from "@/content/site";
 import { InterviewPlayCard } from "./InterviewPlayCard";
 import styles from "./Interviews.module.css";
 
@@ -8,18 +9,19 @@ import styles from "./Interviews.module.css";
  * Source proportions and contain sizing preserve the full preview and video.
  */
 export async function Interviews() {
-  const homeFeaturedInterviews = await loadHomeFeaturedInterviews();
+  const [homeFeaturedInterviews, site] = await Promise.all([loadHomeFeaturedInterviews(), loadSiteSettings()]);
+  const copy = site.home_sections.interviews;
 
   return (
     <section id="interviews" className="section" aria-labelledby="interviews-heading">
       <div className="shell">
         <div className="sectionHeading sectionHeadingSplit">
           <div>
-            <p className="eyebrow">Youth empowerment</p>
-            <h2 id="interviews-heading">Featured Interviews</h2>
+            <p className="eyebrow">{copy.eyebrow}</p>
+            <h2 id="interviews-heading">{copy.heading}</h2>
           </div>
           <Link className="sectionLink" href="/interviews">
-            View all →
+            {copy.view_all_label} →
           </Link>
         </div>
         <div className={styles.interviewGrid}>
@@ -29,22 +31,20 @@ export async function Interviews() {
                 title={item.title}
                 videoSrc={item.videoSrc}
                 coverSrc={item.coverSrc}
+                coverPosition={item.coverPosition}
                 posterSrc={item.posterSrc}
                 alt={item.alt}
                 width={item.width}
                 height={item.height}
               />
-              <p className={`eyebrow ${styles.interviewMeta}`}>Rab Ki Khidmat</p>
+              <p className={styles.interviewMeta}>Rab Ki Khidmat</p>
               <h3>{item.title}</h3>
               <p>{item.copy}</p>
             </article>
           ))}
         </div>
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>
-          <strong>Youth motivational programs</strong> from the History: Church of
-          Pakistan Facebook page (Rab Ki Khidmat / Youth Empowerment). Additional
-          oral-history interviews remain forthcoming. Captions follow the page
-          inventory; no invented names.
+          <strong>{copy.note_heading}</strong> {copy.note_body}
         </p>
       </div>
     </section>

@@ -1,23 +1,24 @@
 # Site Audit Report — History: Church of Pakistan
 
-- Generated: 2026-10-25T01:47:19.411Z
+- Generated: 2026-10-25T12:51:53.926Z
 - Base URL: http://127.0.0.1:4001
-- Routes probed: 8
-- HTTP 200: 8/8
+- Routes probed: 9
+- HTTP 200: 9/9
 - Required files missing: 0
 
 ## Route results
 
 | Route | Status | Bytes | ms | Notes |
 |---|---:|---:|---:|---|
-| `/` | 200 | 86152 | 237 | ok |
-| `/about` | 200 | 45606 | 38 | ok |
-| `/archive` | 200 | 153291 | 58 | ok |
-| `/interviews` | 200 | 25960 | 29 | ok |
-| `/churches` | 200 | 59434 | 35 | ok |
-| `/people` | 200 | 26285 | 37 | ok |
-| `/contribute` | 200 | 20127 | 34 | ok |
-| `/sources` | 200 | 28119 | 28 | ok |
+| `/` | 200 | 94403 | 220 | ok |
+| `/about` | 200 | 46401 | 52 | ok |
+| `/archive` | 200 | 152951 | 83 | ok |
+| `/interviews` | 200 | 30118 | 36 | ok |
+| `/churches` | 200 | 60622 | 39 | ok |
+| `/people` | 200 | 26785 | 27 | ok |
+| `/contribute` | 200 | 18318 | 23 | ok |
+| `/sources` | 200 | 28982 | 26 | ok |
+| `/blog` | 200 | 17752 | 23 | ok |
 
 ## App Router pages found
 
@@ -26,6 +27,8 @@
 - `src\app\admin\login\page.tsx`
 - `src\app\admin\page.tsx`
 - `src\app\archive\page.tsx`
+- `src\app\blog\page.tsx`
+- `src\app\blog\[slug]\page.tsx`
 - `src\app\churches\page.tsx`
 - `src\app\contribute\page.tsx`
 - `src\app\interviews\page.tsx`

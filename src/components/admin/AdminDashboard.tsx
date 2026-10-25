@@ -6,8 +6,10 @@ import type {
   CuratorProfileFile,
   FamilyArchiveItem,
   FeaturedInterview,
+  BlogPost,
   HomepageContent,
   PeopleFrame,
+  SiteSettings,
 } from "@/lib/cms/types";
 import { ImageCropUpload } from "./ImageCropUpload";
 import { HomepageEditor } from "./HomepageEditor";
@@ -16,9 +18,13 @@ import { FamilyArchivesEditor } from "./FamilyArchivesEditor";
 import { FeaturedInterviewsEditor } from "./FeaturedInterviewsEditor";
 import { CuratorProfileEditor } from "./CuratorProfileEditor";
 import { PeopleFramesEditor } from "./PeopleFramesEditor";
+import { SiteEditor } from "./SiteEditor";
+import { BlogEditor } from "./BlogEditor";
 import styles from "@/app/admin/admin.module.css";
 
 type Tab =
+  | "site"
+  | "blog"
   | "home"
   | "churches"
   | "archives"
@@ -35,6 +41,8 @@ type Props = {
   initialInterviews: FeaturedInterview[];
   initialPeopleFrames: PeopleFrame[];
   initialProfile: CuratorProfileFile;
+  initialSite: SiteSettings;
+  initialBlogPosts: BlogPost[];
 };
 
 export function AdminDashboard({
@@ -45,6 +53,8 @@ export function AdminDashboard({
   initialInterviews,
   initialPeopleFrames,
   initialProfile,
+  initialSite,
+  initialBlogPosts,
 }: Props) {
   const [tab, setTab] = useState<Tab>("home");
   const [message, setMessage] = useState<string | null>(null);
@@ -70,6 +80,8 @@ export function AdminDashboard({
       <div className={styles.tabs} role="tablist" aria-label="Curator sections">
         {(
           [
+            ["site", "Site & Pages"],
+            ["blog", "Blog"],
             ["home", "Home"],
             ["churches", "Churches"],
             ["archives", "Family Archives"],
@@ -98,6 +110,26 @@ export function AdminDashboard({
         </p>
       ) : null}
       {message ? <p className={styles.success}>{message}</p> : null}
+
+      {tab === "site" ? (
+        <SiteEditor
+          initialSite={initialSite}
+          pending={pending}
+          setPending={setPending}
+          setMessage={setMessage}
+          setError={setError}
+        />
+      ) : null}
+
+      {tab === "blog" ? (
+        <BlogEditor
+          initialPosts={initialBlogPosts}
+          pending={pending}
+          setPending={setPending}
+          setMessage={setMessage}
+          setError={setError}
+        />
+      ) : null}
 
       {tab === "home" ? (
         <HomepageEditor
@@ -155,9 +187,10 @@ export function AdminDashboard({
         <section className={styles.section} aria-labelledby="media-heading">
           <h2 id="media-heading">Media library</h2>
           <p className={styles.hint}>
-            Uploads land in <code>public/media/uploads/</code> (or Facebook
-            archive folder). Paste the returned path into a Family Archive image
-            field.
+            When Vercel Blob is configured, uploads go to Blob and the
+            returned URL can be pasted anywhere an image is used; otherwise
+            they land in <code>public/media/uploads/</code>. Paste the returned
+            path/URL into an image field.
           </p>
           <div className={styles.panel}>
             <ImageCropUpload

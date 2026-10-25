@@ -136,9 +136,120 @@ Design #1 Archival Heritage is a custom parchment/burgundy archival language. Pa
 
 ---
 
+## ADR-006 — Redesign: Emerald & Gilt palette, Fraunces + Inter
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted (owner, 2026-10-17) |
+| **Date** | 2026-10-17 |
+| **Supersedes** | ADR-002 palette (Design #1 parchment/burgundy) |
+
+### Context
+
+The owner asked for a modern redesign, with the layout informed by Mobbin references. From four researched palettes he chose **Emerald & Gilt**. Content, routes and functionality stay the same.
+
+### Decision
+
+- Palette: emerald `#0B5C47` (primary), emerald-950 `#062E25` (dark bands), gilt `#D8B65E` / gilt-ink `#86601A`, ivory `#F4F3EC`, ink `#14201B`, with oxblood `#7A2B2E` kept as a heritage accent. The full table and contrast ratios are in `docs/DESIGN_SYSTEM.md`.
+- The emerald draws on liturgical green (Ordinary Time). It is not claimed to be any official Church of Pakistan colour.
+- Type: Fraunces (display) + Inter (body) via `next/font`.
+- ADR-005 still applies: CSS Modules + tokens only.
+
+### Consequences
+
+- The legacy `--color-*` variables are now aliases to the new tokens.
+- The parchment textures and rule ornaments are retired from the UI. The assets stay in `public/` and `reference/` stays untouched.
+
+---
+
+## ADR-007 — Site-wide settings CMS (`data/cms/site.json`) + production persistence limit
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted (owner mandate, 2026-10-18) |
+| **Date** | 2026-10-18 |
+
+### Context
+
+The curator admin already covered Homepage, Churches, Family Archives,
+Featured Interviews, People frames, Curator profile and media uploads, but
+global marketing/UI wording (navigation labels, footer text, SEO, hero
+buttons, section headings, inner-page headers/notices, 404) was still
+hard-coded in components.
+
+### Decision
+
+- Add `data/cms/site.json` in the established file-CMS pattern (typed
+  loader `src/content/site.ts`, zod schema `siteSettingsSchema`,
+  `GET|PUT /api/admin/site` behind `requireAdminApi`, atomic writes via
+  `src/lib/cms/store.ts`, new **Site & Pages** admin tab).
+- All covered public strings now read from CMS; no hard-coded duplicates
+  remain for those areas. Confirmed-identity strings (curator name/role,
+  motto) and citation registers stay code-/citation-locked on purpose.
+- **Persistence:** file CMS persists on writable hosts. On Vercel the
+  runtime filesystem is ephemeral, so production content changes must be
+  committed to git (JSON + media) and redeployed. No external/paid store
+  is introduced without a further ADR. See `docs/ADMIN.md`.
+
+### Consequences
+
+- Admin can reword the entire public site's marketing/UI copy without code.
+- Production editors must follow the commit-and-deploy workflow above
+  until/unless a persistent store is adopted.
+
+---
+
+## ADR-008 — Vercel-native storage: KV (documents) + Blob (media); Blog
+
+| Field | Value |
+|-------|--------|
+| **Status** | Accepted (owner mandate, 2026-10-18) |
+| **Date** | 2026-10-18 |
+| **Supersedes** | the production-persistence limitation noted in ADR-007 (once env vars are connected) |
+
+### Context
+
+Owner asked for the easiest durable storage so curator edits persist on
+Vercel, plus a blog. The CMS content is whole-file JSON documents; media is
+binary uploads. A Blob store (`churchhistory-media`, iad1, public) was
+provisioned via the Vercel MCP on 2026-10-18; KV/Blob still need a one-time
+"Connect to Project" click in the dashboard to inject env vars (see
+`docs/ADMIN.md` for the exact steps — no code can do that click).
+
+### Decision
+
+- Documents → **Vercel KV / Upstash Redis** (`@vercel/kv` is deprecated;
+  the adapter speaks the Upstash REST API directly, env
+  `KV_REST_API_URL`/`KV_REST_API_TOKEN`), one JSON doc per `cms:<file>` key.
+  No ORM/schema migration; the JSON-document shape maps 1:1 (Postgres would
+  have needed a table design for identical data). File store remains the
+  local/dev fallback; first KV read seeds from `data/cms/*.json`.
+- Media → **Vercel Blob** (`@vercel/blob` `put`, env `BLOB_READ_WRITE_TOKEN`)
+  when configured; existing `/media/…` paths unchanged.
+- Blog posts are a new CMS document (`blog.json`) through the same adapter,
+  with a Blog admin tab and Markdown rendering sanitised via
+  `marked` + `sanitize-html` (no raw HTML injection).
+- Hero simplified (owner steer, same date): typographic hero, one short
+  lead, motto verbatim, portrait only in My Connection, purpose paragraph
+  moved to the Purpose intro. See `docs/CONTENT_MAP.md`.
+
+### Consequences
+
+- With KV+Blob connected, admin edits/blog/uploads persist across Vercel
+  deploys. Without them, behaviour is exactly the previous file mode.
+- Tests: file-mode save flows per tab, KV adapter against a local
+  Upstash-REST mock (seed, auto-seed, save, blog), Blob upload path is
+  code-reviewed only until the store is connected (no token exists yet).
+
+---
+
 ## Related open questions (do not invent resolutions)
 
-- **Palette confirm** — ADR-002 pending user confirmation (`docs/OPEN_QUESTIONS.md`).  
+- **Palette** — resolved by ADR-006 (Emerald & Gilt, owner-approved 2026-10-17).  
 - **Curator public display name** — required before launch captions; use Project Curator until confirmed.  
 - **Interviews / people** — forthcoming; no fictional records.  
 - **Three cathedrals** (Faisalabad, Hyderabad, Raiwind) — `permission_needed` placeholders until rights-cleared photos exist.
+
+## ADR-009 — Integrate the reviewed archive redesign (2026-10-25)
+
+Owner requested merging the reviewed paper/burgundy redesign into main while retaining newer features. The new presentation supersedes ADR-006 styling; the site-wide CMS, editable hero photos, blog/RSS/sitemap, and ADR-008 KV/Blob storage remain. Cormorant Garamond and Source Sans 3 are the active fonts. Redundant alternate footage is removed from the interview listing; source media remain intact. See `merge-review/README.md` for validation and limits.

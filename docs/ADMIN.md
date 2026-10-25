@@ -91,6 +91,7 @@ Rotate `ADMIN_SESSION_SECRET` to invalidate all existing sessions.
 | Section | Storage | Public pages |
 |---|---|---|
 | Homepage (hero, purpose, connection, timeline, contribution labels) | `data/cms/homepage.json` | `/`, `/about`, `/contribute` |
+| Site & Pages (SEO description, header/footer navigation, footer text, hero buttons, home section headings, inner-page headers/notices, 404) | `data/cms/site.json` | every public page (layout, header, footer, home sections, `/archive`, `/churches`, `/sources`, `/about`, `/people`, `/interviews`, `/contribute`, 404) |
 | Churches / dioceses (8 cathedral records) | `data/cms/cathedrals.json` | `/`, `/churches`, `/sources` |
 | Family Archives CRUD | `data/cms/family-archives.json` | `/`, `/archive` |
 | Featured Interviews (title, copy, featuredOnHome) | `data/cms/featured-interviews.json` | `/`, `/interviews` |
@@ -180,3 +181,98 @@ Use **Log out** on the dashboard. That clears the session cookie via `POST /api/
 - `GET|PUT /api/admin/curator-profile`
 - `POST /api/admin/upload` (multipart: `file`, optional `destination`)
 - `GET /api/admin/media-inspect` (read-only native dimensions and crop-risk assessment)
+
+## Site & Pages tab
+
+Sign in → open the **Site & Pages** tab (first tab). It controls the global
+marketing/UI wording that used to be hard-coded in components:
+
+- **Header & footer navigation** — add/remove/relabel links (label + href).
+- **Footer** — column titles, the “About this archive” text, curator-login label.
+- **SEO** — site description (search/social) and the page-title suffix.
+- **Hero buttons** — labels and destinations.
+- **Home section headings** — eyebrows, headings, “view all” labels and short
+  notes for Purpose, Featured Interviews, Churches & Places, Timeline,
+  Family Archives, My Connection and the Guiding Principle eyebrow.
+- **Inner pages** — About/Archive/Churches/Sources page-header wording,
+  People & Interviews forthcoming panels, the Contribute intake notice,
+  and the 404 page text.
+
+Save → `PUT /api/admin/site` (admin session required; zod-validated) →
+`data/cms/site.json` → the whole layout revalidates.
+
+Deliberately **not** free-text editable, by design:
+
+- The curator's confirmed name/role line (AGENTS.md rule: do not rename the
+  curator) and the motto/strapline wording — factual identity, kept exact.
+- The Sources register entries themselves (`src/content/sources.ts`) and
+  cathedral verification/citation fields remain in their citation-backed
+  homes (Churches / Family Archives tabs) so links and credits stay checkable.
+
+## Persistence on Vercel (important limitation)
+
+The CMS is file/JSON-based by repo design (`data/cms/*.json`, atomic
+tmp-file rename in `src/lib/cms/store.ts`; uploads under `public/media/`).
+On a **local or single-instance host with a writable filesystem**, admin
+saves and uploads persist exactly as tested.
+
+On **Vercel production**, the deployed filesystem is **ephemeral/read-only
+at runtime**: a save or upload made through the live admin may succeed
+in-memory/instance-locally (or fail on a read-only mount) but will **not
+survive redeploys or instance recycling**, and uploaded files are not
+committed to git. This is a known architectural limitation, not a silent
+failure — do not rely on live-admin edits as the production source of truth.
+
+**Production workflow until a persistent store is approved:** make content
+edits locally (or in any writable preview), commit the changed
+`data/cms/*.json` (and any new `public/media/…` files) to git, and push —
+Vercel then deploys the edited content. No paid/external database or
+storage service has been introduced; adopting one (e.g. Vercel Blob/KV)
+requires a new ADR in `docs/DECISIONS.md` first.
+
+## Storage (Vercel KV + Blob) — ADR-008
+
+The CMS now runs behind a storage adapter (`src/lib/cms/store.ts`):
+
+- **Documents** (all CMS JSON, incl. blog): if `KV_REST_API_URL` and
+  `KV_REST_API_TOKEN` are set, documents live in **Vercel KV / Upstash Redis**
+  (Vercel Marketplace) as one JSON document per key (`cms:homepage.json`, …,
+  `cms:blog.json`). This matches the repo's whole-file JSON shape exactly.
+  On first read, a missing key is seeded from the bundled `data/cms/*.json`,
+  so no content is lost. Without those env vars, the local file store is used.
+- **Media**: if `BLOB_READ_WRITE_TOKEN` is set, admin uploads go to **Vercel
+  Blob** and the returned `https://…public.blob.vercel-storage.com/…` URL is
+  stored in the image field. Existing `/media/…` files keep working unchanged.
+
+Check which backend a server is using: `node scripts/storage-check.mjs`
+(names/booleans only). Explicit re-seed (files win): set the KV env vars and
+run `node scripts/seed-storage.mjs` (add `--dry-run` to preview).
+
+### Oscar's one-time setup (about 10 minutes, Vercel dashboard)
+
+1. Open the project → **Storage** → **Create** → choose **KV (Upstash Redis)**
+   from the Marketplace → create → **Connect to Project** (Production +
+   Preview). This injects `KV_REST_API_URL`, `KV_REST_API_TOKEN` (and
+   `KV_REST_API_READ_ONLY_TOKEN`, `KV_URL`) automatically.
+2. Storage → the already-created Blob store **churchhistory-media** →
+   **Connect to Project** (Production + Preview). This injects
+   `BLOB_READ_WRITE_TOKEN`.
+3. Redeploy. The first page load seeds KV from the current site content;
+   from then on, admin saves and blog posts persist across deploys, and new
+   uploads land in Blob. Nothing else changes — same admin, same screens.
+
+Until step 1–2 are done, production keeps using the bundled JSON files
+(read-only on Vercel), exactly as documented in the persistence note above.
+
+## Blog — how to publish a post
+
+1. Sign in → **Blog** tab → **+ New post**.
+2. Title (slug/address fills in automatically; edit if needed), excerpt,
+   cover image (upload or paste a `/media/…` path / Blob URL) + alt text,
+   author, date, tags (comma-separated).
+3. Write the body in Markdown: `##` headings, `**bold**`, `*italic*`,
+   `> pull-quote`, `-` lists, `[text](https://…)`. Raw HTML is stripped.
+4. Status → **Published**, optionally Featured → **Save blog posts**.
+   The post appears at `/blog`, gets its own `/blog/<slug>` page, and is
+   added to `/sitemap.xml` and `/blog/rss.xml` automatically.
+   Drafts are hidden from all public pages.

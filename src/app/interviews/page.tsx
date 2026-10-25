@@ -4,33 +4,35 @@ import { Forthcoming } from "@/components/ui/Forthcoming";
 import { InterviewPlayCard } from "@/components/home/InterviewPlayCard";
 import { loadFeaturedInterviews } from "@/content/featured-interviews";
 import { loadHomepage } from "@/content/homepage";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
 
 export const metadata: Metadata = {
   title: "Interviews",
   description:
-    "Youth motivational programs (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.",
+    "Youth motivational programmes (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.",
 };
 
 export default async function InterviewsPage() {
-  const [featuredInterviews, homepage] = await Promise.all([
+  const [featuredInterviews, homepage, site] = await Promise.all([
     loadFeaturedInterviews(),
     loadHomepage(),
+    loadSiteSettings(),
   ]);
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Youth empowerment</p>
-        <h1>Interviews</h1>
-        <p className={styles.intro}>{homepage.page_context.interviews_intro}</p>
+      <PageHeader
+        eyebrow="Youth empowerment"
+        title="Interviews"
+        intro={homepage.page_context.interviews_intro}
+      />
+      <div className="shell pageBody">
 
-        <Forthcoming title="Oral-history interviews still forthcoming">
-          Additional oral-history interviews (verified interviewees, roles,
-          transcripts, and citations) remain forthcoming. The videos below are
-          youth motivational programs published on the Facebook page · not Family
-          Archive stills and not invented interview records.
+        <Forthcoming title={site.pages.interviews_page.forthcoming_title}>
+          {site.pages.interviews_page.forthcoming_body}
         </Forthcoming>
 
         <div className={homeStyles.interviewGrid} style={{ marginTop: "2rem" }}>
@@ -40,6 +42,7 @@ export default async function InterviewsPage() {
                 title={item.title}
                 videoSrc={item.videoSrc}
                 coverSrc={item.coverSrc}
+                coverPosition={item.coverPosition}
                 posterSrc={item.posterSrc}
                 alt={item.alt}
                 width={item.width}
@@ -59,7 +62,7 @@ export default async function InterviewsPage() {
               >
                 {item.provenance}
                 {" · "}
-                <a href={item.sourceUrl} rel="noopener noreferrer" target="_blank">
+                <a className="tapLink" href={item.sourceUrl} rel="noopener noreferrer" target="_blank">
                   Source reel
                 </a>
                 {" · "}
@@ -69,11 +72,10 @@ export default async function InterviewsPage() {
           ))}
         </div>
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/contribute">Suggest an interview subject</Link>
-          {" · "}
           <Link href="/people">People records</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );

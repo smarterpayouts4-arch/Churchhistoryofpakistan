@@ -4,32 +4,35 @@ import { Forthcoming } from "@/components/ui/Forthcoming";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { loadHomepage } from "@/content/homepage";
 import { loadPeopleFrames } from "@/content/people-frames";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
 
 export const metadata: Metadata = {
   title: "People",
   description:
-    "People records for History: Church of Pakistan. Biographies forthcoming · no invented sample entries.",
+    "People records for History: Church of Pakistan. Biographies forthcoming.",
 };
 
 export default async function PeoplePage() {
-  const [frames, homepage] = await Promise.all([
+  const [frames, homepage, site] = await Promise.all([
     loadPeopleFrames(),
     loadHomepage(),
+    loadSiteSettings(),
   ]);
+  const copy = site.pages.people;
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Clergy &amp; lay witness</p>
-        <h1>People</h1>
-        <p className={styles.intro}>{homepage.page_context.people_intro}</p>
+      <PageHeader
+        eyebrow={copy.eyebrow}
+        title="People"
+        intro={homepage.page_context.people_intro}
+      />
+      <div className="shell pageBody">
 
-        <Forthcoming title="People records forthcoming">
-          Named biographies are still forthcoming. The frames below are thematic
-          stills · not named biography cards.
-        </Forthcoming>
+        <Forthcoming title={copy.forthcoming_title}>{copy.forthcoming_body}</Forthcoming>
 
         <div className={homeStyles.interviewGrid} style={{ marginTop: "2rem" }}>
           {frames.map((frame) => (
@@ -41,26 +44,24 @@ export default async function PeoplePage() {
                   fill
                   style={{ objectFit: "contain", objectPosition: "center" }}
                   className={homeStyles.peoplePhoto}
-                  sizes="(max-width: 768px) 100vw, (max-width: 980px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1100px) 50vw, 400px"
                 />
               </div>
-              <p className="eyebrow">People archive</p>
+              <p className="eyebrow">{copy.card_eyebrow}</p>
               <h2 style={{ fontSize: "1.15rem", color: "var(--color-ink)" }}>
                 {frame.title}
               </h2>
-              <p>Verified biography slots open when citation-backed records arrive.</p>
-              <span className={homeStyles.interviewStatus}>Forthcoming</span>
+              <p>{copy.card_note}</p>
+              <span className={homeStyles.interviewStatus}>{copy.status_label}</span>
             </article>
           ))}
         </div>
 
-        <p style={{ marginTop: "2rem" }}>
+        <nav className="linkRow" aria-label="Related pages">
           <Link href="/interviews">Interviews</Link>
-          {" · "}
           <Link href="/contribute">Contribute a memory</Link>
-          {" · "}
           <Link href="/sources">Sources</Link>
-        </p>
+        </nav>
       </div>
     </div>
   );

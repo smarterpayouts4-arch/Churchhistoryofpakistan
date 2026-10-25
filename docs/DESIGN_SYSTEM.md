@@ -50,3 +50,7 @@ Images remain contained without cropping; published captions, source data, right
 Responsive layouts: header menu at 1050px, collection grids at 1100px/600px, stacked editorial sections at 760px, vertical timeline below 980px. Mobile navigation closes after selection and Escape restores focus to its toggle. Focus indicators and reduced-motion support remain active.
 
 ---
+
+## Integration with newer main (2026-10-25)
+
+The reviewed paper/burgundy redesign takes precedence over the earlier Emerald & Gilt presentation. Site settings, blog, KV/Blob storage, CMS editors, media caching and mobile focus management from main are retained. Compatibility tokens map newer modules to the reviewed palette.

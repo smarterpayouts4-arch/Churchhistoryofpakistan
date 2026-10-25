@@ -22,8 +22,8 @@ export async function ContributeCta() {
             width={72}
             height={72}
           />
-          <Link className={styles.btnCream} href="/contribute">
-            {copy.contribute_button}
+          <Link className={`btn-primary btn-gilt ${styles.btnCream}`} href="/contribute">
+            {copy.contribute_button} <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>

@@ -68,3 +68,6 @@
   }
 
 }
+
+.contributeAside { flex-shrink: 0; }
+.btnCream::after { content: none; }

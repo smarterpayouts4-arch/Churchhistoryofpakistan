@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useState } from "react";
 import styles from "./Interviews.module.css";
 
@@ -8,6 +9,7 @@ export type InterviewPlayCardProps = {
   videoSrc: string;
   /** Optional custom cover; falls back to the uncropped source poster. */
   coverSrc?: string;
+  coverPosition?: string;
   posterSrc: string;
   alt: string;
   width: number;
@@ -22,6 +24,7 @@ export function InterviewPlayCard({
   title,
   videoSrc,
   coverSrc,
+  coverPosition,
   posterSrc,
   alt,
   width,
@@ -56,14 +59,15 @@ export function InterviewPlayCard({
           onClick={startPlayback}
           aria-label={`Play ${title}`}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             className={styles.interviewCoverImage}
             src={thumbSrc}
             alt=""
             width={width}
             height={height}
             decoding="async"
+            sizes="(max-width: 760px) 90vw, 50vw"
+            style={coverPosition ? { objectPosition: coverPosition } : undefined}
           />
           <span className={styles.interviewPlayIcon} aria-hidden="true">
             <svg viewBox="0 0 64 64" width="64" height="64" focusable="false">

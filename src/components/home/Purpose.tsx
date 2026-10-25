@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
+import { loadSiteSettings } from "@/content/site";
 import styles from "./Purpose.module.css";
 
 export async function Purpose() {
-  const homepage = await loadHomepage();
+  const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
   return (
     <section id="purpose" className={`section ${styles.purpose}`} aria-labelledby="purpose-heading">
       <div className={`shell ${styles.layout}`}>
         <div className={styles.introduction}>
-          <p className="eyebrow">Why we preserve</p>
-          <h2 id="purpose-heading">Our past.<br /><em>Their future.</em></h2>
+          <p className="eyebrow">{site.home_sections.purpose.eyebrow}</p>
+          <h2 id="purpose-heading">{site.home_sections.purpose.heading}</h2>
           <p>{homepage.hero.intro}</p>
           <Link className="sectionLink" href="/about">The story behind the archive ↗</Link>
         </div>

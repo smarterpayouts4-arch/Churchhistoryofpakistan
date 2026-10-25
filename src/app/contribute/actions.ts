@@ -26,7 +26,7 @@ export async function submitContribution(
     return {
       ok: false,
       message:
-        "Contribution intake is not configured on this deployment. Your message was not submitted or stored. Please contact the Project Curator directly, or set CONTRIBUTE_WEBHOOK_URL when a real backend is ready.",
+        "Contribution intake is not configured on this deployment. Your message was not submitted or stored. Please contact the Project Curator directly.",
     };
   }
 

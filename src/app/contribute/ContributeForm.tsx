@@ -56,7 +56,7 @@ export function ContributeForm({ contributionFields }: Props) {
               <label htmlFor={meta.name}>{label}</label>
               <input id={meta.name} name={meta.name} type="file" multiple />
               <span className={styles.meta}>
-                Files are only transmitted if a contribution backend is configured.
+                Files are only sent once online intake is connected.
               </span>
             </div>
           );
@@ -69,18 +69,15 @@ export function ContributeForm({ contributionFields }: Props) {
         );
       })}
 
-      <button className="btn-primary" type="submit" disabled={pending}>
+      <button className={`btn-primary ${styles.submit}`} type="submit" disabled={pending}>
         {pending ? "Checking…" : "Submit contribution"}
       </button>
 
       {state.message ? (
         <p
-          className={styles.notice}
+          className={`${styles.notice} ${state.ok ? styles.noticeOk : styles.noticeError}`}
           role="status"
           aria-live="polite"
-          style={{
-            borderLeftColor: state.ok ? "var(--color-antique-gold)" : "var(--color-burgundy)",
-          }}
         >
           <strong>{state.ok ? "Received" : "Not submitted"}.</strong> {state.message}
         </p>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { PlaceCard } from "@/components/ui/PlaceCard";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Churches.module.css";
 
@@ -12,18 +14,17 @@ export const metadata: Metadata = {
 };
 
 export default async function ChurchesPage() {
-  const cathedrals = await loadCathedralItems();
+  const [cathedrals, site] = await Promise.all([loadCathedralItems(), loadSiteSettings()]);
+  const copy = site.pages.churches;
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">Eight dioceses • one shared history</p>
-        <h1>Churches &amp; Places</h1>
-        <p className={styles.intro}>
-          Cathedral seats of the Church of Pakistan dioceses, drawn from the
-          verified content register. Photo badges reflect rights status · three
-          remain placeholders pending permission.
-        </p>
+      <PageHeader
+        eyebrow={copy.eyebrow}
+        title={copy.title}
+        intro={copy.intro}
+      />
+      <div className="shell pageBody">
 
         <div className={styles.places}>
           {cathedrals.map((c) => (
@@ -37,6 +38,7 @@ export default async function ChurchesPage() {
                         <>
                           {" · "}
                           <a
+                            className="tapLink"
                             href={c.photo_source_page}
                             rel="noopener noreferrer"
                             target="_blank"
@@ -60,7 +62,7 @@ export default async function ChurchesPage() {
                     </a>
                   </p>
                   {c.verification_urls.length > 0 ? (
-                    <ul className={styles.meta} style={{ paddingLeft: "1.1rem" }}>
+                    <ul className={`${styles.meta} ${styles.urlList}`} style={{ paddingLeft: "1.1rem" }}>
                       {c.verification_urls.map((url) => (
                         <li key={url}>
                           <a href={url} rel="noopener noreferrer" target="_blank">
@@ -75,9 +77,8 @@ export default async function ChurchesPage() {
         </div>
 
         <p className={homeStyles.rightsNote}>
-          <strong>Photo integrity:</strong> Faisalabad, Hyderabad, and Raiwind use
-          SVG placeholders until licensed or diocesan-approved images are supplied.
-          See <Link href="/sources">Sources</Link> for the institutional register.
+          <strong>{copy.rights_note_strong}</strong> {copy.rights_note}{" "}
+          <Link className="tapLink" href="/sources">{copy.rights_note_link_label}</Link> {copy.rights_note_tail}
         </p>
       </div>
     </div>

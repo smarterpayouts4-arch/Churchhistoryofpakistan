@@ -1,14 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { footerNav, CURATOR_DISPLAY_NAME, CURATOR_ROLE_LINE } from "@/content/nav";
+import type { SiteNavItem } from "@/lib/cms/types";
 import styles from "./Footer.module.css";
 
 export function Footer({
   siteName,
   strapline,
+  navItems = footerNav,
+  exploreTitle = "Explore",
+  aboutTitle = "About this archive",
+  aboutCopy = "A local digital heritage archive. Historical claims remain citation-backed; photographs show rights status.",
+  curatorLinkLabel = "Curator login",
 }: {
   siteName: string;
   strapline: string;
+  navItems?: SiteNavItem[];
+  exploreTitle?: string;
+  aboutTitle?: string;
+  aboutCopy?: string;
+  curatorLinkLabel?: string;
 }) {
   const year = new Date().getFullYear();
   return (
@@ -33,20 +44,18 @@ export function Footer({
             Curated by {CURATOR_DISPLAY_NAME}. {CURATOR_ROLE_LINE}.
           </p>
         </div>
-        <nav className={styles.nav} aria-label="Footer">
-          {footerNav.map((item) => (
+        <nav className={styles.nav} aria-label={exploreTitle}>
+          {navItems.map((item) => (
             <Link key={item.href + item.label} href={item.href}>
               {item.label}
             </Link>
           ))}
         </nav>
-        <p className={styles.copy}>
-          © {year} {siteName}. A digital heritage archive.
-          Historical claims remain citation-backed; photographs
-          show rights status. Complete legal and privacy pages before public launch.
+        <p className={styles.copy} aria-label={aboutTitle}>
+          © {year} {siteName}. {aboutCopy}
           {" · "}
           <Link href="/admin/login" className={styles.curatorLink}>
-            Curator login
+            {curatorLinkLabel}
           </Link>
         </p>
       </div>

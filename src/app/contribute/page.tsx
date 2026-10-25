@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { loadSiteSettings } from "@/content/site";
 import { loadHomepage } from "@/content/homepage";
 import { ContributeForm } from "./ContributeForm";
+import { PageHeader } from "@/components/ui/PageHeader";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
@@ -11,21 +13,19 @@ export const metadata: Metadata = {
 };
 
 export default async function ContributePage() {
-  const homepage = await loadHomepage();
+  const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
   const intakeEnabled = Boolean(process.env.CONTRIBUTE_WEBHOOK_URL);
 
   return (
     <div className={styles.page}>
-      <div className="shell">
-        <p className="eyebrow">{homepage.page_context.contribute_eyebrow}</p>
-        <h1>Contribute</h1>
-        <p className={styles.intro}>{homepage.page_context.contribute_intro}</p>
+      <PageHeader eyebrow={homepage.page_context.contribute_eyebrow} title="Contribute" intro={homepage.page_context.contribute_intro} />
+      <div className="shell pageBody">
 
         <div className={styles.notice}>
           {intakeEnabled ? (
             <><strong>Before you contribute.</strong> Please include the source of your material and confirm that you have permission to share it. Submissions are reviewed before publication.</>
           ) : (
-            <><strong>Online contributions are not open yet.</strong> Please check back before sending photographs, documents, or personal information. You can still explore the archive and learn about the project below.</>
+            <><strong>{site.pages.contribute_notice.strong}</strong> {site.pages.contribute_notice.body}</>
           )}
         </div>
 

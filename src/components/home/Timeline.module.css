@@ -100,3 +100,6 @@
   }
 
 }
+
+.sourceRow { font-size: .8rem; }
+.sourceRow a { display: inline-flex; align-items: center; min-height: 44px; }

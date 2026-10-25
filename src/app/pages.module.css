@@ -183,3 +183,11 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* PageHeader owns the top spacing on newer secondary routes. */
+.page:has(> :global(.pageHeader)) { padding-top: 0; padding-bottom: 0; }
+.submit { justify-self: start; min-height: 44px; }
+.noticeOk { border-color: var(--color-burgundy); }
+.noticeError { border-color: var(--color-deep-burgundy); }
+
+.urlList { overflow-wrap: anywhere; }

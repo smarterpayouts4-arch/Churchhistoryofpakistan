@@ -4,24 +4,27 @@ import {
   loadFamilyArchiveNote,
 } from "@/content/family-archives";
 import { ArchiveCard } from "@/components/ui/ArchiveCard";
+import { loadSiteSettings } from "@/content/site";
 import styles from "./FamilyArchives.module.css";
 
 export async function FamilyArchives() {
-  const [familyArchiveHomePreview, FAMILY_ARCHIVE_NOTE] = await Promise.all([
+  const [familyArchiveHomePreview, FAMILY_ARCHIVE_NOTE, site] = await Promise.all([
     loadFamilyArchiveHomePreview(4),
     loadFamilyArchiveNote(),
+    loadSiteSettings(),
   ]);
+  const copy = site.home_sections.archives;
 
   return (
     <section id="archive" className="section" aria-labelledby="archive-heading">
       <div className="shell">
         <div className="sectionHeading sectionHeadingSplit">
           <div>
-            <p className="eyebrow">Documents • photographs • memories</p>
-            <h2 id="archive-heading">From the Family Archives</h2>
+            <p className="eyebrow">{copy.eyebrow}</p>
+            <h2 id="archive-heading">{copy.heading}</h2>
           </div>
           <Link className="sectionLink" href="/archive">
-            Explore the collection ↗
+            {copy.view_label} →
           </Link>
         </div>
         <div className={styles.archiveGrid}>
@@ -36,8 +39,8 @@ export async function FamilyArchives() {
           ))}
         </div>
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>
-          <strong>Family Archive provenance.</strong> {FAMILY_ARCHIVE_NOTE}{" "}
-          <Link href="/archive">See all published holdings</Link>.
+          <strong>{copy.note_strong}</strong> {FAMILY_ARCHIVE_NOTE}{" "}
+          <Link className="tapLink" href="/archive">{copy.note_link_label}</Link>.
         </p>
       </div>
     </section>
