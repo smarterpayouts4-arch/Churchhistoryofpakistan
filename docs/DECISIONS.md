@@ -245,8 +245,8 @@ provisioned via the Vercel MCP on 2026-10-18; KV/Blob still need a one-time
 
 ## Related open questions (do not invent resolutions)
 
-- **Palette** — resolved by ADR-006 (Emerald & Gilt, owner-approved 2026-10-17).  
-- **Curator public display name** — required before launch captions; use Project Curator until confirmed.  
+- **Palette** — reviewed paper/burgundy presentation supersedes ADR-006; see ADR-009.
+- **Curator public display name** — confirmed as Javed Qadir Bakhsh.
 - **Interviews / people** — forthcoming; no fictional records.  
 - **Three cathedrals** (Faisalabad, Hyderabad, Raiwind) — `permission_needed` placeholders until rights-cleared photos exist.
 
