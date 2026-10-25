@@ -68,7 +68,8 @@ export function MediaImage({
         alt={alt}
         fill
         className={className}
-        priority={priority}
+        loading={priority ? "eager" : undefined}
+        fetchPriority={priority ? "high" : undefined}
         unoptimized={unoptimized}
         sizes={sizes ?? "100vw"}
         style={{ objectFit: "contain", ...style }}
@@ -83,7 +84,8 @@ export function MediaImage({
       width={width ?? 800}
       height={height ?? 600}
       className={className}
-      priority={priority}
+      loading={priority ? "eager" : undefined}
+      fetchPriority={priority ? "high" : undefined}
       unoptimized={unoptimized}
       sizes={sizes}
       style={style}

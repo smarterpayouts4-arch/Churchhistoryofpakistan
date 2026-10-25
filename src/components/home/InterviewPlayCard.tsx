@@ -6,7 +6,7 @@ import styles from "./Interviews.module.css";
 export type InterviewPlayCardProps = {
   title: string;
   videoSrc: string;
-  /** Preferred 4:5 cover; falls back to posterSrc. */
+  /** Optional custom cover; falls back to the uncropped source poster. */
   coverSrc?: string;
   posterSrc: string;
   alt: string;
@@ -15,8 +15,8 @@ export type InterviewPlayCardProps = {
 };
 
 /**
- * Cover-first interview card: shows a clean 4:5 thumbnail with play overlay.
- * On activate, mounts the video (controls + autoPlay) — no tall empty 9:16 frame on load.
+ * Preserve the source aspect ratio for both preview and playback.
+ * On activate, mount the video with native controls.
  */
 export function InterviewPlayCard({
   title,
@@ -35,7 +35,7 @@ export function InterviewPlayCard({
   }, []);
 
   return (
-    <div className={styles.interviewMedia}>
+    <div className={styles.interviewMedia} style={{ aspectRatio: `${width} / ${height}` }}>
       {playing ? (
         <video
           className={styles.interviewVideo}
@@ -61,8 +61,8 @@ export function InterviewPlayCard({
             className={styles.interviewCoverImage}
             src={thumbSrc}
             alt=""
-            width={1080}
-            height={1350}
+            width={width}
+            height={height}
             decoding="async"
           />
           <span className={styles.interviewPlayIcon} aria-hidden="true">

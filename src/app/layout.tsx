@@ -39,7 +39,7 @@ export default async function RootLayout({
 }>) {
   const homepage = await loadHomepage();
   return (
-    <html lang="en" className={`${cormorant.variable} ${sourceSans.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${cormorant.variable} ${sourceSans.variable}`}>
       <body>
         <a className="skipLink" href="#main">
           Skip to content

@@ -1,131 +1,113 @@
-/* -- Churches -- */
 .placesGrid {
   display: grid;
-  /* Desktop: 3 cols; tablet/mobile set in media queries below */
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.15rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.6rem;
 }
 
 .placeCard {
-  background:
-    linear-gradient(180deg, #fffaf0, #f7edd8);
-  border: 1px solid var(--color-border);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-frame);
-  transition: transform 0.2s ease;
-}
-
-.placeCard:hover {
-  transform: translateY(-2px);
+  min-width: 0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .placeMedia {
   position: relative;
   aspect-ratio: 4 / 3;
-  background: var(--color-parchment-deep);
+  background: var(--color-parchment);
   overflow: hidden;
-  border-bottom: 1px solid #a8926e;
 }
 
 .placeMedia img {
-  width: 100%;
-  height: 100%;
   object-fit: contain;
-  object-position: center;
-  filter: contrast(1.02) saturate(0.95);
-}
-
-.placeAwaiting {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  text-align: center;
-  background:
-    linear-gradient(160deg, #d9c7a5, #c4b08e);
-  color: var(--color-ink);
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  line-height: 1.35;
 }
 
 .rightsBadge {
   position: absolute;
-  left: 8px;
-  bottom: 8px;
-  z-index: 2;
-  padding: 5px 8px;
-  background: rgb(41 37 34 / 0.9);
-  color: #fff8ef;
-  font-size: 0.6rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  left: .6rem;
+  bottom: .6rem;
+  right: .6rem;
+  width: fit-content;
+  max-width: calc(100% - 1.2rem);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  padding: .25rem .5rem;
+  font-size: .58rem;
+  font-weight: 600;
+  letter-spacing: .035em;
   text-transform: uppercase;
-  border-radius: 2px;
-  max-width: calc(100% - 16px);
-  border: 1px solid rgb(251 245 233 / 0.2);
 }
 
 .rightsPending {
-  background: rgb(109 34 39 / 0.88);
+  background: var(--color-burgundy);
+  color: var(--color-paper);
 }
 
 .placeCopy {
-  padding: 1rem 1rem 1.15rem;
+  padding: 1.3rem 0 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .placeCopy :global(.eyebrow) {
-  font-size: 0.6rem;
-  margin-bottom: 4px;
+  font-size: .64rem;
+  margin-bottom: .7rem;
 }
 
-.placeCopy h3 {
-  font-size: 1.12rem;
-  color: var(--color-burgundy);
-  margin: 0.15rem 0;
+.placeCopy h2, .placeCopy h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  margin: 0 0 .65rem;
+  letter-spacing: -.02em;
 }
 
 .placeCopy p {
-  margin: 0.3rem 0;
   color: var(--color-muted-brown);
-  font-size: 0.86rem;
+  font-size: .86rem;
+  margin: .3rem 0;
+}
+
+.placeCopy ul {
+  overflow-wrap: anywhere;
 }
 
 .address {
-  font-size: 0.74rem !important;
+  font-size: .77rem !important;
 }
 
 .placeLink {
   margin-top: auto;
-  padding-top: 0.65rem;
-  font-size: 0.82rem;
-  font-weight: 800;
+  padding-top: 1.1rem;
   text-decoration: none;
+  font-size: .79rem;
+  font-weight: 600;
+}
+
+.placeLink:hover {
+  text-decoration: underline;
 }
 
 .rightsNote {
-  margin-top: 1.5rem;
-  padding: 1rem 1.15rem;
-  border-left: 3px solid var(--color-antique-gold);
-  background: rgb(245 234 214 / 0.85);
+  margin: 2rem 0 0;
+  border-left: 2px solid var(--color-antique-gold);
+  padding: .3rem 0 .3rem 1rem;
   color: var(--color-muted-brown);
-  font-size: 0.88rem;
+  font-size: .8rem;
 }
 
-@media (max-width: 980px) {
+@media(max-width: 1100px) {
   .placesGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
   }
+
 }
 
-@media (max-width: 768px) {
+@media(max-width: 600px) {
   .placesGrid {
     grid-template-columns: 1fr;
   }
+
 }

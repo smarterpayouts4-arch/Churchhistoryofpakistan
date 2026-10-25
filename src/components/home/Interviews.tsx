@@ -5,8 +5,7 @@ import styles from "./Interviews.module.css";
 
 /**
  * Featured Interviews = youth motivational videos (Rab Ki Khidmat / Youth Empowerment).
- * Cover stage is uniform Facebook 4:5 with click-to-play; playing video uses contain
- * (never object-fit:cover on the video itself).
+ * Source proportions and contain sizing preserve the full preview and video.
  */
 export async function Interviews() {
   const homeFeaturedInterviews = await loadHomeFeaturedInterviews();

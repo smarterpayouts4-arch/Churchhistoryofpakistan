@@ -36,8 +36,8 @@ export function ContributeForm({ contributionFields }: Props) {
         if (meta.type === "checkbox") {
           return (
             <div className={styles.field} key={label}>
-              <label>
-                <input type="checkbox" name={meta.name} /> {label}
+              <label className={styles.checkboxLabel}>
+                <input type="checkbox" name={meta.name} required /> {label}
               </label>
             </div>
           );

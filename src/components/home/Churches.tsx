@@ -20,12 +20,11 @@ export async function ChurchesPreview() {
             <p className="eyebrow">Eight dioceses • one shared history</p>
             <h2 id="churches-heading">Churches &amp; Places</h2>
             <p className="headingNote">
-              Cathedral seats of the Church of Pakistan · identities from verified
-              diocesan sources, not design mock labels.
+              Explore the places that hold our shared history, across eight dioceses.
             </p>
           </div>
           <Link className="sectionLink" href="/churches">
-            View gallery →
+            All churches & places ↗
           </Link>
         </div>
         <div className={styles.placesGrid}>

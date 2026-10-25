@@ -11,18 +11,10 @@ export async function Timeline() {
       aria-labelledby="timeline-heading"
     >
       <div className="shell">
-        <div className="sectionHeading sectionHeadingCentered">
-          <div className="doubleRule" aria-hidden="true" />
-          <p className="eyebrow">Selected documented milestones</p>
-          <h2 id="timeline-heading">A Journey Through Time</h2>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="ruleOrnament"
-            src="/media/textures/rule-ornament.svg"
-            alt=""
-            width={280}
-            height={24}
-          />
+        <div className="sectionHeading sectionHeadingSplit">
+          <div><p className="eyebrow eyebrowLight">Selected documented milestones</p>
+          <h2 id="timeline-heading">A journey through time.</h2></div>
+          <span className={styles.range}>{homepage.timeline[0]?.year} — {homepage.timeline.at(-1)?.year}</span>
         </div>
         <ol className={styles.timeline}>
           {homepage.timeline.map((entry) => (

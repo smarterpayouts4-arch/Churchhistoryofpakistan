@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 export default async function ContributePage() {
   const homepage = await loadHomepage();
+  const intakeEnabled = Boolean(process.env.CONTRIBUTE_WEBHOOK_URL);
 
   return (
     <div className={styles.page}>
@@ -21,15 +22,18 @@ export default async function ContributePage() {
         <p className={styles.intro}>{homepage.page_context.contribute_intro}</p>
 
         <div className={styles.notice}>
-          <strong>Honest intake status.</strong> This form does not pretend to
-          succeed when no backend is configured. If{" "}
-          <code>CONTRIBUTE_WEBHOOK_URL</code> is unset, nothing is stored or
-          emailed. You will see a clear “not submitted” message.
+          {intakeEnabled ? (
+            <><strong>Before you contribute.</strong> Please include the source of your material and confirm that you have permission to share it. Submissions are reviewed before publication.</>
+          ) : (
+            <><strong>Online contributions are not open yet.</strong> Please check back before sending photographs, documents, or personal information. You can still explore the archive and learn about the project below.</>
+          )}
         </div>
 
-        <ContributeForm contributionFields={homepage.contribution_fields} />
+        {intakeEnabled && <ContributeForm contributionFields={homepage.contribution_fields} />}
 
         <p style={{ marginTop: "2rem" }}>
+          <Link href="/archive">Explore the archive</Link>
+          {" · "}
           <Link href="/sources">Sources &amp; rights policy</Link>
           {" · "}
           <Link href="/about">About the project</Link>

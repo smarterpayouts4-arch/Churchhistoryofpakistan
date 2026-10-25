@@ -34,19 +34,26 @@ export function Header({ siteName }: { siteName: string }) {
         </Link>
 
         <button
+          id="menu-toggle"
           type="button"
           className={styles.menuButton}
           aria-expanded={open}
           aria-controls="primary-nav"
           onClick={() => setOpen((v) => !v)}
         >
-          Menu
+          {open ? "Close ×" : "Menu +"}
         </button>
 
         <nav
           id="primary-nav"
           className={`${styles.nav} ${open ? styles.navOpen : ""}`}
           aria-label="Primary"
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              setOpen(false);
+              document.getElementById("menu-toggle")?.focus();
+            }
+          }}
         >
           {primaryNav.map((item) => {
             const current =

@@ -34,13 +34,7 @@ export function PlaceCard({
       </div>
       <div className={styles.placeCopy}>
         <p className="eyebrow">{cathedral.diocese}</p>
-        <Title
-          style={
-            Title === "h2"
-              ? { fontSize: "1.15rem", color: "var(--color-ink)", margin: "0.2rem 0" }
-              : undefined
-          }
-        >
+        <Title>
           {cathedral.cathedral}
         </Title>
         <p>{cathedral.city}</p>

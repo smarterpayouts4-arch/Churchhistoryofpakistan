@@ -21,7 +21,7 @@ export async function FamilyArchives() {
             <h2 id="archive-heading">From the Family Archives</h2>
           </div>
           <Link className="sectionLink" href="/archive">
-            View more →
+            Explore the collection ↗
           </Link>
         </div>
         <div className={styles.archiveGrid}>
@@ -31,6 +31,7 @@ export async function FamilyArchives() {
               {item.dateLabel ? (
                 <span className={styles.archiveDate}>{item.dateLabel}</span>
               ) : null}
+              <Link className={styles.recordLink} href={`/archive#${item.id}`}>View record <span aria-hidden="true">↗</span></Link>
             </ArchiveCard>
           ))}
         </div>

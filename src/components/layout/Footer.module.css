@@ -1,49 +1,49 @@
 .footer {
-  background: #2f2020;
-  color: #eadfc9;
-  padding: 3rem 0;
+  padding: 4rem 0 2rem;
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1.3fr 0.7fr 1fr;
-  gap: 2.8rem;
-  align-items: start;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2.5rem 5rem;
 }
 
 .brandRow {
   display: flex;
-  align-items: center;
-  gap: 0.85rem;
+  align-items: start;
+  gap: 1rem;
 }
 
 .brandMark {
   flex-shrink: 0;
-  border-radius: 8px;
-  background: #f2e4ca;
 }
 
 .brand {
   font-family: var(--font-display);
-  font-size: 1.3rem;
-  color: #f1dfc0;
+  font-size: 1.7rem;
+  line-height: 1.2;
 }
 
 .strap {
-  font-size: 0.82rem;
-  color: #cbbca6;
-  margin: 0.5rem 0 0;
+  color: var(--color-parchment);
+  font-size: .78rem;
+  line-height: 1.8;
+  max-width: 24rem;
 }
 
 .nav {
   display: grid;
-  gap: 0.55rem;
+  grid-template-columns: 1fr 1fr;
+  gap: .8rem 2rem;
+  align-content: start;
 }
 
 .nav a {
-  color: #f1dfc0;
+  color: var(--color-paper);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: .85rem;
 }
 
 .nav a:hover {
@@ -51,24 +51,32 @@
 }
 
 .copy {
+  font-size: .75rem;
+  line-height: 1.8;
+  color: var(--color-parchment);
   margin: 0;
-  font-size: 0.82rem;
-  color: #cbbca6;
+  max-width: 28rem;
 }
 
-@media (max-width: 760px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+.grid > .copy {
+  grid-column: 1 / -1;
+  max-width: none;
+  border-top: 1px solid #af8b5850;
+  padding-top: 1.5rem;
 }
 
 .curatorLink {
-  color: #9a8a76;
-  text-decoration: none;
-  font-size: 0.78rem;
+  color: var(--color-paper);
 }
 
-.curatorLink:hover {
-  color: #eadfc9;
-  text-decoration: underline;
+.footer :focus-visible {
+  outline-color: var(--color-paper);
+}
+
+@media(max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
 }

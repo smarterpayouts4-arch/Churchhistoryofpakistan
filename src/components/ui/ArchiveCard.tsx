@@ -14,7 +14,7 @@ export function ArchiveCard({
   children?: ReactNode;
 }) {
   return (
-    <article className={styles.archiveCard}>
+    <article id={Title === "h2" ? item.id : undefined} className={styles.archiveCard}>
       <div className={styles.archiveFrame}>
         <MediaImage
           src={item.imageSrc}
@@ -28,13 +28,7 @@ export function ArchiveCard({
           <span>{item.provenance}</span>
         </div>
       </div>
-      <Title
-        style={
-          Title === "h2"
-            ? { fontSize: "1.15rem", color: "var(--color-ink)" }
-            : undefined
-        }
-      >
+      <Title>
         {item.title}
       </Title>
       <p className={styles.archiveCaption}>{item.caption}</p>

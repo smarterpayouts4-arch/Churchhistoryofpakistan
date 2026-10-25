@@ -65,7 +65,7 @@ async function probe(path) {
         path !== "/contribute" ||
         !/thank you for (your )?submission|successfully submitted/i.test(text),
       forthcomingHonest:
-        !["/interviews", "/people", "/archive"].includes(path) ||
+        !["/interviews", "/people"].includes(path) ||
         /forthcoming|coming soon/i.test(text),
     };
     return {
@@ -105,6 +105,7 @@ for (const route of ROUTES) {
 const passed = results.filter((r) => r.ok).length;
 const failed = results.filter((r) => !r.ok);
 const missingFiles = fileChecks.filter((f) => !f.present);
+const failedChecks = results.filter((r) => Object.values(r.checks).some((ok) => !ok));
 
 const now = new Date().toISOString();
 const lines = [
@@ -150,18 +151,18 @@ lines.push(
   ``,
   `## Content / honesty gaps (manual)`,
   ``,
-  `- Interviews & people: forthcoming placeholders only (no invented names).`,
-  `- Archive: thematic family-archive slots only; no fabricated holdings.`,
+  `- Interviews: existing youth programs; additional oral-history interviews remain forthcoming. People biographies remain forthcoming.`,
+  `- Archive: CMS-backed family records with source and verification notes.`,
   `- Contribute: no fake success when \`CONTRIBUTE_WEBHOOK_URL\` unset.`,
-  `- Curator label: **Project Curator** until public display name confirmed.`,
+  `- Curator public name: **Javed Qadir Bakhsh**, confirmed in the content register.`,
   `- Cathedral photos: Faisalabad / Hyderabad / Raiwind remain permission-needed SVGs.`,
   `- Timeline & cathedral facts sourced from \`src/content/*\` only.`,
   ``,
   `## Summary`,
   ``,
-  failed.length === 0 && missingFiles.length === 0
+  failed.length === 0 && missingFiles.length === 0 && failedChecks.length === 0
     ? `All probed routes returned HTTP 200 and required scaffold files are present.`
-    : `Failures remain: ${failed.map((f) => f.path).join(", ") || "none (routes)"}; missing files: ${missingFiles.map((m) => m.file).join(", ") || "none"}.`,
+    : `Failures remain: ${failed.map((f) => f.path).join(", ") || "none (routes)"}; missing files: ${missingFiles.map((m) => m.file).join(", ") || "none"}; failed content checks: ${failedChecks.map((r) => r.path).join(", ") || "none"}.`,
   ``,
 );
 
@@ -170,7 +171,7 @@ const out = join(root, "docs/AUDIT_REPORT.md");
 writeFileSync(out, lines.join("\n"), "utf8");
 console.log(`Wrote ${out}`);
 console.log(`Routes OK: ${passed}/${ROUTES.length}`);
-if (failed.length) {
+if (failed.length || missingFiles.length || failedChecks.length) {
   console.error("Failed routes:", failed.map((f) => `${f.path} (${f.status || f.error})`).join("; "));
   process.exitCode = 1;
 }

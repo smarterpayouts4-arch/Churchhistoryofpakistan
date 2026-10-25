@@ -12,11 +12,11 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <FamilyArchives />
       <Purpose />
-      <Interviews />
       <ChurchesPreview />
       <Timeline />
-      <FamilyArchives />
+      <Interviews />
       <MyConnection />
       <ContributeCta />
       <GuidingPrinciple />

@@ -1,246 +1,172 @@
-/* -- Family archives -- */
-.archiveGrid {
+.archiveGrid, .archiveGridFull {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.8rem 1.7rem;
+  align-items: start;
+}
+
+.archiveGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .archiveCard {
-  background:
-    linear-gradient(180deg, var(--color-paper), #f3e7cf);
-  padding: 0.6rem 0.6rem 1.15rem;
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-frame);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.archiveCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 18px rgb(41 37 34 / 0.1);
+  min-width: 0;
+  padding-bottom: 1rem;
 }
 
 .archiveFrame {
   aspect-ratio: 4 / 3;
-  border: 1px solid #8f7856;
-  box-shadow:
-    inset 0 0 0 5px var(--color-parchment-deep),
-    inset 0 0 0 6px #b8a786,
-    0 2px 10px rgb(41 37 34 / 0.08);
   position: relative;
   overflow: hidden;
-  margin-bottom: 0.85rem;
-  background: var(--color-parchment-deep);
+  margin-bottom: 1.25rem;
+  background: var(--color-parchment);
 }
 
 .archivePhoto {
   object-fit: contain;
   object-position: center;
-  filter: sepia(0.22) contrast(1.05) saturate(0.88);
-}
-
-.archiveArt {
-  position: absolute;
-  inset: 8px;
-  filter: sepia(0.35) contrast(0.95);
-}
-
-.photoStack {
-  background:
-    linear-gradient(28deg, transparent 18%, rgb(255 255 255 / 0.35) 19% 48%, transparent 49%),
-    linear-gradient(135deg, #6a5a48, #b9a588 55%, #8a7862);
-}
-
-.letters {
-  background:
-    repeating-linear-gradient(0deg, #eadfc9 0 18px, #c5b18f 19px 20px),
-    linear-gradient(90deg, #d4c2a0, #c0ad8a);
-}
-
-.people {
-  background:
-    radial-gradient(circle at 28% 42%, #3f3830 0 7%, transparent 8%),
-    radial-gradient(circle at 50% 36%, #3f3830 0 8%, transparent 9%),
-    radial-gradient(circle at 72% 42%, #3f3830 0 7%, transparent 8%),
-    radial-gradient(ellipse at 50% 78%, #4a4036 0 22%, transparent 23%),
-    linear-gradient(#d2c0a0, #8a7862);
-}
-
-.records {
-  background: linear-gradient(
-    90deg,
-    #d2c0a0 10%,
-    #6e5848 11% 16%,
-    #eadfc9 17% 83%,
-    #6e5848 84% 89%,
-    #d2c0a0 90%
-  );
 }
 
 .archiveOverlay {
   position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: end center;
-  padding: 0.65rem;
-  background: linear-gradient(to top, rgb(41 37 34 / 0.5), transparent 55%);
+  bottom: .7rem;
+  left: .7rem;
   pointer-events: none;
-  z-index: 1;
 }
 
 .archiveOverlay span {
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  display: block;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: .58rem;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--color-paper);
-  background: rgb(109 34 39 / 0.82);
-  padding: 4px 8px;
+  padding: .3rem .55rem;
 }
 
-.archiveCard h3 {
-  color: var(--color-burgundy);
-  font-size: 1.12rem;
-  margin: 0 0.45rem 0.35rem;
+.archiveCard h2, .archiveCard h3 {
+  font-size: 1.45rem;
+  color: var(--color-ink);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  margin: 0 0 .8rem;
+  line-height: 1.2;
 }
 
 .archiveCaption {
-  font-size: 0.86rem;
+  font-size: .86rem;
   color: var(--color-muted-brown);
-  margin: 0 0.45rem 0.65rem;
+  margin: 0 0 1rem;
+  line-height: 1.7;
+}
+
+.archiveGrid .archiveCaption {
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.archivePublicRecord {
-  margin: 0 0.45rem 0.75rem;
-  padding: 0.8rem 0.85rem 0.85rem;
-  background:
-    linear-gradient(180deg, rgb(251 245 233 / 0.95), rgb(243 231 207 / 0.9));
-  border: 1px solid rgb(112 85 55 / 0.28);
-  border-left: 3px solid var(--color-burgundy);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35);
-}
-
-.archivePublicRecordLabel {
-  margin: 0 0 0.45rem;
-  font-size: 0.72rem; /* was ~0.62 / ~10px - V-P1-6 readability */
-  font-weight: 800;
-  letter-spacing: 0.1em;
+.provenance, .archiveDate, .archiveStatus {
+  display: inline-block;
+  font-size: .64rem;
   text-transform: uppercase;
-  color: var(--color-burgundy);
-}
-
-.archivePublicRecordNote {
-  margin: 0 0 0.6rem;
-  font-size: 0.86rem;
-  line-height: 1.55;
-  color: #3d3428;
-  display: block;
-  -webkit-line-clamp: unset;
-  overflow: visible;
-}
-
-.archivePublicRecordRefs {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.4rem;
-}
-
-.archivePublicRecordRefs li {
-  font-size: 0.8rem;
-  line-height: 1.45;
+  letter-spacing: .06em;
+  padding: .3rem .5rem;
+  border: 1px solid var(--color-border);
+  margin: .15rem .35rem .15rem 0;
   color: var(--color-muted-brown);
 }
 
-.archivePublicRecordRefs a {
+.archiveDate {
+  background: var(--color-parchment);
   color: var(--color-burgundy);
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.archivePublicRecordRefNote {
-  color: #5c5346;
-  font-weight: 500;
-}
-
-.provenance {
-  display: inline-block;
-  margin-left: 0.45rem;
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #3d3428;
-  background: #e8e0c8;
-  padding: 4px 8px;
-  border-radius: 2px;
-  border: 1px solid rgb(112 85 55 / 0.28);
-}
-
-.archiveGridFull {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
 }
 
 .archiveMetaRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  align-items: center;
-  margin: 0.35rem 0.45rem 0.5rem;
-}
-
-.archiveStatus {
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-burgundy);
-  background: rgb(109 34 39 / 0.08);
-  border: 1px solid rgb(109 34 39 / 0.22);
-  padding: 3px 7px;
+  gap: .15rem;
+  margin: .5rem 0;
 }
 
 .archiveSource {
-  font-size: 0.78rem;
+  font-size: .75rem;
   color: var(--color-muted-brown);
-  margin: 0 0.45rem 0.35rem;
+  overflow-wrap: anywhere;
 }
 
-.archiveDate {
-  display: inline-block;
-  margin-left: 0.45rem;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+.recordLink {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-border);
+  margin-top: 1rem;
+  padding-top: .8rem;
+  font-size: .8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.recordLink:hover {
+  text-decoration: underline;
+}
+
+.archivePublicRecord {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--color-parchment);
+  border-left: 2px solid var(--color-burgundy);
+}
+
+.archivePublicRecordLabel {
+  margin: 0 0 .5rem;
+  font-size: .7rem;
   text-transform: uppercase;
-  color: #fff8ef;
-  background: var(--color-burgundy);
-  padding: 3px 7px;
-  border-radius: 2px;
+  letter-spacing: .08em;
+  font-weight: 700;
+  color: var(--color-burgundy);
 }
 
-@media (max-width: 1100px) {
-  .archiveGridFull {
-    grid-template-columns: repeat(2, 1fr);
+.archivePublicRecordNote {
+  margin: 0 0 .75rem;
+  font-size: .85rem;
+  line-height: 1.65;
+  color: var(--color-ink);
+}
+
+.archivePublicRecordRefs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: .5rem;
+  font-size: .78rem;
+  overflow-wrap: anywhere;
+}
+
+.archivePublicRecordRefs a {
+  font-weight: 600;
+}
+
+.archivePublicRecordRefNote {
+  color: var(--color-muted-brown);
+}
+
+@media(max-width: 1100px) {
+  .archiveGrid, .archiveGridFull {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
 }
 
-@media (max-width: 980px) {
-  .archiveGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .archiveGrid,
-  .archiveGridFull {
+@media(max-width: 600px) {
+  .archiveGrid, .archiveGridFull {
     grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
+
+  .archiveCard h2, .archiveCard h3 {
+    font-size: 1.65rem;
+  }
+
 }

@@ -1,5 +1,7 @@
 # Design system — Archival Heritage (Design #1)
 
+**Current implementation:** see the Contemporary archive redesign dated 2026-10-24 at the end of this document. The original specification below is retained as historical context.
+
 Source of truth for this build: package `docs/DESIGN_SYSTEM.md` + `GROKBOT_MASTER_PROMPT` essential palette. CSS implementation: `src/styles/tokens.css`.
 
 ## Palette
@@ -37,3 +39,14 @@ Wire font CSS variables on `<html>` (see Archive Design `lib/fonts.ts`). Consume
 ## Owner
 
 Archive Design (reports to Heritage Forge). Design #1 Archival Heritage only.
+# Contemporary archive redesign — 2026-10-24
+
+The user's complete visual redesign request supersedes the original Design #1 layout above. The established burgundy, ink, parchment, and paper palette and Cormorant Garamond / Source Sans 3 typefaces remain. The active design uses paper as the primary surface, larger editorial typography, generous whitespace, simple rules, and unfiltered archival media instead of textured panels and ornamental frames.
+
+Homepage sequence: collection-led hero, family archive, purpose, churches, documented timeline, interviews, curator connection, contribution, guiding principle. The hero and previews load existing CMS records; links open their records in the archive. The dark burgundy timeline provides a distinct visual chapter. Shared cards and page typography carry the design through all public routes.
+
+Images remain contained without cropping; published captions, source data, rights notices, public-record caveats, forthcoming biographies, and permission-pending church placeholders are preserved. Administration and contribution delivery logic are unchanged. This work is a local redesign preview, not a production launch.
+
+Responsive layouts: header menu at 1050px, collection grids at 1100px/600px, stacked editorial sections at 760px, vertical timeline below 980px. Mobile navigation closes after selection and Escape restores focus to its toggle. Focus indicators and reduced-motion support remain active.
+
+---

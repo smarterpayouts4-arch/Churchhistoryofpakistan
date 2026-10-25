@@ -1,95 +1,70 @@
-/* -- Contribute CTA -- */
 .contribute {
-  padding: 3.75rem 0;
-  background:
-    linear-gradient(135deg, var(--color-deep-burgundy), var(--color-burgundy) 55%, #5c1c22);
-  color: #fff6e8;
-  border-bottom: 0;
+  padding: clamp(4rem, 7vw, 6rem) 0;
+  background: var(--color-parchment);
+  border-block: 1px solid var(--color-border);
 }
 
 .contributeInner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 3rem;
-  position: relative;
+  gap: 4rem;
 }
 
-.contributeInner::before {
-  content: "";
-  position: absolute;
-  inset: -1.5rem -1rem;
-  background: url("/media/textures/paper-grain.png");
-  background-size: 220px 220px;
-  opacity: 0.18;
-  mix-blend-mode: soft-light;
-  pointer-events: none;
+.contributeCopy {
+  max-width: 47rem;
 }
 
-.contributeCopy,
-.contributeAside {
-  position: relative;
-  z-index: 1;
-}
-
-.contributeAside {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.contributeMark {
-  width: 72px;
-  height: 72px;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
-  border: 1px solid rgb(251 245 233 / 0.35);
+.contributeCopy :global(.eyebrowLight) {
+  color: var(--color-burgundy);
 }
 
 .contribute h2 {
-  margin-bottom: 0.55rem;
-  color: #fff6e8;
-  font-size: clamp(1.85rem, 3vw, 2.45rem);
+  color: var(--color-ink);
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 500;
+  letter-spacing: -.04em;
+  margin: 1rem 0 1.25rem;
 }
 
-.contribute p {
-  max-width: 720px;
-  margin-bottom: 0;
-  color: #f1dfc0;
+.contributeCopy > p:last-child {
+  max-width: 38rem;
+  color: var(--color-muted-brown);
+}
+
+.contributeMark {
+  display: none;
 }
 
 .btnCream {
   display: inline-flex;
-  align-items: center;
+  min-height: 54px;
+  padding: 1rem 2rem;
+  text-align: center;
   justify-content: center;
-  min-height: 48px;
-  padding: 12px 22px;
-  border-radius: 4px;
-  font-weight: 800;
-  font-size: 0.88rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid var(--color-paper);
-  background: var(--color-paper);
-  color: var(--color-burgundy);
+  background: var(--color-burgundy);
+  color: var(--color-paper);
+  font-size: .9rem;
+  font-weight: 600;
   white-space: nowrap;
-  box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
+}
+
+.btnCream::after {
+  content: "↗";
+  margin-left: 2rem;
 }
 
 .btnCream:hover {
-  background: var(--color-parchment);
-  color: var(--color-deep-burgundy);
+  background: var(--color-deep-burgundy);
+  color: var(--color-paper);
 }
 
-@media (max-width: 768px) {
+@media(max-width: 760px) {
   .contributeInner {
-    align-items: start;
     flex-direction: column;
+    align-items: start;
+    gap: 1.5rem;
   }
 
-  .contributeAside {
-    align-items: start;
-  }
 }

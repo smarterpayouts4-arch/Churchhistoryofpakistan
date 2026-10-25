@@ -41,8 +41,8 @@ export function Footer({
           ))}
         </nav>
         <p className={styles.copy}>
-          © {year} {siteName}. A local digital heritage archive · Design #1
-          Archival Heritage. Historical claims remain citation-backed; photographs
+          © {year} {siteName}. A digital heritage archive.
+          Historical claims remain citation-backed; photographs
           show rights status. Complete legal and privacy pages before public launch.
           {" · "}
           <Link href="/admin/login" className={styles.curatorLink}>

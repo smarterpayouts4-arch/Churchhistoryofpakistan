@@ -1,11 +1,24 @@
 .page {
-  padding: var(--space-8) 0 var(--space-9);
+  padding: clamp(3rem, 6vw, 6rem) 0 var(--space-9);
 }
+
+.page h1 {
+  font-size: clamp(3.3rem, 6vw, 6rem);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: 1.05;
+  color: var(--color-ink);
+  margin: .6rem 0 1.5rem;
+}
+
+.page > :global(.shell) > h2 { font-size: var(--text-h2); font-weight: 500; }
 
 .intro {
   max-width: 42rem;
   color: var(--color-muted-brown);
-  margin: 0 0 var(--space-6);
+  margin: 0 0 3rem;
+  font-size: 1.15rem;
+  line-height: 1.8;
 }
 
 .grid {
@@ -14,9 +27,10 @@
 }
 
 .card {
-  background: var(--color-paper);
-  border: 1px solid var(--color-border);
-  padding: var(--space-5);
+  background: var(--color-parchment);
+  border: 0;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  overflow-wrap: anywhere;
 }
 
 .card h2,
@@ -55,9 +69,10 @@
 }
 
 .list li {
-  background: var(--color-paper);
-  border: 1px solid var(--color-border);
-  padding: var(--space-4);
+  background: transparent;
+  border-bottom: 1px solid var(--color-border);
+  padding: 1.5rem 0;
+  overflow-wrap: anywhere;
 }
 
 .form {
@@ -100,6 +115,23 @@
   resize: vertical;
 }
 
+.field .checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.field input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: 0 0 1.2rem;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--color-burgundy);
+}
+
 .notice {
   border-left: 3px solid var(--color-antique-gold);
   background: var(--color-parchment-wash);
@@ -123,7 +155,7 @@
 .places {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
-  gap: var(--space-5);
+  gap: 3rem 2rem;
 }
 
 .extraGrid {

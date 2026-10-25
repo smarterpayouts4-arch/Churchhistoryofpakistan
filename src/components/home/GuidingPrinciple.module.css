@@ -1,29 +1,27 @@
-/* -- Guiding principle -- */
 .guiding {
+  padding: clamp(4rem, 8vw, 8rem) 0;
   text-align: center;
-  padding: 5.4rem 0;
-  background:
-    linear-gradient(180deg, rgb(239 224 197 / 0.95), rgb(232 215 184 / 0.9)),
-    url("/media/textures/parchment-wash.png");
-  background-size: auto, 520px 520px;
+  background: var(--color-paper);
 }
 
 .guidingInner {
-  max-width: 900px;
-  margin-inline: auto;
+  max-width: 54rem;
 }
 
 .guidingQuote {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4.2vw, 3.35rem);
+  font-size: clamp(2.7rem, 5vw, 4.5rem);
+  letter-spacing: -.035em;
+  font-weight: 500;
   color: var(--color-burgundy);
-  margin: 1.25rem 0;
-  font-style: italic;
-  line-height: 1.2;
+  margin: 1.5rem 0;
+  line-height: 1.1;
 }
 
 .guidingNote {
   color: var(--color-muted-brown);
-  max-width: 720px;
-  margin-inline: auto;
+  font-size: .95rem;
+  max-width: 42rem;
+  margin: 1.7rem auto 0;
+  line-height: 1.8;
 }
