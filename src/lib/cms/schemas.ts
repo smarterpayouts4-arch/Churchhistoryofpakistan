@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MAX_IMAGES_PER_SECTION } from "@/lib/sections/config";
 
 export const verificationStatusSchema = z.enum([
   "facebook-caption",
@@ -82,7 +83,7 @@ export const featuredInterviewSchema = z.object({
   coverSrc: z.string().min(1).max(500).optional(),
   coverPosition: z.string().max(40).optional(),
   alt: z.string().min(1).max(1000),
-  sourceUrl: z.string().min(1).max(1000),
+  sourceUrl: z.string().min(1).max(1000).optional(),
   provenance: z.string().min(1).max(300),
   width: z.number().int().positive(),
   height: z.number().int().positive(),
@@ -207,7 +208,7 @@ export const homepageContentSchema = z.object({
           position: z.string().min(1).max(40),
         }),
       )
-      .max(6)
+      .max(MAX_IMAGES_PER_SECTION)
       .optional(),
   }),
   purpose_cards: z.array(purposeCardSchema).min(1),
@@ -237,7 +238,7 @@ export const peopleFrameSchema = z.object({
 });
 
 export const peopleFramesFileSchema = z.object({
-  frames: z.array(peopleFrameSchema).min(1).max(6),
+  frames: z.array(peopleFrameSchema).min(1).max(MAX_IMAGES_PER_SECTION),
 });
 
 export const familyArchiveNoteSchema = z.object({

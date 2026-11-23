@@ -251,61 +251,9 @@ export function HomepageEditor({
           hint="Shown next to “Curated by” in the hero."
         />
 
-        <h3 style={{ margin: "0.5rem 0 0" }}>Hero photo band (rotating)</h3>
-        <p className={styles.hint}>
-          One wide photograph under the hero buttons, crossfading every few seconds.
-          Use landscape photos. Click a preview to set its focus point so faces stay framed. Up to 6 photos.
+        <p className={styles.hint} style={{ margin: "0.5rem 0 0" }}>
+          The rotating homepage photos are changed in <a href="#photos">Photos &amp; videos → Homepage slideshow</a>.
         </p>
-        {(home.hero.band_images ?? []).map((img, i) => {
-          const band = home.hero.band_images ?? [];
-          const setBand = (patch: Partial<typeof img>) => {
-            const list = [...band];
-            list[i] = { ...list[i]!, ...patch };
-            setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-          };
-          const move = (dir: -1 | 1) => {
-            const j = i + dir;
-            if (j < 0 || j >= band.length) return;
-            const list = [...band];
-            [list[i], list[j]] = [list[j]!, list[i]!];
-            setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-          };
-          return (
-            <article key={i} className={styles.panel} style={{ padding: "0.85rem" }}>
-              <ImageField
-                label={`Band photo ${i + 1}`}
-                value={img.src}
-                position={img.position}
-                onPositionChange={(position) => setBand({ position })}
-                onChange={(src, entry) =>
-                  setBand({ src, ...(entry?.alt && !img.alt ? { alt: entry.alt } : {}) })
-                }
-              />
-              <label className={styles.label} style={{ marginTop: "0.6rem" }}>
-                Caption / alt text (who or what is shown)
-                <input className={styles.input} value={img.alt} onChange={(e) => setBand({ alt: e.target.value })} />
-              </label>
-              <div className={styles.rowActions} style={{ marginTop: "0.6rem" }}>
-                <button type="button" className={styles.secondaryBtn} onClick={() => move(-1)} disabled={i === 0} aria-label={`Move band photo ${i + 1} earlier`}>
-                  ↑ Earlier
-                </button>
-                <button type="button" className={styles.secondaryBtn} onClick={() => move(1)} disabled={i === band.length - 1} aria-label={`Move band photo ${i + 1} later`}>
-                  ↓ Later
-                </button>
-                <button type="button" className={styles.dangerBtn} onClick={() => {
-                  const list = band.filter((_, n) => n !== i);
-                  setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-                }}>Remove</button>
-              </div>
-            </article>
-          );
-        })}
-        <div className={styles.rowActions}>
-          <button type="button" className={styles.secondaryBtn} onClick={() => {
-            const list = [...(home.hero.band_images ?? []), { src: "", alt: "", position: "50% 25%" }];
-            setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-          }}>+ Add band photo</button>
-        </div>
 
         <h3 style={{ margin: "0.5rem 0 0" }}>Purpose cards</h3>
         {home.purpose_cards.map((card, i) => (

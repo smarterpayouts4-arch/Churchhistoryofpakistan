@@ -290,5 +290,9 @@
 .bandDotBtn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; }
 .bandDot, .bandDotActive { display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--color-border); }
 .bandDotActive { width: 22px; border-radius: 8px; background: var(--color-burgundy); }
+.bandStepper { display: inline-flex; align-items: center; gap: .25rem; }
+.bandStepBtn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--color-border); border-radius: 50%; background: transparent; color: var(--color-burgundy); font-size: 1.35rem; line-height: 1; cursor: pointer; }
+.bandStepBtn:hover { border-color: var(--color-burgundy); }
+.bandCount { min-width: 4.5rem; text-align: center; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--color-muted-brown); }
 .rotationButton { min-height: 44px; border: 0; background: transparent; color: var(--color-burgundy); font-size: .8rem; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .bandSlide { transition: none; } }

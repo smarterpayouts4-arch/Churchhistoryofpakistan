@@ -7,6 +7,7 @@ import {
   familyArchiveUpsertSchema,
 } from "@/lib/cms/schemas";
 import type { FamilyArchiveItem } from "@/lib/cms/types";
+import { fullMessage, sectionConfig } from "@/lib/sections/config";
 
 export const runtime = "nodejs";
 
@@ -87,6 +88,10 @@ export const POST = adminRoute(async (req: NextRequest) => {
   }
 
   const data = await getFamilyArchives();
+  const gallery = sectionConfig("gallery")!;
+  if (data.items.length >= gallery.max) {
+    return NextResponse.json({ error: fullMessage(gallery, data.items.length) }, { status: 409 });
+  }
   if (data.items.some((i) => i.id === parsed.data.id)) {
     return NextResponse.json(
       { error: "An item with this id already exists." },

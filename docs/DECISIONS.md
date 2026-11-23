@@ -284,3 +284,18 @@ The owner asked to keep the existing design, layout, pages and content, and only
 - **Public site:** only modest motion (scroll reveal, a route fade, a photo lightbox, timeline refinements, all off under reduced motion) and SEO metadata. No layout or style redesign.
 
 **Consequences.** Hosted editing needs KV and Blob, and the admin says so when they are missing. The conflict check is not atomic in KV, which is acceptable for a few family editors. Interviews and people stay placeholders, so the admin edits existing interview slots but does not add new ones (AGENTS.md rule 4). See `docs/ARCHITECTURE.md` and `docs/DEPLOYMENT.md`.
+
+## ADR-011 — Simple owner flow for photos & videos: sections, limits, draft → publish (2026-11-23)
+
+**Context.** The owner wants the simplest possible admin: sign in, open a section, upload, replace, delete or reorder photos and videos, then press one Publish button, with no code and no redeploy. The site runs on the free Vercel plan (1 GB Blob storage). Sanity and Firebase were considered and rejected: the existing KV/Blob store, accounts, CSRF, rate limits and History already cover it.
+
+**Decision.**
+
+- A new default admin page, **Photos & videos**, with four sections (homepage slideshow, Family Archive gallery, People photos, Interview videos). Every other editor moves under **More settings** and keeps saving live as before.
+- Limits: 20 photos per section, 5 videos in total (all in Interview videos), 20 MB per photo, 100 MB per video. Enforced in the browser and on the server. The Family Archive gallery already held 24 records; nothing is removed, it simply cannot grow until it is under 20.
+- New uploads go first (newest first). Section edits are drafts until Publish; publishing writes the live documents through `writeDoc()` (revisions and History kept) and frees the storage of uploads that are no longer used.
+- Videos and photos the curator uploads are his own records (AGENTS.md rules 3–4: nothing is invented). New archive photos are labelled "Added by the curator" and "Needs verification" until the curator adds a source under Archive captions & sources.
+- The duplicate hero-photo editor on the homepage text page was removed; the hero slideshow shows a "3 / 20" stepper instead of dots when it has more than six photos, and only loads the current photo and its neighbours.
+
+**Consequences.** One clear owner path with one Publish button. Restoring a very old History version can point at an upload that was deleted after it was taken off the site; the photo would then need re-uploading. See `docs/ADMIN.md` and `docs/ARCHITECTURE.md`.
+

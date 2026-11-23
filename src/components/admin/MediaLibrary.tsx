@@ -10,7 +10,7 @@ import { checkFile, uploadMedia } from "./upload";
 import { toast } from "./toast";
 import { Thumb } from "./Thumb";
 import { CropTool } from "./CropTool";
-import { formatBytes } from "@/lib/media/rules";
+import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, formatBytes } from "@/lib/media/rules";
 
 type Filter = "all" | "uploaded" | "site" | "unused";
 
@@ -164,8 +164,8 @@ export function MediaLibrary({ mode = "manage", kind, selectedUrl, onPick }: Pro
           </span>
           <strong>Drop {kind === "video" ? "videos" : kind === "image" ? "photos" : "photos or videos"} here</strong>
           <span className={styles.hint}>
-            or click to choose from your computer or phone · photos up to 30 MB, videos up to 1 GB · full
-            quality is kept
+            or click to choose from your computer or phone · photos up to {formatBytes(MAX_IMAGE_BYTES)}, videos up to{" "}
+            {formatBytes(MAX_VIDEO_BYTES)}
           </span>
           <input
             ref={inputRef}

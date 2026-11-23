@@ -2,8 +2,16 @@
 export const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"] as const;
 export const VIDEO_TYPES = ["video/mp4", "video/webm", "video/quicktime"] as const;
 
-export const MAX_IMAGE_BYTES = 30 * 1024 * 1024; // 30 MB — keep full-resolution scans
-export const MAX_VIDEO_BYTES = 1024 * 1024 * 1024; // 1 GB
+/**
+ * Upload size caps (one place, used by the browser and the server).
+ * The free Vercel Blob plan has 1 GB of storage in total, so a video is
+ * capped at 100 MB (five videos then fit with plenty of room for photos).
+ * Photos are resized in the browser before upload, so 20 MB is generous.
+ */
+export const MAX_IMAGE_BYTES = 20 * 1024 * 1024; // 20 MB
+export const MAX_VIDEO_BYTES = 100 * 1024 * 1024; // 100 MB
+/** Total storage on the free Vercel Blob plan (shown as a meter in the admin). */
+export const STORAGE_BUDGET_BYTES = 1024 * 1024 * 1024; // 1 GB
 
 export function kindForType(type: string): "image" | "video" | null {
   if ((IMAGE_TYPES as readonly string[]).includes(type)) return "image";
@@ -18,8 +26,8 @@ export function maxBytesFor(kind: "image" | "video") {
 export function formatBytes(n: number) {
   if (n < 1024) return `${n} B`;
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} KB`;
-  if (n < 1024 * 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)} MB`;
-  return `${(n / 1024 / 1024 / 1024).toFixed(2)} GB`;
+  if (n < 1024 * 1024 * 1024) return `${(n / 1024 / 1024).toFixed(n % (1024 * 1024) === 0 ? 0 : 1)} MB`;
+  return `${(n / 1024 / 1024 / 1024).toFixed(n % (1024 * 1024 * 1024) === 0 ? 0 : 2)} GB`;
 }
 
 const EXT: Record<string, string> = {

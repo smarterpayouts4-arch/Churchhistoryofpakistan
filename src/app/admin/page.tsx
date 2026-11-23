@@ -27,6 +27,7 @@ import { resolveHomeLayout } from "@/content/home-layout";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { StorageBanner } from "@/components/admin/StorageBanner";
+import { loadSectionsState } from "@/lib/sections/server";
 import styles from "./admin.module.css";
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const session = await requireAdminPage();
-  const [archives, interviews, profile, homepage, layout, cathedrals, peopleFrames, siteSettings, blog, media, contributions] =
+  const [archives, interviews, profile, homepage, layout, cathedrals, peopleFrames, siteSettings, blog, media, contributions, sections] =
     await Promise.all([
       readDoc<FamilyArchivesFile>("family-archives.json"),
       readDoc<FeaturedInterviewsFile>("featured-interviews.json"),
@@ -51,7 +52,9 @@ export default async function AdminDashboardPage() {
       readDoc<BlogFile>("blog.json"),
       getMediaIndex(),
       readDoc<ContributionsFile>("contributions.json"),
+      loadSectionsState(),
     ]);
+  const storage = storageStatus();
 
   const docs: Record<string, unknown> = {
     "family-archives.json": archives,
@@ -74,23 +77,20 @@ export default async function AdminDashboardPage() {
         <div className={styles.adminNav}>
           <div>
             <p className="eyebrow" style={{ margin: 0 }}>
-              Curator admin
+              History: Church of Pakistan
             </p>
-            <h1 style={{ margin: "0.2rem 0 0" }}>Dashboard</h1>
+            <h1 style={{ margin: "0.2rem 0 0" }}>Website admin</h1>
             <p className={styles.hint} style={{ marginTop: "0.35rem" }}>
               Signed in as {session.sub} · {session.role === "admin" ? "Administrator" : "Editor"}
             </p>
           </div>
           <span className={styles.spacer} />
           <Link className={styles.secondaryLink} href="/" target="_blank">
-            View live site ↗
-          </Link>
-          <Link className={styles.secondaryLink} href="/admin/inspect">
-            Media check
+            View website ↗
           </Link>
           <LogoutButton />
         </div>
-        <StorageBanner status={storageStatus()} problems={session.role === "admin" ? authConfigProblems() : []} />
+        <StorageBanner status={storage} problems={session.role === "admin" ? authConfigProblems() : []} />
         <AdminDashboard
           initialHomepage={homepage}
           initialLayout={{ sections: resolveHomeLayout(layout) }}
@@ -107,6 +107,8 @@ export default async function AdminDashboardPage() {
           me={{ userId: session.userId, name: session.sub, email: session.email, role: session.role }}
           counts={{ media: media.length, newContributions: (contributions.items ?? []).filter((c) => c.status === "new").length }}
           intakeEnabled={intakeStatus().enabled}
+          sections={sections}
+          storageInfo={{ blob: storage.blob, hosted: storage.hosted }}
         />
       </div>
     </div>

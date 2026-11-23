@@ -9,6 +9,9 @@ export type UploadProgress = (fraction: number) => void;
 
 export type StorageInfo = { blob: boolean; hosted: boolean };
 
+/** Upload into a "Photos & videos" section: the server checks kind and room first. */
+export type SectionTarget = { section: string; replace?: boolean };
+
 /** Extra facts measured in the browser and stored with the library item. */
 type Extra = {
   width?: number;
@@ -51,7 +54,13 @@ export function checkFile(file: File): string | null {
   return null;
 }
 
-function localUpload(file: File, alt: string, extra: Extra, onProgress?: UploadProgress): Promise<MediaItem> {
+function localUpload(
+  file: File,
+  alt: string,
+  extra: Extra,
+  onProgress?: UploadProgress,
+  target?: SectionTarget,
+): Promise<MediaItem> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/admin/media/upload");
@@ -63,6 +72,10 @@ function localUpload(file: File, alt: string, extra: Extra, onProgress?: UploadP
     if (extra.posterUrl) xhr.setRequestHeader("x-poster-url", encodeURIComponent(extra.posterUrl));
     if (extra.duration) xhr.setRequestHeader("x-duration", String(extra.duration));
     if (extra.width && extra.height) xhr.setRequestHeader("x-dimensions", `${extra.width}x${extra.height}`);
+    if (target) {
+      xhr.setRequestHeader("x-section", target.section);
+      if (target.replace) xhr.setRequestHeader("x-section-replace", "1");
+    }
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) onProgress?.(e.loaded / e.total);
     };
@@ -81,7 +94,13 @@ function localUpload(file: File, alt: string, extra: Extra, onProgress?: UploadP
   });
 }
 
-async function blobUpload(file: File, alt: string, extra: Extra, onProgress?: UploadProgress): Promise<MediaItem> {
+async function blobUpload(
+  file: File,
+  alt: string,
+  extra: Extra,
+  onProgress?: UploadProgress,
+  target?: SectionTarget,
+): Promise<MediaItem> {
   const { upload } = await import("@vercel/blob/client");
   const dims =
     extra.width && extra.height
@@ -94,6 +113,9 @@ async function blobUpload(file: File, alt: string, extra: Extra, onProgress?: Up
     access: "public",
     handleUploadUrl: "/api/admin/media/blob",
     headers: { "x-csrf-token": csrfToken() },
+    ...(target
+      ? { clientPayload: JSON.stringify({ ...target, kind: file.type.startsWith("video/") ? "video" : "image" }) }
+      : {}),
     multipart: file.size > 8 * 1024 * 1024,
     onUploadProgress: (p) => onProgress?.(p.percentage / 100),
   });
@@ -109,6 +131,7 @@ async function blobUpload(file: File, alt: string, extra: Extra, onProgress?: Up
       ...(extra.blurDataURL ? { blurDataURL: extra.blurDataURL } : {}),
       ...(extra.posterUrl ? { posterUrl: extra.posterUrl } : {}),
       ...(extra.duration ? { duration: extra.duration } : {}),
+      ...(target ? { section: target.section, replace: Boolean(target.replace) } : {}),
       alt,
     }),
   });
@@ -117,8 +140,17 @@ async function blobUpload(file: File, alt: string, extra: Extra, onProgress?: Up
   return body.item;
 }
 
-function send(file: File, storage: StorageInfo, alt: string, extra: Extra, onProgress?: UploadProgress) {
-  return storage.blob ? blobUpload(file, alt, extra, onProgress) : localUpload(file, alt, extra, onProgress);
+function send(
+  file: File,
+  storage: StorageInfo,
+  alt: string,
+  extra: Extra,
+  onProgress?: UploadProgress,
+  target?: SectionTarget,
+) {
+  return storage.blob
+    ? blobUpload(file, alt, extra, onProgress, target)
+    : localUpload(file, alt, extra, onProgress, target);
 }
 
 /**
@@ -129,7 +161,7 @@ function send(file: File, storage: StorageInfo, alt: string, extra: Extra, onPro
 export async function uploadMedia(
   original: File,
   storage: StorageInfo,
-  opts: { alt?: string; onProgress?: UploadProgress } = {},
+  opts: { alt?: string; onProgress?: UploadProgress; target?: SectionTarget } = {},
 ): Promise<MediaItem> {
   const problem = checkFile(original);
   if (problem) throw new Error(problem);
@@ -140,7 +172,7 @@ export async function uploadMedia(
   if (original.type.startsWith("image/")) {
     const prepared = await prepareImage(original);
     const { file, ...extra } = prepared;
-    return send(file, storage, alt, extra, opts.onProgress);
+    return send(file, storage, alt, extra, opts.onProgress, opts.target);
   }
   const video = await prepareVideo(original);
   let posterUrl: string | undefined;
@@ -169,5 +201,6 @@ export async function uploadMedia(
       blurDataURL: video.posterBlur,
     },
     opts.onProgress,
+    opts.target,
   );
 }

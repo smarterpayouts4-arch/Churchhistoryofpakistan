@@ -60,7 +60,12 @@ export const CONTENT_DOCS = [
 export type ContentDoc = (typeof CONTENT_DOCS)[number];
 
 /** Private documents (never committed, never public). */
-export type PrivateDoc = "users.json" | "media.json" | "contributions.json";
+export type PrivateDoc =
+  | "users.json"
+  | "media.json"
+  | "contributions.json"
+  /** Unpublished photo & video changes (admin "Photos & videos"). */
+  | "section-drafts.json";
 export type DocName = ContentDoc | PrivateDoc;
 
 export const DOC_LABELS: Record<ContentDoc, string> = {
@@ -134,6 +139,7 @@ const PRIVATE_DEFAULTS: Record<PrivateDoc, unknown> = {
   "users.json": { users: [] },
   "media.json": { items: [] },
   "contributions.json": { items: [] },
+  "section-drafts.json": { drafts: {} },
 };
 
 async function rawRead<T>(name: DocName): Promise<T> {

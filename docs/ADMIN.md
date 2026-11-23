@@ -2,11 +2,20 @@
 
 This is how to look after the website without touching any code. If something here doesn't match what you see, ask Oscar.
 
+## The short version
+
+1. Sign in.
+2. **Photos & videos** opens. Pick a section.
+3. Add, replace, delete or reorder photos and videos. Each change saves itself as a draft.
+4. Press **Publish to website**. Your changes are live straight away. Nothing needs to be redeployed and no code is touched.
+
+Until you press Publish, visitors keep seeing the old version, so you can take your time.
+
 ## Signing in
 
 1. Go to the website and click **Curator login** at the very bottom of any page. You can also add `/admin/login` to the site address.
 2. Type your **email** and **password**, then press **Sign in**. The eye button shows the password while you type it.
-3. You'll land on the **Dashboard**.
+3. You'll land on **Photos & videos**.
 
 If you type the password wrong too many times, the login rests for 15 minutes. Wait, then try again.
 
@@ -14,69 +23,80 @@ To sign out, press **Log out** at the top right. You're also signed out automati
 
 **Your password:** an administrator creates your account and gives you a first password. Change it straight away under **My account**. Use at least 10 characters; a short sentence works well, for example `grandfather planted the mango tree`. Never send passwords in WhatsApp, Facebook or email.
 
-## Finding your way around
+## Photos & videos (the main page)
 
-The menu on the left is grouped:
+The four buttons along the top are the parts of the website that show photos or videos. Each one says how many it holds, for example **4 of 20 photos**.
+
+| Section | Where it shows on the website | Limit |
+|---|---|---|
+| **Homepage slideshow** | The large rotating photo at the top of the homepage | 20 photos |
+| **Family Archive gallery** | The Archive page (the first four also show on the homepage) | 20 photos |
+| **People photos** | The People page | 20 photos |
+| **Interview videos** | The Interviews page and the homepage | 5 videos |
+
+Each section has a **See it on the website** link.
+
+### Add photos or videos
+
+- Drag files from your computer onto the dotted box, or press **+ Add photos** (or **+ Add videos**). On a phone, the button lets you pick from your photos or take a new one.
+- A progress bar shows each file. You can add several at once.
+- New ones go to the **front** of the section and are marked **New**, so the newest photos and videos show first. Drag them elsewhere if you like.
+- **Photos:** JPEG, PNG, WebP, GIF or AVIF, up to 20 MB each. Photos are straightened and made web-friendly automatically.
+- **Videos:** MP4, WebM or MOV, up to 100 MB each. Landscape (16:9) videos filmed on a tripod look best.
+- **iPhone photos (HEIC):** these won't upload. On the iPhone, go to Settings → Camera → Formats and choose **Most Compatible**, or share the photo by email, which turns it into a JPEG.
+
+### When a section is full
+
+When a section reaches its limit (20 photos, or 5 videos), the upload box is replaced by a message like **"Homepage slideshow is full (20 of 20 photos). Delete a photo to add another."** Delete one you no longer need, then add the new one.
+
+The Family Archive gallery already had more than 20 photos before the limit existed. All of them stay on the website, but you need to delete some before you can add new ones there.
+
+### Replace, delete, reorder
+
+- **Replace** swaps the file but keeps its place, title and description.
+- **Delete** asks you to confirm. The photo leaves the website when you publish.
+- **Reorder:** drag a photo to a new place, or use the **←** and **→** arrows (easiest on a phone). The order here is the order on the website.
+- **Focus point (photos):** tap or click a photo on its most important spot, usually a face. That spot stays in view when the photo is cropped to fit.
+
+### Titles and descriptions
+
+- **Title** (archive, people and videos) shows on the website under the photo or video.
+- **Description** or **Caption** says what or who is shown, for someone who can't see the picture. For example: "Bishop Young and Bishop J. S. Qadir Bakhsh outside the cathedral, 1975." On the homepage slideshow it's also the caption on the photo. Only write what you actually know. Don't guess names or dates.
+
+### Publish
+
+The bar above the sections always tells you where things stand:
+
+- **Everything is published** (green): the website shows exactly what you see.
+- **You have unpublished changes** (gold): your changes are saved as a draft, but visitors still see the old version. It lists the sections you changed.
+
+Press **Publish to website** to make every change live at once. The bar then says **Published. Your changes are live on the website.** with a link to look.
+
+Changed your mind? **Discard** throws away every unpublished change, and **Undo changes to this section** (under the photos) does the same for one section. Each publish is also kept in History (see "Undoing a change" below).
+
+### Storage
+
+The free website plan has 1 GB of storage for photos and videos. The thin bar shows how much is used. When you delete or replace an uploaded photo or video and publish, its file is removed, which frees the space again. The photos that came with the website are never removed.
+
+## More settings
+
+Everything else is tucked under **More settings** in the menu, so the main page stays simple. These pages save straight to the website when you press **Save** (they don't use the Publish button):
 
 | Menu item | What you can change |
 |---|---|
-| **Dashboard** | Shortcuts and the most recent changes |
-| **Photos & videos** | The media library: every picture and video the site can use |
-| **Text & photos** | Homepage title, introduction, founder portrait, rotating photos, timeline text |
-| **Sections & order** | Move homepage sections up or down, or hide one |
-| **Family Archive** | The archive records: photo, title, caption, date, source |
+| **Homepage text** | Homepage title, introduction, founder portrait, timeline text |
+| **Homepage section order** | Move homepage sections up or down, or hide one |
+| **Archive captions & sources** | The long caption, date and source of each archive photo |
 | **Churches** | The cathedral cards and their photos |
-| **Interviews** | Interview videos, posters and captions |
-| **People photos** | The pictures on the People page |
+| **Interview details** | A video's speaker, transcript, captions file and description |
+| **People photo details** | Framing options for People photos |
 | **Blog** | Blog posts (drafts stay hidden until published) |
 | **Curator profile** | The About page text for Javed Qadir Bakhsh |
 | **Site text & menus** | Menu labels, footer text, page introductions |
-| **Stories** | Stories, memories and photos visitors sent through the Share Your Story page |
+| **All uploaded files** | Every uploaded file: describe, crop a copy, or delete unused files |
 | **Accounts** | Administrators only: add, change or remove people |
-| **My account** | Your name and password |
 
-Every page in the admin shows **Last saved** and has a **History** button (see "Undoing a change" below).
-
-## Adding photos (the important part)
-
-### Upload them to the library
-
-1. Open **Photos & videos**.
-2. Drag photos from your computer onto the dotted box, or click the box and choose them. On a phone, tapping the box lets you pick from the camera roll.
-3. A progress bar shows each file. Several files can upload at once.
-4. When the upload finishes, the photo shows up first in the grid.
-
-The site keeps the original quality and makes smaller copies for visitors automatically, so you don't need to resize anything.
-
-- **Photos:** JPEG, PNG, WebP, GIF or AVIF, up to 30 MB each.
-- **Videos:** MP4, WebM or MOV, up to 1 GB each.
-- **iPhone photos (HEIC):** these won't upload. On the iPhone, go to Settings → Camera → Formats and choose **Most Compatible**, or share the photo by email, which converts it to JPEG.
-
-### Describe each photo
-
-Click a photo in the library to open its details:
-
-- **Description (alt text):** say what the photo shows, for someone who can't see it. For example: "Bishop Young and Bishop J. S. Qadir Bakhsh standing outside the cathedral." Only write what you actually know. Don't guess names or dates.
-- **Crop a copy:** drag to frame the photo, then save. The original stays untouched.
-- **Delete:** this only works for photos that aren't used anywhere. The details show where each photo is used.
-
-### Put a photo on the page
-
-Every photo field in the admin (portrait, rotating photos, archive records, churches, people, blog covers) has the same buttons:
-
-- **Choose photo** / **Replace photo** opens the library. Pick a photo and press **Use this photo**. You can also upload a new one straight from that window.
-- **Remove** empties the field.
-- **Focus point:** on some fields, click the most important spot in the preview, usually a face. That keeps it in view when the photo is cropped on phones.
-
-Then press the **Save** button for that section.
-
-### How photos appear in the gallery
-
-All gallery tiles are the same shape, so the page looks even. Click the photo preview on the most important spot (usually a face) and the tile keeps that spot in view. For documents, plaques, lists and wide group photos tick **Show the whole photo (no cropping)**. Visitors who open a photo always see it complete and uncropped. Phone photos are straightened automatically and very large files are reduced before upload. Small photos saved from Facebook stay small; for sharper pictures, upload the original scan or camera file.
-
-### Interview videos
-
-Each video shows as a card with its poster, running time, title and description, and plays in a pop-up player (Esc closes it). In **Featured Interviews** you can also add the **speaker** (only when confirmed), a **transcript** (shown under the player) and a **captions file** (.vtt). The running time fills in automatically when you choose a video. Landscape (16:9) videos recorded on a tripod look best.
+**Stories** and **My account** are in the main menu. Every page under More settings shows **Last saved** and has a **History** button.
 
 ## Editing text
 
@@ -86,7 +106,7 @@ Please keep to facts that have a source. If you're not sure about a name, date o
 
 ## Homepage sections
 
-Open **Sections & order**. Drag a section, or use the ↑ ↓ arrows, to move it. Use the switch to hide a section without deleting anything. Press **Save**.
+Open **More settings → Homepage section order**. Drag a section, or use the ↑ ↓ arrows, to move it. Use the switch to hide a section without deleting anything. Press **Save**.
 
 ## Undoing a change
 
@@ -110,7 +130,7 @@ If two people edit the same section at the same time, the second person to save 
 The Share Your Story page (`/share-your-story`; the old `/contribute` address forwards there) lets visitors send a story along with up to 4 photos or PDFs. Photos are made smaller automatically in their browser. Open **Stories** to read them:
 
 - Open a story to read it and look at its files.
-- **Add to library** copies an attached photo into **Photos & videos**. Only do this after the rights and sources are confirmed.
+- **Add to library** copies an attached photo into **All uploaded files**. Only do this after the rights and sources are confirmed.
 - Mark it **Reviewed** or **Archived** when you're done. Administrators can also delete one.
 
 Contact details from visitors are private. They never appear on the public site.
@@ -134,5 +154,6 @@ Contact details from visitors are private. They never appear on the public site.
 
 - Start it with `npm run dev`, then open http://localhost:5000/admin/login.
 - Local edits are saved into `data/cms/*.json`, and uploads go into `public/media/uploads/`. Commit those folders to publish the changes.
-- Accounts, history and contributions live in `data/local-store/`. That folder is never committed.
+- Accounts, history, contributions and unpublished photo & video drafts (`section-drafts.json`) live in `data/local-store/`. That folder is never committed. On the live site they live in Vercel KV.
+- The limits are constants: `MAX_IMAGES_PER_SECTION` and `MAX_VIDEOS` in `src/lib/sections/config.ts`, and the upload size caps `MAX_IMAGE_BYTES` / `MAX_VIDEO_BYTES` in `src/lib/media/rules.ts`.
 - For a one-click local sign-in without a password, set `ADMIN_OPEN_PREVIEW=true` in `.env.local`. This only works on a local development machine; it is always refused in production and on Vercel. Never set it on a public host.

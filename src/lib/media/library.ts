@@ -28,23 +28,66 @@ function collectStrings(value: unknown, out: string[]) {
   }
 }
 
-/** Map of media URL → list of sections that use it. */
+/** Map of media URL → list of sections that use it (unpublished changes included). */
 export async function mediaUsage(): Promise<Map<string, string[]>> {
   const usage = new Map<string, string[]>();
+  const sources: [string, Promise<unknown>][] = [
+    ...CONTENT_DOCS.map((doc) => [DOC_LABELS[doc], readDoc(doc)] as [string, Promise<unknown>]),
+    ["Unpublished photo & video changes", readDoc("section-drafts.json")],
+  ];
   await Promise.all(
-    CONTENT_DOCS.map(async (doc) => {
-      const data = await readDoc(doc).catch(() => null);
+    sources.map(async ([label, read]) => {
+      const data = await read.catch(() => null);
       const strings: string[] = [];
       collectStrings(data, strings);
       for (const s of strings) {
         if (!(s.startsWith("/media/") || BLOB_HOST_RE.test(s))) continue;
         const list = usage.get(s) ?? [];
-        if (!list.includes(DOC_LABELS[doc])) list.push(DOC_LABELS[doc]);
+        if (!list.includes(label)) list.push(label);
         usage.set(s, list);
       }
     }),
   );
   return usage;
+}
+
+/** Remove one uploaded file from storage (Vercel Blob or this computer). */
+export async function deleteUploadedFile(item: MediaItem) {
+  if (item.storage === "vercel-blob") {
+    const { del } = await import("@vercel/blob");
+    await del(item.url);
+  } else if (item.url.startsWith(`${UPLOAD_PUBLIC_PREFIX}/`)) {
+    const rel = item.url.replace(/^\/+/, "");
+    const full = path.join(process.cwd(), "public", rel);
+    const root = path.join(process.cwd(), "public", "media", "uploads");
+    if (full.startsWith(root + path.sep)) await fs.unlink(full).catch(() => {});
+  }
+}
+
+/**
+ * After a publish: delete uploads (and their video posters) among `urls`
+ * that no page and no unpublished change uses any more, so the free 1 GB of
+ * storage isn't filled by files that were taken off the site. Files that
+ * ship with the website (public/media outside uploads/) are never touched.
+ */
+export async function deleteUnusedUploads(urls: string[]): Promise<number> {
+  if (!urls.length) return 0;
+  const [items, usage] = await Promise.all([getMediaIndex(), mediaUsage()]);
+  const byUrl = new Map(items.map((i) => [i.url, i]));
+  const doomed = new Set<string>();
+  for (const url of urls) {
+    const item = byUrl.get(url);
+    if (!item || usage.get(url)?.length) continue;
+    doomed.add(url);
+    const poster = item.posterUrl ? byUrl.get(item.posterUrl) : undefined;
+    if (poster && !usage.get(poster.url)?.length) doomed.add(poster.url);
+  }
+  if (!doomed.size) return 0;
+  for (const url of doomed) {
+    await deleteUploadedFile(byUrl.get(url)!).catch((err) => console.error("[media cleanup]", url, err));
+  }
+  await saveMediaIndex(items.filter((i) => !doomed.has(i.url)));
+  return doomed.size;
 }
 
 /** Images and videos already shipped in public/media (when the folder is readable). */

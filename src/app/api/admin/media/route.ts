@@ -6,6 +6,7 @@ import { addMediaItem, BLOB_HOST_RE, listLibrary } from "@/lib/media/library";
 import { BLUR_DATA_URL_RE, MAX_BLUR_DATA_URL, kindForType, maxBytesFor } from "@/lib/media/rules";
 import { storageStatus } from "@/lib/cms/store";
 import type { MediaItem } from "@/lib/cms/types";
+import { sectionUploadProblem } from "@/lib/sections/upload-guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,6 +27,9 @@ const registerSchema = z.object({
   posterUrl: z.string().regex(BLOB_HOST_RE).optional(),
   duration: z.number().nonnegative().max(86400).optional(),
   alt: z.string().max(1000).default(""),
+  /** Set when the file was uploaded into a "Photos & videos" section. */
+  section: z.string().max(40).optional(),
+  replace: z.boolean().optional(),
 });
 
 /** Register a file that the browser uploaded straight to Vercel Blob. */
@@ -38,9 +42,17 @@ export const POST = adminRoute(async (req: NextRequest, _ctx, session) => {
   if (!kind || parsed.data.bytes > maxBytesFor(kind)) {
     return NextResponse.json({ error: "That file type or size is not allowed." }, { status: 400 });
   }
+  const { section, replace, ...data } = parsed.data;
+  const sectionProblem = await sectionUploadProblem(section, kind, replace);
+  if (sectionProblem) {
+    // Already in Blob storage: don't leave an unused copy behind.
+    const { del } = await import("@vercel/blob");
+    await del(data.url).catch(() => {});
+    return NextResponse.json({ error: sectionProblem.error }, { status: sectionProblem.status });
+  }
   const item: MediaItem = {
     id: randomUUID(),
-    ...parsed.data,
+    ...data,
     kind,
     storage: "vercel-blob",
     uploadedAt: new Date().toISOString(),

@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
 import { z } from "zod";
 import { adminRoute, readJsonBody } from "@/lib/admin/route";
-import { getMediaIndex, mediaUsage, saveMediaIndex, UPLOAD_PUBLIC_PREFIX } from "@/lib/media/library";
+import { deleteUploadedFile, getMediaIndex, mediaUsage, saveMediaIndex } from "@/lib/media/library";
 
 export const runtime = "nodejs";
 
@@ -34,15 +32,7 @@ export const DELETE = adminRoute<Ctx>(async (_req, ctx) => {
       { status: 409 },
     );
   }
-  if (item.storage === "vercel-blob") {
-    const { del } = await import("@vercel/blob");
-    await del(item.url);
-  } else if (item.url.startsWith(`${UPLOAD_PUBLIC_PREFIX}/`)) {
-    const rel = item.url.replace(/^\/+/, "");
-    const full = path.join(process.cwd(), "public", rel);
-    const root = path.join(process.cwd(), "public", "media", "uploads");
-    if (full.startsWith(root + path.sep)) await fs.unlink(full).catch(() => {});
-  }
+  await deleteUploadedFile(item);
   await saveMediaIndex(items.filter((i) => i.id !== id));
   return NextResponse.json({ ok: true });
 });

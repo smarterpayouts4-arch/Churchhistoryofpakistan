@@ -9,6 +9,7 @@ import { adminRoute } from "@/lib/admin/route";
 import { addMediaItem, UPLOAD_PUBLIC_PREFIX } from "@/lib/media/library";
 import { BLUR_DATA_URL_RE, MAX_BLUR_DATA_URL, kindForType, maxBytesFor, safeMediaFilename, formatBytes } from "@/lib/media/rules";
 import type { MediaItem } from "@/lib/cms/types";
+import { sectionUploadProblem } from "@/lib/sections/upload-guard";
 
 export const runtime = "nodejs";
 
@@ -56,6 +57,12 @@ export const POST = adminRoute(async (req: NextRequest, _ctx, session) => {
       { status: 415 },
     );
   }
+  const sectionProblem = await sectionUploadProblem(
+    req.headers.get("x-section"),
+    kind,
+    req.headers.get("x-section-replace") === "1",
+  );
+  if (sectionProblem) return NextResponse.json({ error: sectionProblem.error }, { status: sectionProblem.status });
   const declared = Number(req.headers.get("content-length") || 0);
   const max = maxBytesFor(kind);
   if (declared > max) {

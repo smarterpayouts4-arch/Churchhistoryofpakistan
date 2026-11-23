@@ -77,8 +77,15 @@ SEO pieces:
 - **Library** = the uploaded items index (`media.json`) plus a scan of the existing site media under `public/media`. `mediaUsage()` scans every content document, so the library can show "in use" and refuse to delete files that are used.
 - **Local uploads:** the browser streams the raw file to `POST /api/admin/media/upload` (XHR, with progress). The server checks magic bytes against the declared type, reads the dimensions with `image-size`, and writes `public/media/uploads/<year>/<kebab-name>-<suffix>.<ext>`.
 - **Vercel uploads:** the browser uploads straight to Blob using `@vercel/blob/client` `upload()`, with a token from `/api/admin/media/blob`. The token is limited by content type and size and requires a signed-in admin or editor with CSRF. The browser then registers the item with `POST /api/admin/media`. This avoids the 4.5 MB function body limit entirely.
-- Limits: photos 30 MB, videos 1 GB. HEIC is rejected with instructions.
+- Limits: photos 20 MB, videos 100 MB (`MAX_IMAGE_BYTES` / `MAX_VIDEO_BYTES` in `src/lib/media/rules.ts`, sized for the free 1 GB Blob plan). HEIC is rejected with instructions.
 - Every image field uses `ImageField` → `MediaPicker` → `MediaLibrary`. Nobody types URLs. Optional focal points are stored as CSS `object-position`, and cropping saves a new file.
+
+## Photos & videos sections (draft → publish) — `src/lib/sections/`
+
+- The owner's main admin page (`SectionMediaManager`) edits four sections, each a view over one live document: **hero** = `homepage.json` `hero.band_images`, **gallery** = `family-archives.json` `items`, **people** = `people-frames.json` `frames`, **interviews** = `featured-interviews.json` `items`.
+- Limits live in `src/lib/sections/config.ts` (shared by browser and server): `MAX_IMAGES_PER_SECTION` = 20, `MAX_VIDEOS` = 5. They are checked in the UI, before an upload (`x-section` header locally, Blob `clientPayload` on Vercel, see `upload-guard.ts`), on every draft save and again on publish. A section that already held more than the limit keeps everything but cannot grow.
+- Edits are saved as a draft in the private doc `section-drafts.json` (KV on Vercel, `data/local-store/` locally), with a per-section revision number so two editors can't silently overwrite each other's draft. `POST /api/admin/sections/publish` merges each draft into the current live document (fields edited elsewhere, such as archive captions, are kept) and writes it with `writeDoc()`, so every publish is a revision in History. Public pages read documents per request (`noStore`), so a publish is live immediately without a redeploy.
+- Storage: uploads removed by a publish, discard or draft edit are deleted from Blob / `public/media/uploads` when nothing else uses them (`deleteUnusedUploads()`); shipped files under `public/media` are never deleted. The page shows a meter against the 1 GB free plan.
 
 ## Gallery & video presentation
 

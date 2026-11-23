@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Icon } from "./Icon";
 import type {
   BlogPost,
   CathedralsFile,
@@ -21,6 +20,9 @@ import { FeaturedInterviewsEditor } from "./FeaturedInterviewsEditor";
 import { CuratorProfileEditor } from "./CuratorProfileEditor";
 import { PeopleFramesEditor } from "./PeopleFramesEditor";
 import { SiteEditor } from "./SiteEditor";
+import { SectionMediaManager } from "./SectionMediaManager";
+import type { SectionsSnapshot } from "@/lib/sections/config";
+import type { StorageInfo } from "./upload";
 import { BlogEditor } from "./BlogEditor";
 import { MediaLibrary } from "./MediaLibrary";
 import { UsersPanel } from "./UsersPanel";
@@ -35,7 +37,7 @@ import s from "./studio.module.css";
 import styles from "@/app/admin/admin.module.css";
 
 type Tab =
-  | "overview"
+  | "photos"
   | "media"
   | "home"
   | "layout"
@@ -68,7 +70,13 @@ type Props = {
   me: { userId: string; name: string; email: string; role: "admin" | "editor" };
   counts: { media: number; newContributions: number };
   intakeEnabled: boolean;
+  sections: SectionsSnapshot;
+  storageInfo: StorageInfo;
 };
+
+/** Tabs outside the owner's everyday path, tucked under "More settings". */
+const MORE_TABS: Tab[] = ["home", "layout", "archives", "churches", "interviews", "people", "blog", "profile", "site", "media", "users"];
+const ALL_TABS: Tab[] = ["photos", "contributions", "account", ...MORE_TABS];
 
 const DOC_FOR_TAB: Partial<Record<Tab, [string, string]>> = {
   home: ["homepage.json", "Homepage text & photos"],
@@ -104,21 +112,34 @@ export function AdminDashboard(props: Props) {
     me,
     counts,
     intakeEnabled,
+    sections,
+    storageInfo,
   } = props;
   // Register the versions this page was rendered with (conflict detection).
   useState(() => {
     if (typeof window !== "undefined") setDocVersions(versions);
     return true;
   });
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] = useState<Tab>("photos");
+  const [more, setMore] = useState(false);
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
     setDocVersions(versions);
-    const fromHash = window.location.hash.slice(1) as Tab;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (fromHash) setTab(fromHash);
   }, [versions]);
+
+  // Open the tab named in the address (#photos, #archives …), also when a link changes it.
+  useEffect(() => {
+    const fromHash = () => {
+      const h = window.location.hash.slice(1) as Tab;
+      if (!ALL_TABS.includes(h)) return;
+      setTab(h);
+      if (MORE_TABS.includes(h)) setMore(true);
+    };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    return () => window.removeEventListener("hashchange", fromHash);
+  }, []);
 
   function go(t: Tab) {
     setTab(t);
@@ -135,38 +156,30 @@ export function AdminDashboard(props: Props) {
   };
   const editorProps = { pending, setPending, setMessage, setError };
 
-  const nav: { group: string; items: [Tab, string, string?][] }[] = [
-    { group: "Start", items: [["overview", "Dashboard"], ["media", "Photos & videos", String(counts.media)]] },
-    {
-      group: "Homepage",
-      items: [
-        ["home", "Text & photos"],
-        ["layout", "Sections & order"],
-      ],
-    },
-    {
-      group: "Collections",
-      items: [
-        ["archives", "Family Archive", String(initialArchives.length)],
-        ["churches", "Churches", String(initialCathedrals.items.length)],
-        ["interviews", "Interviews", String(initialInterviews.length)],
-        ["people", "People photos"],
-        ["blog", "Blog", String(initialBlogPosts.length)],
-      ],
-    },
-    {
-      group: "Pages & settings",
-      items: [
-        ["profile", "Curator profile"],
-        ["site", "Site text & menus"],
-        ["contributions", "Stories", counts.newContributions ? String(counts.newContributions) : undefined],
-      ],
-    },
-    {
-      group: "People",
-      items: [...(me.role === "admin" ? ([["users", "Accounts"]] as [Tab, string][]) : []), ["account", "My account"]],
-    },
+  const main: [Tab, string, string?][] = [
+    ["photos", "Photos & videos"],
+    ["contributions", "Stories", counts.newContributions ? String(counts.newContributions) : undefined],
+    ["account", "My account"],
   ];
+  const extra: [Tab, string, string?][] = [
+    ["home", "Homepage text"],
+    ["layout", "Homepage section order"],
+    ["archives", "Archive captions & sources"],
+    ["churches", "Churches"],
+    ["interviews", "Interview details"],
+    ["people", "People photo details"],
+    ["blog", "Blog", String(initialBlogPosts.length)],
+    ["profile", "Curator profile"],
+    ["site", "Site text & menus"],
+    ["media", "All uploaded files", String(counts.media)],
+    ...(me.role === "admin" ? ([["users", "Accounts"]] as [Tab, string][]) : []),
+  ];
+  const navButton = ([id, label, badge]: [Tab, string, string?]) => (
+    <button key={id} type="button" className={tab === id ? s.navBtnActive : s.navBtn} aria-current={tab === id ? "page" : undefined} onClick={() => go(id)}>
+      <span>{label}</span>
+      {badge && badge !== "0" ? <span className={s.badge}>{badge}</span> : null}
+    </button>
+  );
 
   const docInfo = DOC_FOR_TAB[tab];
   const last = docInfo ? edited[docInfo[0]] : null;
@@ -174,17 +187,13 @@ export function AdminDashboard(props: Props) {
   return (
     <div className={s.shell}>
       <nav className={s.sidebar} aria-label="Admin sections">
-        {nav.map((g) => (
-          <div key={g.group} style={{ display: "contents" }}>
-            <p className={s.sidebarGroup}>{g.group}</p>
-            {g.items.map(([id, label, badge]) => (
-              <button key={id} type="button" className={tab === id ? s.navBtnActive : s.navBtn} aria-current={tab === id ? "page" : undefined} onClick={() => go(id)}>
-                <span>{label}</span>
-                {badge && badge !== "0" ? <span className={s.badge}>{badge}</span> : null}
-              </button>
-            ))}
-          </div>
-        ))}
+        <p className={s.sidebarGroup}>Website</p>
+        {main.map(navButton)}
+        <button type="button" className={s.moreBtn} aria-expanded={more} onClick={() => setMore((v) => !v)}>
+          <span>More settings</span>
+          <span aria-hidden="true">{more ? "▴" : "▾"}</span>
+        </button>
+        {more ? extra.map(navButton) : null}
       </nav>
 
       <div className={s.main} key={tab}>
@@ -194,22 +203,23 @@ export function AdminDashboard(props: Props) {
               {last && last.by !== "original"
                 ? `Last saved ${ago(last.at)} by ${last.by}.`
                 : "No admin edits yet — this is the original content."}{" "}
-              Changes appear on the live site as soon as you save.
+              These settings go live as soon as you save (no Publish step).
             </p>
             <HistoryButton doc={docInfo[0]} label={docInfo[1]} />
           </div>
         ) : null}
 
-        {tab === "overview" ? <Overview me={me} counts={counts} archives={initialArchives.length} posts={initialBlogPosts.length} churches={initialCathedrals.items.length} edited={edited} go={go} /> : null}
+        {tab === "photos" ? <SectionMediaManager initial={sections} storageInfo={storageInfo} /> : null}
 
         {tab === "media" ? (
           <section aria-labelledby="media-heading">
             <h2 id="media-heading" style={{ fontFamily: "var(--font-display)", marginTop: 0 }}>
-              Photos & videos
+              All uploaded files
             </h2>
             <p className={styles.hint} style={{ marginBottom: "1rem" }}>
-              Everything uploaded here can be chosen in any photo field. Click a photo to describe it, crop a copy,
-              or delete it.
+              Every photo and video file on the site. To change what the website shows, use{" "}
+              <a href="#photos">Photos &amp; videos</a>. Here you can describe a file, crop a copy, or delete files
+              nothing uses. <a href="/admin/inspect">Check photo sizes and framing</a>.
             </p>
             <MediaLibrary />
           </section>
@@ -275,83 +285,5 @@ export function AdminDashboard(props: Props) {
       <Toaster />
       <ConflictDialog />
     </div>
-  );
-}
-
-function Overview({
-  me,
-  counts,
-  archives,
-  posts,
-  churches,
-  edited,
-  go,
-}: {
-  me: Props["me"];
-  counts: Props["counts"];
-  archives: number;
-  posts: number;
-  churches: number;
-  edited: Record<string, Edited>;
-  go: (t: Tab) => void;
-}) {
-  const recent = Object.entries(edited)
-    .filter(([, e]) => e && e.by !== "original")
-    .sort((a, b) => (a[1]!.at < b[1]!.at ? 1 : -1))
-    .slice(0, 5);
-  const LABEL: Record<string, string> = Object.fromEntries(Object.values(DOC_FOR_TAB).map(([d, l]) => [d, l]));
-  const TAB_FOR_DOC: Record<string, Tab> = Object.fromEntries(Object.entries(DOC_FOR_TAB).map(([t, v]) => [v![0], t as Tab]));
-  const cards: [Tab, string, string, string][] = [
-    ["media", "photo", "Photos & videos", `${counts.media} uploaded · drag & drop to add more`],
-    ["archives", "archive", "Family Archive", `${archives} records with captions & sources`],
-    ["home", "home", "Homepage", "Title, introduction, rotating photos"],
-    ["layout", "layout", "Homepage sections", "Reorder or hide sections"],
-    ["churches", "church", "Churches", `${churches} cathedrals`],
-    ["interviews", "video", "Interviews", "Videos, posters and captions"],
-    ["blog", "pen", "Blog", `${posts} posts`],
-    ["contributions", "mail", "Submitted stories", counts.newContributions ? `${counts.newContributions} new to read` : "Nothing new"],
-  ];
-  return (
-    <section aria-labelledby="overview-heading">
-      <h2 id="overview-heading" style={{ fontFamily: "var(--font-display)", marginTop: 0 }}>
-        Welcome, {me.name.split(" ")[0]}
-      </h2>
-      <p className={styles.hint} style={{ marginBottom: "1.25rem" }}>
-        Choose what you&rsquo;d like to work on. Every save is kept in History, so nothing is ever lost.
-      </p>
-      <div className={s.cards}>
-        {cards.map(([t, icon, title, sub]) => (
-          <button key={t} type="button" className={s.card} onClick={() => go(t)}>
-            <span className={s.cardIcon} aria-hidden="true">
-              <Icon name={icon} />
-            </span>
-            <strong>{title}</strong>
-            <span>{sub}</span>
-          </button>
-        ))}
-      </div>
-      <h3 style={{ marginTop: "2rem" }}>Recent changes</h3>
-      {recent.length ? (
-        <ul className={s.list}>
-          {recent.map(([doc, e]) => (
-            <li key={doc} className={s.listRow}>
-              <div className={s.listMain}>
-                <strong>{LABEL[doc] ?? doc}</strong>
-                <small>
-                  {ago(e!.at)} by {e!.by}
-                </small>
-              </div>
-              {TAB_FOR_DOC[doc] ? (
-                <button type="button" className={s.smallBtn} onClick={() => go(TAB_FOR_DOC[doc]!)}>
-                  Open
-                </button>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className={styles.hint}>No changes yet.</p>
-      )}
-    </section>
   );
 }

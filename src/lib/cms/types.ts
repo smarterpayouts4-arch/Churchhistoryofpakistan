@@ -45,7 +45,8 @@ export type FeaturedInterview = {
   /** CSS object-position for the mobile 3:2 cover crop, e.g. "50% 20%" — keeps the speaker's face framed. */
   coverPosition?: string;
   alt: string;
-  sourceUrl: string;
+  /** Original post (e.g. Facebook); videos uploaded in the admin have none. */
+  sourceUrl?: string;
   provenance: string;
   width: number;
   height: number;
