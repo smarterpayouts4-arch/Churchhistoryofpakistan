@@ -1,8 +1,9 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { FormEvent, useMemo, useState } from "react";
 import type { CathedralRecord, CathedralsFile } from "@/lib/cms/types";
-import { ImageCropUpload } from "./ImageCropUpload";
+import { ImageField } from "./ImageField";
 import styles from "@/app/admin/admin.module.css";
 
 type Props = {
@@ -58,7 +59,7 @@ export function ChurchesEditor({
     setMessage(null);
     try {
       const payload: CathedralsFile = { note, items };
-      const res = await fetch("/api/admin/cathedrals", {
+      const res = await adminFetch("/api/admin/cathedrals", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -286,39 +287,18 @@ export function ChurchesEditor({
               </label>
             </div>
             <div className={styles.grid2}>
-              <label className={styles.label}>
-                Local file path
-                <input
-                  className={styles.input}
-                  required
-                  value={selected.local_file}
-                  onChange={(e) => patchSelected({ local_file: e.target.value })}
-                />
-              </label>
-              <label className={styles.label}>
-                Fallback file (optional)
-                <input
-                  className={styles.input}
-                  value={selected.fallback_file ?? ""}
-                  onChange={(e) =>
-                    patchSelected({
-                      fallback_file: e.target.value.trim() || undefined,
-                    })
-                  }
-                />
-              </label>
-            </div>
-            <div className={styles.panel} style={{ margin: "0.5rem 0" }}>
-              <p className={styles.hint} style={{ marginTop: 0 }}>
-                Upload a rights-cleared photo into{" "}
-                <code>public/media/cathedrals/</code> (sets local_file):
-              </p>
-              <ImageCropUpload
-                destination="cathedrals"
-                onUploaded={(path) => {
-                  patchSelected({ local_file: path });
-                  setMessage(`Cathedral image ready: ${path}`);
-                }}
+              <ImageField
+                label="Church photo"
+                required
+                value={selected.local_file}
+                onChange={(url) => patchSelected({ local_file: url })}
+                hint="Only rights-cleared photos. Fill in the author and licence above."
+              />
+              <ImageField
+                label="Fallback picture (optional)"
+                value={selected.fallback_file ?? ""}
+                onChange={(url) => patchSelected({ fallback_file: url || undefined })}
+                hint="Shown if the main photo can't load."
               />
             </div>
             <label className={styles.label}>

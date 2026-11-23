@@ -1,0 +1,40 @@
+{
+  "sections": [
+    {
+      "id": "hero",
+      "visible": true
+    },
+    {
+      "id": "archives",
+      "visible": true
+    },
+    {
+      "id": "purpose",
+      "visible": true
+    },
+    {
+      "id": "churches",
+      "visible": true
+    },
+    {
+      "id": "timeline",
+      "visible": true
+    },
+    {
+      "id": "interviews",
+      "visible": true
+    },
+    {
+      "id": "connection",
+      "visible": true
+    },
+    {
+      "id": "contribute",
+      "visible": true
+    },
+    {
+      "id": "guiding",
+      "visible": true
+    }
+  ]
+}

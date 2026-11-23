@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { requireAdminApi } from "@/lib/auth/require-admin";
+import { adminRoute } from "@/lib/admin/route";
 import {
   getFeaturedInterviews,
   saveFeaturedInterviews,
@@ -11,9 +11,7 @@ export const runtime = "nodejs";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-export async function PUT(req: NextRequest, ctx: Ctx) {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const PUT = adminRoute(async (req: NextRequest, ctx: Ctx) => {
   const { id } = await ctx.params;
 
   let body: unknown;
@@ -55,6 +53,9 @@ export async function PUT(req: NextRequest, ctx: Ctx) {
     ...(parsed.data.posterSrc !== undefined
       ? { posterSrc: parsed.data.posterSrc }
       : {}),
+    ...(parsed.data.width ? { width: parsed.data.width } : {}),
+    ...(parsed.data.height ? { height: parsed.data.height } : {}),
+    ...(parsed.data.orientation ? { orientation: parsed.data.orientation } : {}),
   };
   if (parsed.data.coverPosition !== undefined) {
     if (parsed.data.coverPosition) next.coverPosition = parsed.data.coverPosition;
@@ -86,4 +87,4 @@ export async function PUT(req: NextRequest, ctx: Ctx) {
   revalidatePath("/");
   revalidatePath("/interviews");
   return NextResponse.json({ ok: true, item: next });
-}
+});

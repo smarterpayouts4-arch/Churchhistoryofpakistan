@@ -1,5 +1,6 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "@/app/admin/admin.module.css";
@@ -11,7 +12,7 @@ export function LogoutButton() {
   async function logout() {
     setPending(true);
     try {
-      await fetch("/api/admin/logout", { method: "POST" });
+      await adminFetch("/api/admin/logout", { method: "POST" });
     } finally {
       router.replace("/admin/login");
       router.refresh();

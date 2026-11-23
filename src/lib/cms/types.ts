@@ -269,3 +269,84 @@ export type BlogPost = {
 };
 
 export type BlogFile = { posts: BlogPost[] };
+
+/* ---------------- Homepage layout (section order + show/hide) -------- */
+
+export const HOME_SECTION_IDS = [
+  "hero",
+  "archives",
+  "purpose",
+  "churches",
+  "timeline",
+  "interviews",
+  "connection",
+  "contribute",
+  "guiding",
+] as const;
+export type HomeSectionId = (typeof HOME_SECTION_IDS)[number];
+
+export type HomeLayoutSection = { id: HomeSectionId; visible: boolean };
+export type HomeLayoutFile = { sections: HomeLayoutSection[] };
+
+/* ---------------- Media library (private doc: media.json) ------------ */
+
+export type MediaKind = "image" | "video";
+
+export type MediaItem = {
+  id: string;
+  url: string;
+  kind: MediaKind;
+  filename: string;
+  contentType: string;
+  bytes: number;
+  width?: number;
+  height?: number;
+  alt: string;
+  storage: "local" | "vercel-blob";
+  uploadedAt: string;
+  uploadedBy: string;
+};
+
+export type MediaFile = { items: MediaItem[] };
+
+/* ---------------- Contributions inbox (private doc) ------------------ */
+
+export type ContributionAttachment = {
+  id: string;
+  filename: string;
+  contentType: string;
+  bytes: number;
+  /** Local path under data/local-store/contributions or a private Blob pathname. */
+  key: string;
+  storage: "local" | "vercel-blob";
+};
+
+export type Contribution = {
+  id: string;
+  receivedAt: string;
+  status: "new" | "reviewed" | "archived";
+  fields: Record<string, string>;
+  attachments: ContributionAttachment[];
+};
+
+export type ContributionsFile = { items: Contribution[] };
+
+/* ---------------- Admin users (private doc: users.json) -------------- */
+
+export type AdminRole = "admin" | "editor";
+
+export type AdminUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: AdminRole;
+  passwordHash: string;
+  active: boolean;
+  /** Bumped on password change / deactivation to end existing sessions. */
+  tokenVersion: number;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string;
+};
+
+export type UsersFile = { users: AdminUser[] };

@@ -1,64 +1,77 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { createHash, timingSafeEqual } from "crypto";
-import bcrypt from "bcryptjs";
+import { promises as fs } from "fs";
+import path from "path";
+import { randomBytes } from "crypto";
+import type { AdminRole } from "@/lib/cms/types";
+import { getUserById } from "./users";
 
 export const ADMIN_SESSION_COOKIE = "hcop_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 hours
 
 export type AdminSession = {
+  userId: string;
+  /** Display name (kept as `sub` for older call sites). */
   sub: string;
-  role: "curator";
+  email: string;
+  role: AdminRole;
 };
 
-function getSecretKey(): Uint8Array {
+let devSecret: Uint8Array | null = null;
+
+/**
+ * Production: ADMIN_SESSION_SECRET (≥32 chars) is required.
+ * Local dev: if it is missing, a random secret is generated once and kept in
+ * data/local-store/.session-secret so admin works out of the box.
+ */
+async function getSecretKey(): Promise<Uint8Array> {
   const secret = process.env.ADMIN_SESSION_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error(
-      "ADMIN_SESSION_SECRET must be set to a string of at least 32 characters.",
-    );
+  if (secret && secret.length >= 32) return new TextEncoder().encode(secret);
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("ADMIN_SESSION_SECRET must be set to at least 32 characters.");
   }
-  return new TextEncoder().encode(secret);
-}
-
-export function getAdminUsername(): string {
-  return (process.env.ADMIN_USERNAME || "javed").trim();
-}
-
-/** Compare candidate password to ADMIN_PASSWORD_HASH or ADMIN_PASSWORD. */
-export async function verifyAdminPassword(candidate: string): Promise<boolean> {
-  const hash = process.env.ADMIN_PASSWORD_HASH?.trim();
-  if (hash) {
-    return bcrypt.compare(candidate, hash);
+  if (devSecret) return devSecret;
+  const file = path.join(process.cwd(), "data", "local-store", ".session-secret");
+  let value = await fs.readFile(file, "utf8").catch(() => "");
+  if (value.trim().length < 32) {
+    value = randomBytes(32).toString("hex");
+    await fs.mkdir(path.dirname(file), { recursive: true });
+    await fs.writeFile(file, value, "utf8");
   }
-  const plain = process.env.ADMIN_PASSWORD;
-  if (!plain) return false;
-  const a = createHash("sha256").update(candidate).digest();
-  const b = createHash("sha256").update(plain).digest();
-  return a.length === b.length && timingSafeEqual(a, b);
+  devSecret = new TextEncoder().encode(value.trim());
+  return devSecret;
 }
 
-export async function createSessionToken(username: string): Promise<string> {
-  return new SignJWT({ role: "curator" } satisfies Omit<AdminSession, "sub">)
+export async function createSessionToken(user: {
+  id: string;
+  role: AdminRole;
+  tokenVersion: number;
+}): Promise<string> {
+  return new SignJWT({ role: user.role, tv: user.tokenVersion })
     .setProtectedHeader({ alg: "HS256" })
-    .setSubject(username)
+    .setSubject(user.id)
     .setIssuedAt()
     .setExpirationTime(`${SESSION_TTL_SECONDS}s`)
-    .sign(getSecretKey());
+    .sign(await getSecretKey());
 }
 
+/**
+ * Verify the JWT, then confirm the account still exists, is active, and has
+ * not changed password since (tokenVersion) — so removing someone or
+ * resetting a password ends their sessions immediately.
+ */
 export async function readSessionToken(
   token: string | undefined | null,
 ): Promise<AdminSession | null> {
   if (!token) return null;
   try {
-    const { payload } = await jwtVerify(token, getSecretKey(), {
+    const { payload } = await jwtVerify(token, await getSecretKey(), {
       algorithms: ["HS256"],
     });
-    if (payload.role !== "curator" || typeof payload.sub !== "string") {
-      return null;
-    }
-    return { sub: payload.sub, role: "curator" };
+    if (typeof payload.sub !== "string") return null;
+    const user = await getUserById(payload.sub);
+    if (!user || !user.active || user.tokenVersion !== payload.tv) return null;
+    return { userId: user.id, sub: user.name, email: user.email, role: user.role };
   } catch {
     return null;
   }
@@ -66,22 +79,18 @@ export async function readSessionToken(
 
 export async function getAdminSession(): Promise<AdminSession | null> {
   const jar = await cookies();
-  const token = jar.get(ADMIN_SESSION_COOKIE)?.value;
-  return readSessionToken(token);
+  return readSessionToken(jar.get(ADMIN_SESSION_COOKIE)?.value);
 }
 
 /**
- * Session cookie flags:
- * - httpOnly: true (no JS access)
- * - secure: true in production (HTTPS only)
- * - sameSite: "lax" (CSRF mitigation; Strict also acceptable)
- * - path: "/" so the cookie is sent to both /admin and /api/admin/*
+ * Session cookie: HttpOnly, Secure in production, SameSite=Strict,
+ * host-only. Path "/" so it reaches both /admin and /api/admin/*.
  */
 export function sessionCookieOptions(maxAge = SESSION_TTL_SECONDS) {
   return {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
+    sameSite: "strict" as const,
     path: "/",
     maxAge,
   };

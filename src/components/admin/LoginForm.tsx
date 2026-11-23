@@ -1,5 +1,6 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/app/admin/admin.module.css";
@@ -15,12 +16,13 @@ export function LoginForm({ previewOpen = false }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(!previewOpen);
+  const [showPw, setShowPw] = useState(false);
 
   async function enterPreview() {
     setError(null);
     setPending(true);
     try {
-      const res = await fetch("/api/admin/login/preview", {
+      const res = await adminFetch("/api/admin/login/preview", {
         method: "POST",
       });
       const data = (await res.json().catch(() => ({}))) as {
@@ -44,7 +46,7 @@ export function LoginForm({ previewOpen = false }: Props) {
     setError(null);
     setPending(true);
     try {
-      const res = await fetch("/api/admin/login", {
+      const res = await adminFetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -101,7 +103,7 @@ export function LoginForm({ previewOpen = false }: Props) {
               style={{ width: "100%", marginTop: "0.75rem" }}
               onClick={() => setShowPasswordForm(true)}
             >
-              Use username / password instead
+              Use email / password instead
             </button>
           ) : null}
         </div>
@@ -115,7 +117,7 @@ export function LoginForm({ previewOpen = false }: Props) {
             </p>
           ) : null}
           <label className={styles.label}>
-            Username or email
+            Email
             <input
               className={styles.input}
               name="username"
@@ -130,12 +132,15 @@ export function LoginForm({ previewOpen = false }: Props) {
             <input
               className={styles.input}
               name="password"
-              type="password"
+              type={showPw ? "text" : "password"}
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </label>
+          <label className={styles.hint} style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
+            <input type="checkbox" checked={showPw} onChange={(e) => setShowPw(e.target.checked)} /> Show password
           </label>
           <button className={styles.primaryBtn} type="submit" disabled={pending}>
             {pending ? "Signing in…" : "Sign in"}

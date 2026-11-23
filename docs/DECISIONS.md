@@ -253,3 +253,34 @@ provisioned via the Vercel MCP on 2026-10-18; KV/Blob still need a one-time
 ## ADR-009 — Integrate the reviewed archive redesign (2026-10-25)
 
 Owner requested merging the reviewed paper/burgundy redesign into main while retaining newer features. The new presentation supersedes ADR-006 styling; the site-wide CMS, editable hero photos, blog/RSS/sitemap, and ADR-008 KV/Blob storage remain. Cormorant Garamond and Source Sans 3 are the active fonts. Redundant alternate footage is removed from the interview listing; source media remain intact. See `merge-review/README.md` for validation and limits.
+
+## ADR-010 — Security, accounts, media library and history (2026-11-23)
+
+**Context.** The 2026-11 audit found:
+
+- Next 16.3.5 had critical CVEs.
+- A development password was published in the public repo.
+- There was one shared env login.
+- Uploads died above Vercel's 4.5 MB body limit.
+- Image fields needed pasted URLs.
+- There was no undo or video upload.
+- The Contribute form dropped its attachments.
+
+The owner asked to keep the existing design, layout, pages and content, and only fix, polish, and improve the admin and the photo workflow.
+
+**Decision.**
+
+- **Dependencies:** Next and eslint-config-next 16.4.6, React 19.3. pnpm is the only lockfile, and overrides clear the transitive advisories.
+- **Accounts:** per-person accounts (admin/editor) live in the CMS store. The first admin is bootstrapped from `ADMIN_EMAIL` + `ADMIN_PASSWORD_HASH`. Plaintext passwords are not supported, sessions are checked against the store, and logins get CSRF protection and rate limits.
+- **Headers:** a per-request nonce CSP in `src/proxy.ts`, plus HSTS and COOP.
+- **Media library:**
+  - one picker for every image field;
+  - drag-and-drop, focal points and a crop-to-copy tool;
+  - photos up to 30 MB and videos up to 1 GB;
+  - streamed to `public/media/uploads` locally, or uploaded straight from the browser to Blob on Vercel.
+- **History:** every save is recorded as a revision (40 kept, restorable), and saves use optimistic concurrency with a conflict dialog.
+- **Homepage:** section order and visibility live in `data/cms/home-layout.json`.
+- **Contributions:** stored in a private inbox, with private attachment storage and resizing in the browser.
+- **Public site:** only modest motion (scroll reveal, a route fade, a photo lightbox, timeline refinements, all off under reduced motion) and SEO metadata. No layout or style redesign.
+
+**Consequences.** Hosted editing needs KV and Blob, and the admin says so when they are missing. The conflict check is not atomic in KV, which is acceptable for a few family editors. Interviews and people stay placeholders, so the admin edits existing interview slots but does not add new ones (AGENTS.md rule 4). See `docs/ARCHITECTURE.md` and `docs/DEPLOYMENT.md`.

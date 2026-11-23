@@ -6,6 +6,7 @@ import {
 } from "@/content/family-archives";
 import { loadHomepage } from "@/content/homepage";
 import { ArchiveCard } from "@/components/ui/ArchiveCard";
+import { Lightbox } from "@/components/ui/Lightbox";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
@@ -39,8 +40,8 @@ export default async function ArchivePage() {
         </p>
 
         <div className={homeStyles.archiveGridFull}>
-          {familyArchiveItems.map((item) => (
-            <ArchiveCard key={item.id} item={item} titleTag="h2">
+          {familyArchiveItems.map((item, i) => (
+            <ArchiveCard key={item.id} item={item} titleTag="h2" lightbox={`archive:${i}`}>
               <div className={homeStyles.archiveMetaRow}>
                 <span className={homeStyles.provenance}>{item.provenance}</span>
                 <span className={homeStyles.archiveStatus}>
@@ -63,6 +64,17 @@ export default async function ArchivePage() {
             </ArchiveCard>
           ))}
         </div>
+
+        <Lightbox
+          group="archive"
+          photos={familyArchiveItems.map((item) => ({
+            src: item.imageSrc,
+            alt: item.alt,
+            title: item.title,
+            caption: item.caption,
+            meta: [item.dateLabel, item.provenance].filter(Boolean).join(" · "),
+          }))}
+        />
 
         <nav className="linkRow" aria-label="Related pages">
           <Link href="/contribute">Help add a verified record</Link>

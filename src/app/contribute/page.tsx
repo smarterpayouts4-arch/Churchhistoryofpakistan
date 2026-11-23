@@ -4,6 +4,7 @@ import { loadSiteSettings } from "@/content/site";
 import { loadHomepage } from "@/content/homepage";
 import { ContributeForm } from "./ContributeForm";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { CONTRIB_MAX_FILES, CONTRIB_MAX_TOTAL_BYTES, intakeStatus } from "@/lib/contributions/intake";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 
 export default async function ContributePage() {
   const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
-  const intakeEnabled = Boolean(process.env.CONTRIBUTE_WEBHOOK_URL);
+  const intake = intakeStatus();
+  const intakeEnabled = intake.enabled;
 
   return (
     <div className={styles.page}>
@@ -29,7 +31,16 @@ export default async function ContributePage() {
           )}
         </div>
 
-        {intakeEnabled && <ContributeForm contributionFields={homepage.contribution_fields} />}
+        {intakeEnabled && (
+          <ContributeForm
+            contributionFields={homepage.contribution_fields}
+            attachments={{
+              enabled: intake.attachments,
+              maxFiles: CONTRIB_MAX_FILES,
+              maxTotalBytes: CONTRIB_MAX_TOTAL_BYTES,
+            }}
+          />
+        )}
 
         <p style={{ marginTop: "2rem" }}>
           <Link href="/archive">Explore the archive</Link>

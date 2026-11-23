@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Local site audit for History: Church of Pakistan.
- * Hits live routes on BASE_URL (default http://127.0.0.1:4000),
+ * Hits live routes on BASE_URL (default http://localhost:5000),
  * writes docs/AUDIT_REPORT.md — no invented content checks beyond presence.
  */
 import { writeFileSync, mkdirSync, existsSync, readdirSync, statSync } from "node:fs";
@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const root = join(__dirname, "..");
-const BASE = process.env.AUDIT_BASE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://127.0.0.1:4000";
+const BASE = process.env.AUDIT_BASE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5000";
 
 const ROUTES = [
   "/",

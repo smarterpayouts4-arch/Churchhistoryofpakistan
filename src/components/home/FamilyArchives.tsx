@@ -4,6 +4,7 @@ import {
   loadFamilyArchiveNote,
 } from "@/content/family-archives";
 import { ArchiveCard } from "@/components/ui/ArchiveCard";
+import { Lightbox } from "@/components/ui/Lightbox";
 import { loadSiteSettings } from "@/content/site";
 import styles from "./FamilyArchives.module.css";
 
@@ -28,8 +29,8 @@ export async function FamilyArchives() {
           </Link>
         </div>
         <div className={styles.archiveGrid}>
-          {familyArchiveHomePreview.map((item) => (
-            <ArchiveCard key={item.id} item={item}>
+          {familyArchiveHomePreview.map((item, i) => (
+            <ArchiveCard key={item.id} item={item} lightbox={`home-archive:${i}`}>
               <span className={styles.provenance}>{item.provenance}</span>
               {item.dateLabel ? (
                 <span className={styles.archiveDate}>{item.dateLabel}</span>
@@ -38,6 +39,16 @@ export async function FamilyArchives() {
             </ArchiveCard>
           ))}
         </div>
+        <Lightbox
+          group="home-archive"
+          photos={familyArchiveHomePreview.map((item) => ({
+            src: item.imageSrc,
+            alt: item.alt,
+            title: item.title,
+            caption: item.caption,
+            meta: [item.dateLabel, item.provenance].filter(Boolean).join(" · "),
+          }))}
+        />
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>
           <strong>{copy.note_strong}</strong> {FAMILY_ARCHIVE_NOTE}{" "}
           <Link className="tapLink" href="/archive">{copy.note_link_label}</Link>.

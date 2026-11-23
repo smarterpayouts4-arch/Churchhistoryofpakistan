@@ -4,7 +4,7 @@ export const SITE_STRAPLINE =
   "Preserving History · Honouring Our Forefathers · Inspiring Future Generations";
 export const SITE_DESCRIPTION =
   "Photographs, documents, interviews and family memories preserving the history and people of the Church of Pakistan for future generations.";
-export const DEFAULT_SITE_URL = "http://127.0.0.1:4000";
+export const DEFAULT_SITE_URL = "http://localhost:5000";
 
 export function siteUrl(): string {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;

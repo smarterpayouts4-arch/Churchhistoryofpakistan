@@ -1,8 +1,19 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { useState } from "react";
 import type { FeaturedInterview } from "@/lib/cms/types";
-import { ImageCropUpload } from "./ImageCropUpload";
+import { ImageField } from "./ImageField";
+
+function videoDimensions(url: string): Promise<{ width: number; height: number } | null> {
+  return new Promise((resolve) => {
+    const v = document.createElement("video");
+    v.preload = "metadata";
+    v.onloadedmetadata = () => resolve(v.videoWidth ? { width: v.videoWidth, height: v.videoHeight } : null);
+    v.onerror = () => resolve(null);
+    v.src = url;
+  });
+}
 import styles from "@/app/admin/admin.module.css";
 
 type Props = {
@@ -33,7 +44,7 @@ export function FeaturedInterviewsEditor({
     setError(null);
     setMessage(null);
     try {
-      const res = await fetch(
+      const res = await adminFetch(
         `/api/admin/featured-interviews/${encodeURIComponent(item.id)}`,
         {
           method: "PUT",
@@ -47,6 +58,9 @@ export function FeaturedInterviewsEditor({
             posterSrc: item.posterSrc,
             coverSrc: item.coverSrc ?? "",
             coverPosition: item.coverPosition ?? "",
+            width: item.width,
+            height: item.height,
+            orientation: item.orientation,
           }),
         },
       );
@@ -106,54 +120,37 @@ export function FeaturedInterviewsEditor({
                 onChange={(e) => patchInterview(item.id, { alt: e.target.value })}
               />
             </label>
-            <label className={styles.label}>
-              Video path
-              <input
-                className={styles.input}
-                value={item.videoSrc}
-                onChange={(e) =>
-                  patchInterview(item.id, { videoSrc: e.target.value })
+            <ImageField
+              kind="video"
+              label="Interview video"
+              required
+              value={item.videoSrc}
+              hint="MP4 works on every phone and browser."
+              onChange={async (url) => {
+                patchInterview(item.id, { videoSrc: url });
+                const dims = await videoDimensions(url);
+                if (dims) {
+                  patchInterview(item.id, {
+                    width: dims.width,
+                    height: dims.height,
+                    orientation: dims.height > dims.width ? "portrait" : "landscape",
+                  });
                 }
-              />
-            </label>
-            <label className={styles.label}>
-              Poster path
-              <input
-                className={styles.input}
-                value={item.posterSrc}
-                onChange={(e) =>
-                  patchInterview(item.id, { posterSrc: e.target.value })
-                }
-              />
-            </label>
-            <ImageCropUpload
-              destination="uploads"
-              onUploaded={(path) => patchInterview(item.id, { posterSrc: path })}
+              }}
             />
-            <label className={styles.label}>
-              Cover focal position (mobile crop; e.g. 50% 20% keeps upper faces)
-              <input
-                className={styles.input}
-                value={item.coverPosition ?? ""}
-                placeholder="50% 35%"
-                onChange={(e) =>
-                  patchInterview(item.id, { coverPosition: e.target.value })
-                }
-              />
-            </label>
-            <label className={styles.label}>
-              Cover path (optional)
-              <input
-                className={styles.input}
-                value={item.coverSrc ?? ""}
-                onChange={(e) =>
-                  patchInterview(item.id, { coverSrc: e.target.value })
-                }
-              />
-            </label>
-            <ImageCropUpload
-              destination="uploads"
-              onUploaded={(path) => patchInterview(item.id, { coverSrc: path })}
+            <ImageField
+              label="Poster photo (shown before the video plays)"
+              required
+              value={item.posterSrc}
+              onChange={(url) => patchInterview(item.id, { posterSrc: url })}
+            />
+            <ImageField
+              label="Cover photo for cards (optional)"
+              value={item.coverSrc ?? ""}
+              position={item.coverPosition || "50% 35%"}
+              onPositionChange={(coverPosition) => patchInterview(item.id, { coverPosition })}
+              onChange={(url) => patchInterview(item.id, { coverSrc: url })}
+              hint="Falls back to the poster photo."
             />
             <label
               className={styles.label}

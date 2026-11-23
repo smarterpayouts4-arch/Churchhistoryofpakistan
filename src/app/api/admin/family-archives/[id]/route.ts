@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { requireAdminApi } from "@/lib/auth/require-admin";
+import { adminRoute } from "@/lib/admin/route";
 import { getFamilyArchives, saveFamilyArchives } from "@/lib/cms/store";
 import { familyArchiveUpsertSchema } from "@/lib/cms/schemas";
 import type { FamilyArchiveItem } from "@/lib/cms/types";
@@ -9,9 +9,7 @@ export const runtime = "nodejs";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-export async function PUT(req: NextRequest, ctx: Ctx) {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const PUT = adminRoute(async (req: NextRequest, ctx: Ctx) => {
   const { id } = await ctx.params;
 
   let body: unknown;
@@ -56,11 +54,9 @@ export async function PUT(req: NextRequest, ctx: Ctx) {
   revalidatePath("/");
   revalidatePath("/archive");
   return NextResponse.json({ ok: true, item });
-}
+});
 
-export async function DELETE(_req: NextRequest, ctx: Ctx) {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const DELETE = adminRoute(async (_req: NextRequest, ctx: Ctx) => {
   const { id } = await ctx.params;
 
   const data = await getFamilyArchives();
@@ -73,4 +69,4 @@ export async function DELETE(_req: NextRequest, ctx: Ctx) {
   revalidatePath("/");
   revalidatePath("/archive");
   return NextResponse.json({ ok: true });
-}
+});

@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { requireAdminApi } from "@/lib/auth/require-admin";
+import { adminRoute } from "@/lib/admin/route";
 import { getBlogPosts, saveBlogPosts } from "@/lib/cms/store";
 import { blogFileSchema } from "@/lib/cms/schemas";
 
 export const runtime = "nodejs";
 
-export async function GET() {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const GET = adminRoute(async () => {
   const data = await getBlogPosts();
   return NextResponse.json(data);
-}
+});
 
-export async function PUT(req: NextRequest) {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const PUT = adminRoute(async (req: NextRequest) => {
 
   let body: unknown;
   try {
@@ -44,4 +40,4 @@ export async function PUT(req: NextRequest) {
   revalidatePath("/blog");
   revalidatePath("/", "layout");
   return NextResponse.json({ ok: true, data: parsed.data });
-}
+});

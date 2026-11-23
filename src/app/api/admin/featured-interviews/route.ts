@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import { requireAdminApi } from "@/lib/auth/require-admin";
+import { adminRoute } from "@/lib/admin/route";
 import { getFeaturedInterviews } from "@/lib/cms/store";
 
 export const runtime = "nodejs";
 
-export async function GET() {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const GET = adminRoute(async () => {
   const data = await getFeaturedInterviews();
   return NextResponse.json(data);
-}
+});

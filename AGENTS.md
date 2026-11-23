@@ -10,22 +10,22 @@ Strapline (package): *Preserving History • Honouring Our Forefathers • Inspi
 
 | Layer | Choice |
 |-------|--------|
-| Framework | **Next.js 16.3.5** App Router (`src/app/`) |
+| Framework | **Next.js 16.4.6** App Router (`src/app/`) |
 | Runtime | **Node ≥20** (developed on Node 24) |
-| Package manager | **pnpm 9.15.9** preferred; `npm run dev` uses the same scripts |
+| Package manager | **pnpm 9.15.9** (`pnpm-lock.yaml` is the only lockfile; `npx -y pnpm@9.15.9 install` if pnpm is not installed) |
 | Language | **TypeScript** (strict) |
 | Rendering | **Server Components by default** |
 | Styles | CSS Modules + `src/styles/tokens.css` (no Tailwind, shadcn, MUI, Lucide, Heroicons) |
 | Fonts | Cormorant Garamond + Source Sans 3 via `next/font` (reviewed archive redesign) |
-| Local preview | `http://127.0.0.1:4000` |
+| Local preview | `http://localhost:5000` |
 
 The app **is scaffolded**. Live editable content is `data/cms/`. Typed public loaders are `src/content/`. Root `content/` drafts are stale — do not wire new code there. `reference/` stays immutable.
 
 ## Install / dev / build / test
 
 ```bash
-npm install
-npm run dev          # http://127.0.0.1:4000
+npx -y pnpm@9.15.9 install
+npm run dev          # http://localhost:5000
 npm run typecheck
 npm run lint:eslint
 npm run audit:site   # requires the dev or start server
@@ -33,7 +33,7 @@ npm run build
 npm run start
 ```
 
-`pnpm` is the lockfile-pinned package manager when it is installed. On this machine, `npm run <script>` is the working command. Do not commit `.env.local`. Never set `ADMIN_OPEN_PREVIEW=true` on a public host.
+Install with pnpm (lockfile-pinned); `npm run <script>` works for every script afterwards. Do not add a `package-lock.json`. Do not commit `.env.local`. Never set `ADMIN_OPEN_PREVIEW=true` on a public host.
 
 ## Authority locations (canonical map)
 
@@ -47,7 +47,7 @@ npm run start
 | Components / UI | Present content from `src/content/` and `data/cms/` (and rights-cleared media). **They do not invent history.** |
 | `docs/DESIGN_SYSTEM.md` + `src/styles/tokens.css` | Working Design #1 Archival Heritage for this build. |
 | `docs/OPEN_QUESTIONS.md` | Unresolved conflicts. **Flag — do not invent resolutions.** |
-| `docs/AI_CONTEXT.md` | 5-minute orientation for humans and coding agents. |
+| `README.md` / `docs/ARCHITECTURE.md` | Orientation and how the code, storage and security fit together. |
 | `docs/DECISIONS.md` | Architecture Decision Records (ADRs). |
 | Media originals | Stay under `reference/`. |
 | Publishable media | Rights-cleared copies under `public/media/` with **kebab-case** filenames. |
@@ -92,18 +92,18 @@ Package homepage nav also lists **Timeline** as a section/nav item; treat timeli
 
 ## Point agents here first
 
-1. **`docs/CURSOR_ONBOARDING_FINISH.md`** — master finish briefing (architecture, routes, phases, production go/no-go). Dated 2026-09-29; re-verified locally 2026-09-30.  
-2. **`docs/AI_CONTEXT.md`** — short orientation  
+1. **`README.md`** — setup and scripts  
+2. **`docs/ARCHITECTURE.md`** — content store, auth, media, security  
 3. **`docs/DECISIONS.md`** — architecture choices  
 4. **`docs/OPEN_QUESTIONS.md`** — unresolved items (do not invent answers)  
-5. **`docs/ADMIN.md`** — curator admin. Env **names** only in chat; never paste secrets.  
-6. **`docs/DESIGN_SYSTEM.md`** + **`src/styles/tokens.css`** — Design #1 tokens  
+5. **`docs/ADMIN.md`** (family guide) and **`docs/DEPLOYMENT.md`** (Vercel). Env **names** only in chat; never paste secrets.  
+6. **`docs/DESIGN_SYSTEM.md`** + **`src/styles/tokens.css`** — design tokens; keep the existing look  
 
-Public production remains **NO-GO** until the briefing’s Phase 3–6 blockers and Phase 7 QA are clear. Local curator preview is a **conditional GO** when `npm run dev` is healthy. Owner lane: Archive QA. Do not modify `reference/` or invent content facts.
+Public production needs the `docs/DEPLOYMENT.md` checklist (KV + Blob connected, hashed admin password, session secret). Local curator preview is a GO when `npm run dev` is healthy. Owner lane: Archive QA. Do not modify `reference/` or invent content facts.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
-# This is NOT the Next.js you know
+## This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 

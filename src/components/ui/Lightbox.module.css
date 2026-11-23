@@ -1,0 +1,137 @@
+.dialog {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(24 19 17 / 0.97);
+  color: var(--color-paper);
+}
+
+.dialog::backdrop {
+  background: rgb(28 22 20 / 0.6);
+}
+
+.dialog[open] {
+  animation: lightboxIn .22s ease-out;
+}
+
+@keyframes lightboxIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.inner {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem clamp(1rem, 3vw, 2rem);
+}
+
+.count {
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-parchment);
+}
+
+.close {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  background: transparent;
+  color: var(--color-paper);
+  cursor: pointer;
+  font-size: .85rem;
+  letter-spacing: .04em;
+  transition: background .2s, border-color .2s;
+}
+
+.close span { font-size: 1.2rem; margin-left: .35rem; }
+
+.close:hover { background: rgb(255 255 255 / 0.08); border-color: var(--color-parchment); }
+
+.figure {
+  margin: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 0 clamp(3.5rem, 7vw, 6rem) 1.25rem;
+}
+
+.frame {
+  position: relative;
+  min-height: 0;
+  animation: photoIn .28s ease-out;
+}
+
+@keyframes photoIn {
+  from { opacity: 0; transform: scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.caption {
+  max-width: 52rem;
+  margin: 1rem auto 0;
+  text-align: center;
+  display: grid;
+  gap: .35rem;
+  font-size: .9rem;
+  line-height: 1.6;
+  color: var(--color-parchment);
+}
+
+.caption strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--color-paper);
+}
+
+.caption em {
+  font-style: normal;
+  font-size: .7rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .8;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: 48px;
+  height: 64px;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  background: rgb(28 22 20 / 0.5);
+  color: var(--color-paper);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+
+.nav:hover { background: rgb(255 255 255 / 0.1); border-color: var(--color-parchment); }
+.prev { left: clamp(.5rem, 1.5vw, 1.25rem); }
+.next { right: clamp(.5rem, 1.5vw, 1.25rem); }
+
+.dialog :focus-visible { outline-color: var(--color-paper); }
+
+@media (max-width: 640px) {
+  .figure { padding: 0 .75rem 1rem; }
+  .nav { top: auto; bottom: 1rem; translate: none; width: 44px; height: 44px; font-size: 1.6rem; }
+  .caption { padding-inline: 3.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open], .frame { animation: none; }
+}

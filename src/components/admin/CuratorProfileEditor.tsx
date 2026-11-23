@@ -1,5 +1,6 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { useState } from "react";
 import type { CuratorProfileFile } from "@/lib/cms/types";
 import styles from "@/app/admin/admin.module.css";
@@ -37,7 +38,7 @@ export function CuratorProfileEditor({
         setPending(false);
         return;
       }
-      const res = await fetch("/api/admin/curator-profile", {
+      const res = await adminFetch("/api/admin/curator-profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed),

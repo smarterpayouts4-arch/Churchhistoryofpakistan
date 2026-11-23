@@ -2,7 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import type { HomepageContent, PurposeCard, TimelineEntry } from "@/lib/cms/types";
-import { ImageCropUpload } from "./ImageCropUpload";
+import { ImageField } from "./ImageField";
+import { adminFetch } from "./adminFetch";
 import styles from "@/app/admin/admin.module.css";
 
 type Props = {
@@ -135,7 +136,7 @@ export function HomepageEditor({
     setError(null);
     setMessage(null);
     try {
-      const res = await fetch("/api/admin/homepage", {
+      const res = await adminFetch("/api/admin/homepage", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(home),
@@ -161,8 +162,8 @@ export function HomepageEditor({
     <section className={styles.section} aria-labelledby="home-heading">
       <h2 id="home-heading">Homepage</h2>
       <p className={styles.hint}>
-        Stored in <code>data/cms/homepage.json</code>. Edit only existing
-        historical copy. Do not invent facts, dates, or biographies.
+        Edit only existing historical copy. Do not invent facts, dates, or
+        biographies. Every save is kept in History, so you can always go back.
       </p>
 
       <form className={`${styles.form} ${styles.panel}`} onSubmit={saveHome}>
@@ -242,74 +243,63 @@ export function HomepageEditor({
             onChange={(e) => updateHero("purpose", e.target.value)}
           />
         </label>
-        <label className={styles.label}>
-          Portrait path
-          <input
-            className={styles.input}
-            required
-            value={home.hero.portrait}
-            onChange={(e) => updateHero("portrait", e.target.value)}
-            placeholder="/media/founder/…"
-          />
-        </label>
-        <div className={styles.panel} style={{ padding: "0.85rem" }}>
-          <p className={styles.hint} style={{ marginBottom: "0.5rem" }}>
-            Optional: upload / crop a new portrait and set the path above.
-          </p>
-          <ImageCropUpload
-            destination="uploads"
-            onUploaded={(path) => {
-              updateHero("portrait", path);
-              setMessage(`Portrait path set to ${path}`);
-            }}
-          />
-        </div>
+        <ImageField
+          label="Curator portrait"
+          required
+          value={home.hero.portrait}
+          onChange={(url) => updateHero("portrait", url)}
+          hint="Shown next to “Curated by” in the hero."
+        />
 
         <h3 style={{ margin: "0.5rem 0 0" }}>Hero photo band (rotating)</h3>
         <p className={styles.hint}>
           One wide photograph under the hero buttons, crossfading every few seconds.
-          Use landscape photos. “Focal position” keeps faces framed — e.g. <code>50% 18%</code>
-          shows the upper part of the photo, <code>50% 50%</code> the centre.
+          Use landscape photos. Click a preview to set its focus point so faces stay framed. Up to 6 photos.
         </p>
-        {(home.hero.band_images ?? []).map((img, i) => (
-          <article key={i} className={styles.panel} style={{ padding: "0.85rem" }}>
-            <div className={styles.grid2}>
-              <label className={styles.label}>
-                Image path
-                <input className={styles.input} value={img.src} onChange={(e) => {
-                  const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, src: e.target.value };
-                  setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-                }} />
+        {(home.hero.band_images ?? []).map((img, i) => {
+          const band = home.hero.band_images ?? [];
+          const setBand = (patch: Partial<typeof img>) => {
+            const list = [...band];
+            list[i] = { ...list[i]!, ...patch };
+            setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+          };
+          const move = (dir: -1 | 1) => {
+            const j = i + dir;
+            if (j < 0 || j >= band.length) return;
+            const list = [...band];
+            [list[i], list[j]] = [list[j]!, list[i]!];
+            setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
+          };
+          return (
+            <article key={i} className={styles.panel} style={{ padding: "0.85rem" }}>
+              <ImageField
+                label={`Band photo ${i + 1}`}
+                value={img.src}
+                position={img.position}
+                onPositionChange={(position) => setBand({ position })}
+                onChange={(src, entry) =>
+                  setBand({ src, ...(entry?.alt && !img.alt ? { alt: entry.alt } : {}) })
+                }
+              />
+              <label className={styles.label} style={{ marginTop: "0.6rem" }}>
+                Caption / alt text (who or what is shown)
+                <input className={styles.input} value={img.alt} onChange={(e) => setBand({ alt: e.target.value })} />
               </label>
-              <label className={styles.label}>
-                Focal position
-                <input className={styles.input} value={img.position} placeholder="50% 20%" onChange={(e) => {
-                  const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, position: e.target.value };
+              <div className={styles.rowActions} style={{ marginTop: "0.6rem" }}>
+                <button type="button" className={styles.secondaryBtn} onClick={() => move(-1)} disabled={i === 0} aria-label={`Move band photo ${i + 1} earlier`}>
+                  ↑ Earlier
+                </button>
+                <button type="button" className={styles.secondaryBtn} onClick={() => move(1)} disabled={i === band.length - 1} aria-label={`Move band photo ${i + 1} later`}>
+                  ↓ Later
+                </button>
+                <button type="button" className={styles.dangerBtn} onClick={() => {
+                  const list = band.filter((_, n) => n !== i);
                   setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-                }} />
-              </label>
-            </div>
-            <label className={styles.label} style={{ marginTop: "0.6rem" }}>
-              Caption / alt text
-              <input className={styles.input} value={img.alt} onChange={(e) => {
-                const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, alt: e.target.value };
-                setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-              }} />
-            </label>
-            <div className={styles.rowActions} style={{ marginTop: "0.6rem" }}>
-              <button type="button" className={styles.dangerBtn} onClick={() => {
-                const list = (home.hero.band_images ?? []).filter((_, n) => n !== i);
-                setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-              }}>Remove</button>
-            </div>
-            <div style={{ marginTop: "0.6rem" }}>
-              <ImageCropUpload destination="uploads" onUploaded={(path) => {
-                const list = [...(home.hero.band_images ?? [])]; list[i] = { ...list[i]!, src: path };
-                setHome((h) => ({ ...h, hero: { ...h.hero, band_images: list } }));
-              }} />
-            </div>
-          </article>
-        ))}
+                }}>Remove</button>
+              </div>
+            </article>
+          );
+        })}
         <div className={styles.rowActions}>
           <button type="button" className={styles.secondaryBtn} onClick={() => {
             const list = [...(home.hero.band_images ?? []), { src: "", alt: "", position: "50% 25%" }];

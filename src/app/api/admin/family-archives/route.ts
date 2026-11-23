@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { requireAdminApi } from "@/lib/auth/require-admin";
+import { adminRoute } from "@/lib/admin/route";
 import { getFamilyArchives, saveFamilyArchives } from "@/lib/cms/store";
 import {
   familyArchiveNoteSchema,
@@ -19,16 +19,12 @@ function slugifyId(title: string): string {
   return `fa-${base || "item"}-${Date.now().toString(36)}`;
 }
 
-export async function GET() {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const GET = adminRoute(async () => {
   const data = await getFamilyArchives();
   return NextResponse.json(data);
-}
+});
 
-export async function PATCH(req: NextRequest) {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const PATCH = adminRoute(async (req: NextRequest) => {
 
   let body: unknown;
   try {
@@ -51,11 +47,9 @@ export async function PATCH(req: NextRequest) {
   revalidatePath("/");
   revalidatePath("/archive");
   return NextResponse.json({ ok: true, note: data.note });
-}
+});
 
-export async function POST(req: NextRequest) {
-  const gate = await requireAdminApi();
-  if (!gate.ok) return gate.response;
+export const POST = adminRoute(async (req: NextRequest) => {
 
   let body: unknown;
   try {
@@ -111,4 +105,33 @@ export async function POST(req: NextRequest) {
   revalidatePath("/");
   revalidatePath("/archive");
   return NextResponse.json({ ok: true, item }, { status: 201 });
-}
+});
+
+/** Reorder records (the first record is featured first on the homepage). */
+export const PUT = adminRoute(async (req: NextRequest) => {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
+  }
+  const ids = (body as { ids?: unknown })?.ids;
+  const data = await getFamilyArchives();
+  if (
+    !Array.isArray(ids) ||
+    ids.length !== data.items.length ||
+    new Set(ids).size !== ids.length ||
+    !data.items.every((i) => ids.includes(i.id))
+  ) {
+    return NextResponse.json(
+      { error: "The list changed while you were reordering. Please reload the page." },
+      { status: 409 },
+    );
+  }
+  const byId = new Map(data.items.map((i) => [i.id, i]));
+  data.items = (ids as string[]).map((id) => byId.get(id)!);
+  await saveFamilyArchives(data);
+  revalidatePath("/");
+  revalidatePath("/archive");
+  return NextResponse.json({ ok: true, items: data.items });
+});

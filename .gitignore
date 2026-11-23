@@ -44,3 +44,8 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# private CMS data on a local machine (users, media index, history, contributions)
+/data/local-store/
+*.tmp
+/docs/AUDIT_REPORT.md

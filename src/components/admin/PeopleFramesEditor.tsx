@@ -1,8 +1,9 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { useState } from "react";
 import type { PeopleFrame } from "@/lib/cms/types";
-import { ImageCropUpload } from "./ImageCropUpload";
+import { ImageField } from "./ImageField";
 import styles from "@/app/admin/admin.module.css";
 
 type Props = {
@@ -33,7 +34,7 @@ export function PeopleFramesEditor({
     setError(null);
     setMessage(null);
     try {
-      const res = await fetch("/api/admin/people-frames", {
+      const res = await adminFetch("/api/admin/people-frames", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ frames }),
@@ -82,17 +83,11 @@ export function PeopleFramesEditor({
                 onChange={(e) => patchFrame(frame.id, { alt: e.target.value })}
               />
             </label>
-            <label className={styles.label}>
-              Image path
-              <input
-                className={styles.input}
-                value={frame.src}
-                onChange={(e) => patchFrame(frame.id, { src: e.target.value })}
-              />
-            </label>
-            <ImageCropUpload
-              destination="uploads"
-              onUploaded={(path) => patchFrame(frame.id, { src: path })}
+            <ImageField
+              label="Photo"
+              required
+              value={frame.src}
+              onChange={(url) => patchFrame(frame.id, { src: url })}
             />
           </article>
         ))}

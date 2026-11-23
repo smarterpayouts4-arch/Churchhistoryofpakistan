@@ -1,278 +1,130 @@
-# Curator Admin — History: Church of Pakistan
+# Admin guide — for family and curators
 
-Single-curator admin for **Javed Qadir Bakhsh** to manage Homepage copy, Churches/dioceses, Family Archives, Featured Interview metadata, media uploads, and the About-page curator profile.
+This is how to look after the website without touching any code. If something here doesn't match what you see, ask Oscar.
 
-## One-click local Sign in (preview)
+## Signing in
 
-For local development only — when the site is **not** launched publicly yet:
+1. Go to the website and click **Curator login** at the very bottom of any page. You can also add `/admin/login` to the site address.
+2. Type your **email** and **password**, then press **Sign in**. The eye button shows the password while you type it.
+3. You'll land on the **Dashboard**.
 
-1. In `.env.local` set:
+If you type the password wrong too many times, the login rests for 15 minutes. Wait, then try again.
 
-```bash
-ADMIN_OPEN_PREVIEW=true
-```
+To sign out, press **Log out** at the top right. You're also signed out automatically after a while.
 
-2. Start the site: `pnpm dev` → http://127.0.0.1:4000
-3. Open `/admin/login`
-4. Click **Enter as curator (local preview)** — no username/password required
-5. You land on `/admin` with the same HttpOnly session cookie as a normal login
+**Your password:** an administrator creates your account and gives you a first password. Change it straight away under **My account**. Use at least 10 characters; a short sentence works well, for example `grandfather planted the mango tree`. Never send passwords in WhatsApp, Facebook or email.
 
-**How it works:** `POST /api/admin/login/preview` creates a session only when **both** are true:
+## Finding your way around
 
-- `ADMIN_OPEN_PREVIEW=true`
-- `NODE_ENV !== 'production'`
+The menu on the left is grouped:
 
-Otherwise it returns **403**. Username/password Sign in remains available (collapsed under the preview button when preview mode is on).
-
-### Before any public deploy
-
-```bash
-ADMIN_OPEN_PREVIEW=false
-```
-
-Never enable preview login in production. Even if the flag is mistakenly set, production builds refuse the endpoint.
-
-## Password Sign in (development)
-
-1. Ensure `.env.local` exists (copy from `.env.example` if needed).
-2. Start the site: `pnpm dev` → http://127.0.0.1:4000
-3. Open **Curator login** in the site footer, or go to `/admin/login`.
-4. Sign in with the **dev** credentials (local only):
-
-| Field | Dev value |
+| Menu item | What you can change |
 |---|---|
-| Username | `javed` |
-| Password | `CuratorDev2026!` |
+| **Dashboard** | Shortcuts and the most recent changes |
+| **Photos & videos** | The media library: every picture and video the site can use |
+| **Text & photos** | Homepage title, introduction, founder portrait, rotating photos, timeline text |
+| **Sections & order** | Move homepage sections up or down, or hide one |
+| **Family Archive** | The archive records: photo, title, caption, date, source |
+| **Churches** | The cathedral cards and their photos |
+| **Interviews** | Interview videos, posters and captions |
+| **People photos** | The pictures on the People page |
+| **Blog** | Blog posts (drafts stay hidden until published) |
+| **Curator profile** | The About page text for Javed Qadir Bakhsh |
+| **Site text & menus** | Menu labels, footer text, page introductions |
+| **Contributions** | What visitors sent through the Contribute form |
+| **Accounts** | Administrators only: add, change or remove people |
+| **My account** | Your name and password |
 
-These values live in **`.env.local`** (gitignored) and are documented **only here**. Never reuse them in production.
+Every page in the admin shows **Last saved** and has a **History** button (see "Undoing a change" below).
 
-After a successful login you land on `/admin`. Unauthenticated visits to `/admin` redirect to `/admin/login`.
+## Adding photos (the important part)
 
-## Changing the password
+### Upload them to the library
 
-Passwords are **not** changed in the UI. Update environment variables and restart the app.
+1. Open **Photos & videos**.
+2. Drag photos from your computer onto the dotted box, or click the box and choose them. On a phone, tapping the box lets you pick from the camera roll.
+3. A progress bar shows each file. Several files can upload at once.
+4. When the upload finishes, the photo shows up first in the grid.
 
-### Plain password (fine for local / trusted hosts)
+The site keeps the original quality and makes smaller copies for visitors automatically, so you don't need to resize anything.
 
-```bash
-ADMIN_USERNAME=javed
-ADMIN_PASSWORD='your-new-password'
-ADMIN_SESSION_SECRET='a-long-random-string-at-least-32-characters'
-```
+- **Photos:** JPEG, PNG, WebP, GIF or AVIF, up to 30 MB each.
+- **Videos:** MP4, WebM or MOV, up to 1 GB each.
+- **iPhone photos (HEIC):** these won't upload. On the iPhone, go to Settings → Camera → Formats and choose **Most Compatible**, or share the photo by email, which converts it to JPEG.
 
-### Preferred for production: bcrypt hash
+### Describe each photo
 
-Generate a hash (from the project root):
+Click a photo in the library to open its details:
 
-```bash
-pnpm exec tsx -e "import bcrypt from 'bcryptjs'; console.log(bcrypt.hashSync('your-strong-password', 12))"
-```
+- **Description (alt text):** say what the photo shows, for someone who can't see it. For example: "Bishop Young and Bishop J. S. Qadir Bakhsh standing outside the cathedral." Only write what you actually know. Don't guess names or dates.
+- **Crop a copy:** drag to frame the photo, then save. The original stays untouched.
+- **Delete:** this only works for photos that aren't used anywhere. The details show where each photo is used.
 
-Then set:
+### Put a photo on the page
 
-```bash
-ADMIN_USERNAME=javed
-ADMIN_PASSWORD_HASH='$2a$12$...'   # overrides ADMIN_PASSWORD when set
-ADMIN_SESSION_SECRET='...'        # >= 32 chars, unique per deploy
-```
+Every photo field in the admin (portrait, rotating photos, archive records, churches, people, blog covers) has the same buttons:
 
-Rotate `ADMIN_SESSION_SECRET` to invalidate all existing sessions.
+- **Choose photo** / **Replace photo** opens the library. Pick a photo and press **Use this photo**. You can also upload a new one straight from that window.
+- **Remove** empties the field.
+- **Focus point:** on some fields, click the most important spot in the preview, usually a face. That keeps it in view when the photo is cropped on phones.
 
-## Security notes
+Then press the **Save** button for that section.
 
-- Session cookie: **HttpOnly**, **SameSite=Lax**, **Secure** in production (`NODE_ENV=production`).
-- Auth is checked in **Server Components** and **Route Handlers** via `requireAdmin()` / `requireAdminPage()` — do not rely on middleware alone (defense in depth / CVE-2025-29927 class risk).
-- Login is lightly rate-limited (about 8 attempts / 15 minutes per client IP, in-memory).
-- Preview login is **local-only** and disabled when `NODE_ENV=production`.
-- Secrets belong only in env / host secrets — never in the repo.
+## Editing text
 
-## What you can manage
+Type into the boxes, then press **Save**. A small message at the bottom right confirms it saved. Changes show on the live site straight away.
 
-| Section | Storage | Public pages |
-|---|---|---|
-| Homepage (hero, purpose, connection, timeline, contribution labels) | `data/cms/homepage.json` | `/`, `/about`, `/contribute` |
-| Site & Pages (SEO description, header/footer navigation, footer text, hero buttons, home section headings, inner-page headers/notices, 404) | `data/cms/site.json` | every public page (layout, header, footer, home sections, `/archive`, `/churches`, `/sources`, `/about`, `/people`, `/interviews`, `/contribute`, 404) |
-| Churches / dioceses (8 cathedral records) | `data/cms/cathedrals.json` | `/`, `/churches`, `/sources` |
-| Family Archives CRUD | `data/cms/family-archives.json` | `/`, `/archive` |
-| Featured Interviews (title, copy, featuredOnHome) | `data/cms/featured-interviews.json` | `/`, `/interviews` |
-| Curator profile JSON | `data/cms/curator-profile.json` | `/about#profile` |
-| Image upload (+ optional crop) | `public/media/uploads/` or `public/media/archive/facebook/` | via FA `imageSrc` / hero portrait |
-| Inspect media (read-only) | CMS JSON + native files under `public/` | `/admin/inspect` |
+Please keep to facts that have a source. If you're not sure about a name, date or title, leave it out and tell the curator.
 
-Do **not** invent historical facts. Migrate and edit only caption-backed or biography-sourced material.
+## Homepage sections
 
-## Homepage CMS
+Open **Sections & order**. Drag a section, or use the ↑ ↓ arrows, to move it. Use the switch to hide a section without deleting anything. Press **Save**.
 
-1. Sign in → open the **Home** tab (first tab).
-2. Edit site title, strapline, guiding principle, hero, purpose cards, connection paragraphs, timeline, and contribution field labels.
-3. Optional: use the portrait crop/upload widget to set `hero.portrait`.
-4. Click **Save homepage** → `PUT /api/admin/homepage` → public `/` and `/about` refresh on next load (`noStore` on CMS reads).
+## Undoing a change
 
-## Churches CMS
+Every save is kept. On any admin page, press **History**:
 
-1. Sign in → open the **Churches** tab (after Home).
-2. Select a diocese from the list (id badge, cathedral name, `open_license` / `permission_needed` chip).
-3. Edit fields: diocese, cathedral, city, address, verification text/URLs, photo rights fields, `local_file` / `fallback_file`, notes, map query / Maps URL.
-4. Optional: crop/upload into `public/media/cathedrals/` to set `local_file` (do not invent licenses — only upload rights-cleared photos).
-5. Click **Save all churches** → `PUT /api/admin/cathedrals` → `/`, `/churches`, and `/sources` revalidate.
+- **View** shows what that version contained.
+- **Restore** brings that version back. The version you're replacing stays in History too, so a restore can always be undone.
 
-**Do not invent historical facts or licenses.** Keep captions and rights accurate. Seed data came from the verified cathedral register; placeholders for Faisalabad, Hyderabad, and Raiwind must stay until diocesan-approved images arrive.
+The last 40 saves are kept for each section.
 
-## Inspect media board
+## "Someone else just saved this"
 
-Open **Inspect media** from the dashboard or visit `/admin/inspect`. The route is protected by the same admin session as `/admin` and is read-only.
+If two people edit the same section at the same time, the second person to save sees this message instead of silently overwriting the first person's work:
 
-The board inventories every Family Archive image, cathedral `local_file` and `fallback_file`, interview video and poster, People-page thematic still, and the homepage hero portrait. It shows the local public path, source class, readable native dimensions, native/card aspect comparison, fit recommendation, and crop-risk level. Native image dimensions come from the lightweight `image-size` package; interview video dimensions and orientation come from `data/cms/featured-interviews.json`.
+- **Load their version** reloads the page with their changes. Your unsaved typing is lost, so copy it somewhere first if you need it.
+- **Keep mine** saves your version anyway. Theirs is still in History.
+- **Cancel** does nothing, so you can look first.
 
-Recommendation rule: **contain** when the native/card aspect difference is greater than `0.25`, or when portrait/landscape orientation mismatches. Make edits only in the existing Churches, Family Archives, Featured Interviews, or Media tabs.
+## Contributions from visitors
 
-Protected JSON endpoint: `GET /api/admin/media-inspect`.
+The Contribute page lets visitors send a story along with up to 4 photos or PDFs. Photos are made smaller automatically in their browser. Open **Contributions** to read them:
 
-## Uploads
+- Open a contribution to read it and look at its files.
+- **Add to library** copies an attached photo into **Photos & videos**. Only do this after the rights and sources are confirmed.
+- Mark it **Reviewed** or **Archived** when you're done. Administrators can also delete one.
 
-- Allowed types: JPEG, PNG, WebP, GIF
-- Max size: **8 MB**
-- Filenames are sanitized; a timestamp suffix is added
-- Destinations:
-  - `uploads` → `/media/uploads/…`
-  - `facebook` → `/media/archive/facebook/…`
-  - `cathedrals` → `/media/cathedrals/…`
-- After upload, paste the returned path into a Family Archive **Image path** field (the Media tab can hand the path into the FA form automatically), or use the Churches tab crop widget to set `local_file`.
+Contact details from visitors are private. They never appear on the public site.
 
-## Crop how-to
+## Accounts (administrators)
 
-1. Open **Media library** on the dashboard.
-2. Choose aspect **free**, **4:3**, or **3:4**.
-3. Select an image; drag on the preview to set the crop rectangle.
-4. Click **Upload crop** (or **Upload without crop** to skip).
-5. Use the returned path on a Family Archive item.
+- **Accounts → Add a family member:** enter their name and email, choose a role, and set a first password. The **Suggest** button creates a strong one. Give it to them in person or by phone.
+  - **Administrator:** everything, including accounts and deleting contributions.
+  - **Editor:** all content and photos, but not accounts.
+- You can change someone's role, reset their password, or **Switch off** an account. Switching an account off signs that person out everywhere.
+- The last administrator can't be removed, so you can't lock everyone out.
 
-## Logout
+## If something goes wrong
 
-Use **Log out** on the dashboard. That clears the session cookie via `POST /api/admin/logout`.
+- **A yellow or red banner at the top of the admin** means the site's storage isn't connected. Saving is switched off so nothing gets lost. Tell Oscar; [DEPLOYMENT.md](DEPLOYMENT.md) explains the fix.
+- **"Your sign-in has expired"** means you need to sign in again. Your changes are still on screen, so copy anything important before you reload.
+- **An upload failed:** check the file type and size limits above, then try once more.
+- **Everyone is locked out:** Oscar can turn on recovery login. See [DEPLOYMENT.md](DEPLOYMENT.md#locked-out).
 
-## Manual QA checklist
+## For whoever runs the site on their own computer
 
-- [ ] With `ADMIN_OPEN_PREVIEW=true`, `/admin/login` shows **Enter as curator (local preview)** → lands on `/admin`
-- [ ] With preview off (or production), preview endpoint returns 403
-- [ ] Unauthenticated `GET /admin` → redirect to `/admin/login`
-- [ ] Bad password → 401 / error message; no session
-- [ ] Good password → dashboard
-- [ ] Home tab save → `data/cms/homepage.json` updates; `/` reflects new hero title
-- [ ] Churches tab save → `data/cms/cathedrals.json` updates; `/churches` reflects edits
-- [ ] Create / edit / delete a Family Archive item → persists in JSON; `/archive` reflects it
-- [ ] Image upload → HTTP 200 and a public path under `/media/…`
-- [ ] Logout → cookie cleared; `/admin` redirects to login again
-- [ ] Footer shows discreet **Curator login** link (not in primary nav)
-- [ ] **Inspect media** opens `/admin/inspect`; unauthenticated access redirects to login
-- [ ] `GET /api/admin/media-inspect` requires an admin session and lists all published paths
-
-## API surface (all require an admin session except login / preview)
-
-- `POST /api/admin/login`
-- `POST /api/admin/login/preview` (local preview only)
-- `POST /api/admin/logout`
-- `GET|PUT /api/admin/homepage`
-- `GET|PUT /api/admin/cathedrals`
-- `GET|POST /api/admin/family-archives`
-- `PUT|DELETE /api/admin/family-archives/[id]`
-- `GET /api/admin/featured-interviews`
-- `PUT /api/admin/featured-interviews/[id]`
-- `GET|PUT /api/admin/curator-profile`
-- `POST /api/admin/upload` (multipart: `file`, optional `destination`)
-- `GET /api/admin/media-inspect` (read-only native dimensions and crop-risk assessment)
-
-## Site & Pages tab
-
-Sign in → open the **Site & Pages** tab (first tab). It controls the global
-marketing/UI wording that used to be hard-coded in components:
-
-- **Header & footer navigation** — add/remove/relabel links (label + href).
-- **Footer** — column titles, the “About this archive” text, curator-login label.
-- **SEO** — site description (search/social) and the page-title suffix.
-- **Hero buttons** — labels and destinations.
-- **Home section headings** — eyebrows, headings, “view all” labels and short
-  notes for Purpose, Featured Interviews, Churches & Places, Timeline,
-  Family Archives, My Connection and the Guiding Principle eyebrow.
-- **Inner pages** — About/Archive/Churches/Sources page-header wording,
-  People & Interviews forthcoming panels, the Contribute intake notice,
-  and the 404 page text.
-
-Save → `PUT /api/admin/site` (admin session required; zod-validated) →
-`data/cms/site.json` → the whole layout revalidates.
-
-Deliberately **not** free-text editable, by design:
-
-- The curator's confirmed name/role line (AGENTS.md rule: do not rename the
-  curator) and the motto/strapline wording — factual identity, kept exact.
-- The Sources register entries themselves (`src/content/sources.ts`) and
-  cathedral verification/citation fields remain in their citation-backed
-  homes (Churches / Family Archives tabs) so links and credits stay checkable.
-
-## Persistence on Vercel (important limitation)
-
-The CMS is file/JSON-based by repo design (`data/cms/*.json`, atomic
-tmp-file rename in `src/lib/cms/store.ts`; uploads under `public/media/`).
-On a **local or single-instance host with a writable filesystem**, admin
-saves and uploads persist exactly as tested.
-
-On **Vercel production**, the deployed filesystem is **ephemeral/read-only
-at runtime**: a save or upload made through the live admin may succeed
-in-memory/instance-locally (or fail on a read-only mount) but will **not
-survive redeploys or instance recycling**, and uploaded files are not
-committed to git. This is a known architectural limitation, not a silent
-failure — do not rely on live-admin edits as the production source of truth.
-
-**Production workflow until a persistent store is approved:** make content
-edits locally (or in any writable preview), commit the changed
-`data/cms/*.json` (and any new `public/media/…` files) to git, and push —
-Vercel then deploys the edited content. No paid/external database or
-storage service has been introduced; adopting one (e.g. Vercel Blob/KV)
-requires a new ADR in `docs/DECISIONS.md` first.
-
-## Storage (Vercel KV + Blob) — ADR-008
-
-The CMS now runs behind a storage adapter (`src/lib/cms/store.ts`):
-
-- **Documents** (all CMS JSON, incl. blog): if `KV_REST_API_URL` and
-  `KV_REST_API_TOKEN` are set, documents live in **Vercel KV / Upstash Redis**
-  (Vercel Marketplace) as one JSON document per key (`cms:homepage.json`, …,
-  `cms:blog.json`). This matches the repo's whole-file JSON shape exactly.
-  On first read, a missing key is seeded from the bundled `data/cms/*.json`,
-  so no content is lost. Without those env vars, the local file store is used.
-- **Media**: if `BLOB_READ_WRITE_TOKEN` is set, admin uploads go to **Vercel
-  Blob** and the returned `https://…public.blob.vercel-storage.com/…` URL is
-  stored in the image field. Existing `/media/…` files keep working unchanged.
-
-Check which backend a server is using: `node scripts/storage-check.mjs`
-(names/booleans only). Explicit re-seed (files win): set the KV env vars and
-run `node scripts/seed-storage.mjs` (add `--dry-run` to preview).
-
-### Oscar's one-time setup (about 10 minutes, Vercel dashboard)
-
-1. Open the project → **Storage** → **Create** → choose **KV (Upstash Redis)**
-   from the Marketplace → create → **Connect to Project** (Production +
-   Preview). This injects `KV_REST_API_URL`, `KV_REST_API_TOKEN` (and
-   `KV_REST_API_READ_ONLY_TOKEN`, `KV_URL`) automatically.
-2. Storage → the already-created Blob store **churchhistory-media** →
-   **Connect to Project** (Production + Preview). This injects
-   `BLOB_READ_WRITE_TOKEN`.
-3. Redeploy. The first page load seeds KV from the current site content;
-   from then on, admin saves and blog posts persist across deploys, and new
-   uploads land in Blob. Nothing else changes — same admin, same screens.
-
-Until step 1–2 are done, production keeps using the bundled JSON files
-(read-only on Vercel), exactly as documented in the persistence note above.
-
-## Blog — how to publish a post
-
-1. Sign in → **Blog** tab → **+ New post**.
-2. Title (slug/address fills in automatically; edit if needed), excerpt,
-   cover image (upload or paste a `/media/…` path / Blob URL) + alt text,
-   author, date, tags (comma-separated).
-3. Write the body in Markdown: `##` headings, `**bold**`, `*italic*`,
-   `> pull-quote`, `-` lists, `[text](https://…)`. Raw HTML is stripped.
-4. Status → **Published**, optionally Featured → **Save blog posts**.
-   The post appears at `/blog`, gets its own `/blog/<slug>` page, and is
-   added to `/sitemap.xml` and `/blog/rss.xml` automatically.
-   Drafts are hidden from all public pages.
+- Start it with `npm run dev`, then open http://localhost:5000/admin/login.
+- Local edits are saved into `data/cms/*.json`, and uploads go into `public/media/uploads/`. Commit those folders to publish the changes.
+- Accounts, history and contributions live in `data/local-store/`. That folder is never committed.
+- For a one-click local sign-in without a password, set `ADMIN_OPEN_PREVIEW=true` in `.env.local`. This only works on a local development machine; it is always refused in production and on Vercel. Never set it on a public host.

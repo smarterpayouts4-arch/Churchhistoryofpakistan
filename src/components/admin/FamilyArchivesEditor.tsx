@@ -1,8 +1,11 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { FormEvent, useMemo, useState } from "react";
 import type { FamilyArchiveItem } from "@/lib/cms/types";
 import styles from "@/app/admin/admin.module.css";
+import { ImageField } from "./ImageField";
+import { Thumb } from "./Thumb";
 
 type ArchiveFormState = {
   id: string;
@@ -15,7 +18,7 @@ type ArchiveFormState = {
   dateLabel: string;
   verificationStatus: "facebook-caption" | "needs-verification";
   contextNote: string;
-  referencesJson: string;
+  references: { label: string; url: string; note: string }[];
 };
 
 const emptyArchiveForm: ArchiveFormState = {
@@ -29,7 +32,7 @@ const emptyArchiveForm: ArchiveFormState = {
   dateLabel: "",
   verificationStatus: "needs-verification",
   contextNote: "",
-  referencesJson: "",
+  references: [],
 };
 
 type Props = {
@@ -85,38 +88,62 @@ export function FamilyArchivesEditor({
       dateLabel: item.dateLabel || "",
       verificationStatus: item.verificationStatus,
       contextNote: item.contextNote || "",
-      referencesJson: item.references?.length
-        ? JSON.stringify(item.references, null, 2)
-        : "",
+      references: (item.references ?? []).map((r) => ({
+        label: r.label,
+        url: r.url,
+        note: r.note ?? "",
+      })),
     });
     setMessage(null);
     setError(null);
   }
 
+  async function moveArchive(index: number, dir: -1 | 1) {
+    const j = index + dir;
+    if (j < 0 || j >= archives.length) return;
+    const next = [...archives];
+    [next[index], next[j]] = [next[j]!, next[index]!];
+    setPending(true);
+    try {
+      const res = await adminFetch("/api/admin/family-archives", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: next.map((i) => i.id) }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { items?: FamilyArchiveItem[]; error?: string };
+      if (!res.ok || !data.items) {
+        setError(data.error || "Could not change the order.");
+        return;
+      }
+      setArchives(data.items);
+      setMessage("Order saved. The first record is featured first on the homepage.");
+    } finally {
+      setPending(false);
+    }
+  }
+
   async function saveArchive(e: FormEvent) {
     e.preventDefault();
+    if (!form.imageSrc) {
+      setError("Please choose a photo for this record.");
+      return;
+    }
     setPending(true);
     setError(null);
     setMessage(null);
     try {
-      let references: FamilyArchiveItem["references"] | undefined;
-      let includeReferences = true;
-      const refsRaw = form.referencesJson.trim();
-      if (!refsRaw && editingId) {
-        includeReferences = false;
-      } else if (refsRaw) {
-        try {
-          const parsed = JSON.parse(refsRaw) as unknown;
-          if (!Array.isArray(parsed)) {
-            setError("References must be a JSON array of { label, url, note? }.");
-            return;
-          }
-          references = parsed as FamilyArchiveItem["references"];
-        } catch {
-          setError("References JSON is invalid.");
-          return;
-        }
+      const references = form.references
+        .filter((r) => r.label.trim() || r.url.trim())
+        .map((r) => ({
+          label: r.label.trim(),
+          url: r.url.trim(),
+          ...(r.note.trim() ? { note: r.note.trim() } : {}),
+        }));
+      if (references.some((r) => !r.label || !/^https?:\/\//i.test(r.url))) {
+        setError("Each reference needs a title and a web address starting with https://");
+        return;
       }
+      const includeReferences = true;
       const payload = {
         id: form.id || undefined,
         title: form.title,
@@ -129,12 +156,12 @@ export function FamilyArchivesEditor({
         dateLabel: form.dateLabel,
         verificationStatus: form.verificationStatus,
         contextNote: form.contextNote.trim() || undefined,
-        ...(includeReferences ? { references: references ?? [] } : {}),
+        ...(includeReferences ? { references } : {}),
       };
       const url = editingId
         ? `/api/admin/family-archives/${encodeURIComponent(editingId)}`
         : "/api/admin/family-archives";
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method: editingId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -167,7 +194,7 @@ export function FamilyArchivesEditor({
     setError(null);
     setMessage(null);
     try {
-      const res = await fetch("/api/admin/family-archives", {
+      const res = await adminFetch("/api/admin/family-archives", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ note }),
@@ -194,7 +221,7 @@ export function FamilyArchivesEditor({
     setPending(true);
     setError(null);
     try {
-      const res = await fetch(
+      const res = await adminFetch(
         `/api/admin/family-archives/${encodeURIComponent(id)}`,
         { method: "DELETE" },
       );
@@ -279,30 +306,44 @@ export function FamilyArchivesEditor({
             }
           />
         </label>
-        <label className={styles.label}>
-          References JSON (leave blank while editing to keep the current list)
-          <textarea
-            className={styles.textarea}
-            value={form.referencesJson}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, referencesJson: e.target.value }))
-            }
-            placeholder='[{"label":"…","url":"https://…","note":"…"}]'
-          />
-        </label>
+        <fieldset className={styles.panel} style={{ padding: "0.85rem", display: "grid", gap: "0.6rem" }}>
+          <legend className={styles.label}>Public-record references (optional)</legend>
+          {form.references.map((r, i) => (
+            <div key={i} className={styles.grid2}>
+              <label className={styles.label}>
+                Title
+                <input className={styles.input} value={r.label} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, label: e.target.value } : x)) }))} />
+              </label>
+              <label className={styles.label}>
+                Web address
+                <input className={styles.input} type="url" placeholder="https://" value={r.url} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, url: e.target.value } : x)) }))} />
+              </label>
+              <label className={styles.label}>
+                Note (optional)
+                <input className={styles.input} value={r.note} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, note: e.target.value } : x)) }))} />
+              </label>
+              <div className={styles.rowActions} style={{ alignItems: "end" }}>
+                <button type="button" className={styles.dangerBtn} onClick={() => setForm((f) => ({ ...f, references: f.references.filter((_, n) => n !== i) }))}>
+                  Remove reference
+                </button>
+              </div>
+            </div>
+          ))}
+          <div className={styles.rowActions}>
+            <button type="button" className={styles.secondaryBtn} onClick={() => setForm((f) => ({ ...f, references: [...f.references, { label: "", url: "", note: "" }] }))}>
+              + Add reference
+            </button>
+          </div>
+        </fieldset>
         <div className={styles.grid2}>
-          <label className={styles.label}>
-            Image path
-            <input
-              className={styles.input}
-              required
-              placeholder="/media/uploads/…"
-              value={form.imageSrc}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, imageSrc: e.target.value }))
-              }
-            />
-          </label>
+          <ImageField
+            label="Photo"
+            required
+            value={form.imageSrc}
+            onChange={(url, entry) =>
+              setForm((f) => ({ ...f, imageSrc: url, ...(entry?.alt && !f.alt ? { alt: entry.alt } : {}) }))
+            }
+          />
           <label className={styles.label}>
             Verification
             <select
@@ -377,11 +418,12 @@ export function FamilyArchivesEditor({
             </tr>
           </thead>
           <tbody>
-            {archives.map((item) => (
+            {archives.map((item, index) => (
               <tr key={item.id}>
                 <td>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={styles.thumb} src={item.imageSrc} alt="" />
+                  <span className={styles.thumb} style={{ position: "relative", display: "block" }}>
+                    <Thumb src={item.imageSrc} sizes="60px" />
+                  </span>
                 </td>
                 <td>
                   <strong>{item.title}</strong>
@@ -396,6 +438,24 @@ export function FamilyArchivesEditor({
                       onClick={() => startEdit(item)}
                     >
                       Edit
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.secondaryBtn}
+                      onClick={() => moveArchive(index, -1)}
+                      disabled={pending || index === 0}
+                      aria-label={`Move ${item.title} up`}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.secondaryBtn}
+                      onClick={() => moveArchive(index, 1)}
+                      disabled={pending || index === archives.length - 1}
+                      aria-label={`Move ${item.title} down`}
+                    >
+                      ↓
                     </button>
                     <button
                       type="button"

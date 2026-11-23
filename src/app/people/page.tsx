@@ -8,6 +8,8 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
+import archiveStyles from "@/components/home/FamilyArchives.module.css";
+import { Lightbox } from "@/components/ui/Lightbox";
 
 export const metadata: Metadata = {
   title: "People",
@@ -35,7 +37,7 @@ export default async function PeoplePage() {
         <Forthcoming title={copy.forthcoming_title}>{copy.forthcoming_body}</Forthcoming>
 
         <div className={homeStyles.interviewGrid} style={{ marginTop: "2rem" }}>
-          {frames.map((frame) => (
+          {frames.map((frame, i) => (
             <article key={frame.id} className={homeStyles.interviewCard}>
               <div className={homeStyles.peopleMedia}>
                 <MediaImage
@@ -46,6 +48,10 @@ export default async function PeoplePage() {
                   className={homeStyles.peoplePhoto}
                   sizes="(max-width: 640px) 50vw, (max-width: 1100px) 50vw, 400px"
                 />
+                <button type="button" className={archiveStyles.enlarge} data-lightbox-open={`people:${i}`}>
+                  <span className="sr-only">View larger photo: {frame.title}</span>
+                  <span className={archiveStyles.enlargeHint} aria-hidden="true">View larger</span>
+                </button>
               </div>
               <p className="eyebrow">{copy.card_eyebrow}</p>
               <h2 style={{ fontSize: "1.15rem", color: "var(--color-ink)" }}>
@@ -56,6 +62,11 @@ export default async function PeoplePage() {
             </article>
           ))}
         </div>
+
+        <Lightbox
+          group="people"
+          photos={frames.map((frame) => ({ src: frame.src, alt: frame.alt, title: frame.title }))}
+        />
 
         <nav className="linkRow" aria-label="Related pages">
           <Link href="/interviews">Interviews</Link>

@@ -18,8 +18,12 @@ export async function Timeline() {
           <span className={styles.range}>{homepage.timeline[0]?.year} — {homepage.timeline.at(-1)?.year}</span>
         </div>
         <ol className={styles.timeline}>
-          {homepage.timeline.map((entry) => (
-            <li key={`${entry.year}-${entry.title}`}>
+          {homepage.timeline.map((entry, i) => (
+            <li
+              key={`${entry.year}-${entry.title}`}
+              data-reveal
+              style={{ "--i": i } as React.CSSProperties}
+            >
               <span className={styles.year}>{entry.year}</span>
               <h3>{entry.title}</h3>
               <p>{entry.copy}</p>

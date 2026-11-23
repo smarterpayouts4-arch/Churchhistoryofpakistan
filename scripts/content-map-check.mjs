@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const base = (process.argv[2] ?? "http://127.0.0.1:4000").replace(/\/$/, "");
+const base = (process.argv[2] ?? "http://localhost:5000").replace(/\/$/, "");
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cms = (n) => JSON.parse(readFileSync(join(root, "data", "cms", n), "utf8"));
 const home = cms("homepage.json"), site = cms("site.json"), cats = cms("cathedrals.json"),

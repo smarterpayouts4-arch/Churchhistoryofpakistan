@@ -99,6 +99,9 @@ export const featuredInterviewPatchSchema = z.object({
   posterSrc: publicMediaPath.optional(),
   coverSrc: z.union([z.literal(""), publicMediaPath]).optional(),
   coverPosition: z.string().max(40).optional(),
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
+  orientation: z.enum(["portrait", "landscape"]).optional(),
 });
 
 export const curatorProfileSchema = z.object({
@@ -150,7 +153,7 @@ export const curatorProfileFileSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  username: z.string().min(1).max(80),
+  username: z.string().min(1).max(200),
   password: z.string().min(1).max(200),
 });
 
@@ -369,3 +372,51 @@ export const blogPostSchema = z.object({
 export const blogFileSchema = z.object({
   posts: z.array(blogPostSchema).max(500),
 });
+
+/* ---- Whole-document schemas (used by revision restore) ---- */
+
+export const homeLayoutFileSchema = z.object({
+  sections: z
+    .array(
+      z.object({
+        id: z.enum([
+          "hero",
+          "archives",
+          "purpose",
+          "churches",
+          "timeline",
+          "interviews",
+          "connection",
+          "contribute",
+          "guiding",
+        ]),
+        visible: z.boolean(),
+      }),
+    )
+    .min(1)
+    .max(20)
+    .refine((s) => new Set(s.map((x) => x.id)).size === s.length, {
+      message: "Each section can appear only once.",
+    }),
+});
+
+export const familyArchivesFileSchema = z.object({
+  note: z.string().min(1).max(8000),
+  items: z.array(familyArchiveItemSchema).max(2000),
+});
+
+export const featuredInterviewsFileSchema = z.object({
+  items: z.array(featuredInterviewSchema).max(500),
+});
+
+export const DOC_SCHEMAS = {
+  "homepage.json": homepageFileSchema,
+  "home-layout.json": homeLayoutFileSchema,
+  "site.json": siteSettingsSchema,
+  "family-archives.json": familyArchivesFileSchema,
+  "featured-interviews.json": featuredInterviewsFileSchema,
+  "people-frames.json": peopleFramesFileSchema,
+  "cathedrals.json": cathedralsFileSchema,
+  "curator-profile.json": curatorProfileFileSchema,
+  "blog.json": blogFileSchema,
+} as const;

@@ -1,9 +1,10 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { useState } from "react";
 import type { BlogPost } from "@/lib/cms/types";
 import { slugify } from "@/lib/blog/markdown-client";
-import { ImageCropUpload } from "./ImageCropUpload";
+import { ImageField } from "./ImageField";
 import styles from "@/app/admin/admin.module.css";
 
 type Props = {
@@ -59,7 +60,7 @@ export function BlogEditor({ initialPosts, pending, setPending, setMessage, setE
     setError(null);
     setMessage(null);
     try {
-      const res = await fetch("/api/admin/blog", {
+      const res = await adminFetch("/api/admin/blog", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ posts }),
@@ -124,10 +125,12 @@ export function BlogEditor({ initialPosts, pending, setPending, setMessage, setE
                     <label className={styles.label}>Excerpt (short summary for cards & search)
                       <textarea className={styles.textarea} value={editing.excerpt} onChange={(e) => patch(editing.id, { excerpt: e.target.value })} />
                     </label>
-                    <label className={styles.label}>Cover image path or URL (use a wide photo at least 1200px across so it stays sharp)
-                      <input className={styles.input} value={editing.coverSrc} onChange={(e) => patch(editing.id, { coverSrc: e.target.value })} placeholder="/media/… or https://…blob.vercel-storage.com/…" />
-                    </label>
-                    <ImageCropUpload destination="uploads" onUploaded={(path) => patch(editing.id, { coverSrc: path })} />
+                    <ImageField
+                      label="Cover photo"
+                      hint="Use a wide photo at least 1200 pixels across so it stays sharp."
+                      value={editing.coverSrc}
+                      onChange={(url, entry) => patch(editing.id, { coverSrc: url, ...(entry?.alt && !editing.coverAlt ? { coverAlt: entry.alt } : {}) })}
+                    />
                     <label className={styles.label}>Cover image alt text
                       <input className={styles.input} value={editing.coverAlt} onChange={(e) => patch(editing.id, { coverAlt: e.target.value })} />
                     </label>

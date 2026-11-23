@@ -1,5 +1,6 @@
 "use client";
 
+import { adminFetch } from "./adminFetch";
 import { FormEvent, useState } from "react";
 import type { SiteNavItem, SiteSettings } from "@/lib/cms/types";
 import styles from "@/app/admin/admin.module.css";
@@ -154,7 +155,7 @@ export function SiteEditor({ initialSite, pending, setPending, setMessage, setEr
     setMessage(null);
     setError(null);
     try {
-      const res = await fetch("/api/admin/site", {
+      const res = await adminFetch("/api/admin/site", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(site),
