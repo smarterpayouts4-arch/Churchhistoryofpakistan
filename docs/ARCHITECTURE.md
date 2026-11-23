@@ -87,7 +87,7 @@ SEO pieces:
 - Videos: one 16:9 frame (`InterviewPlayCard`); portrait clips are contained and centred over the poster's blur. Nothing downloads before "play"; then `preload="metadata"`, `playsInline`, native controls. Bundled videos are H.264 High / AAC-LC MP4 with `+faststart` (`npm run media:normalize -- --videos`).
 - Admin uploads (`src/components/admin/normalizeMedia.ts`): photos are EXIF-rotated and capped at 3200 px on the long edge before upload, with a blur preview; videos get width/height/duration and a captured poster frame (stored as a library photo, `posterUrl`). Videos are not re-encoded in the browser.
 
-## Contributions — `src/app/contribute/`, `src/lib/contributions/intake.ts`
+## Share Your Story (visitor stories) — `src/app/share-your-story/` (`/contribute` 308-redirects here), `src/lib/contributions/intake.ts`
 
 - The form shows when there is somewhere to keep submissions: the local store, KV, or `CONTRIBUTE_WEBHOOK_URL`.
 - **Attachments:** up to 4 files and 4 MB total, JPEG/PNG/WebP/PDF. Photos are scaled to 2000 px JPEG in the browser first.

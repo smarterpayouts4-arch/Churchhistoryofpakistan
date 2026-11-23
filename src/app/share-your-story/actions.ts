@@ -14,29 +14,29 @@ import {
   storeAttachment,
 } from "@/lib/contributions/intake";
 
-export type ContributeState = {
+export type ShareStoryState = {
   ok: boolean;
   message: string;
 };
 
 const TEXT_LIMIT = 8000;
 
-export async function submitContribution(
-  _prev: ContributeState,
+export async function submitStory(
+  _prev: ShareStoryState,
   formData: FormData,
-): Promise<ContributeState> {
+): Promise<ShareStoryState> {
   const status = intakeStatus();
   if (!status.enabled) {
     return {
       ok: false,
       message:
-        "Online contributions are not switched on for this site yet. Nothing was sent. Please contact the Project Curator directly.",
+        "Sharing stories online is not switched on for this site yet. Nothing was sent. Please contact the Project Curator directly.",
     };
   }
 
   // Honeypot: real people never fill the hidden "website" field.
   if (String(formData.get("website") ?? "").trim()) {
-    return { ok: true, message: "Thank you. Your contribution was received." };
+    return { ok: true, message: "Thank you for sharing your story." };
   }
 
   const ip = clientIp(await headers());
@@ -67,7 +67,7 @@ export async function submitContribution(
   if (!fields.story?.trim() && !fields.subject?.trim()) {
     return {
       ok: false,
-      message: "Please tell us who or what your contribution is about. Nothing was sent.",
+      message: "Please tell us who or what your story is about. Nothing was sent.",
     };
   }
 
@@ -121,7 +121,7 @@ export async function submitContribution(
     console.error("[contribute]", err);
     return {
       ok: false,
-      message: "We could not save your contribution just now. Nothing was confirmed as saved. Please try again later.",
+      message: "We could not save your story just now. Nothing was confirmed as saved. Please try again later.",
     };
   }
 
@@ -147,11 +147,11 @@ export async function submitContribution(
         }),
       });
       if (!res.ok && !status.inbox) {
-        return { ok: false, message: `The contribution service returned an error (${res.status}). Nothing was confirmed as saved.` };
+        return { ok: false, message: `The story service returned an error (${res.status}). Nothing was confirmed as saved.` };
       }
     } catch {
       if (!status.inbox) {
-        return { ok: false, message: "Could not reach the contribution service. Nothing was submitted." };
+        return { ok: false, message: "Could not reach the story service. Nothing was submitted." };
       }
     }
   }
@@ -160,7 +160,7 @@ export async function submitContribution(
     ok: true,
     message:
       files.length > 0
-        ? `Thank you. Your contribution and ${files.length} file${files.length === 1 ? "" : "s"} were received. The Project Curator will review rights and sources before anything is published.`
-        : "Thank you. Your contribution was received. The Project Curator will review rights and sources before anything is published.",
+        ? `Thank you for sharing your story. It arrived with ${files.length} file${files.length === 1 ? "" : "s"}. The Project Curator will review rights and sources before anything is published.`
+          : "Thank you for sharing your story. The Project Curator will review rights and sources before anything is published.",
   };
 }

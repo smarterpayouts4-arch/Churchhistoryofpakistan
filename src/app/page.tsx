@@ -6,7 +6,7 @@ import { ChurchesPreview } from "@/components/home/Churches";
 import { Timeline } from "@/components/home/Timeline";
 import { FamilyArchives } from "@/components/home/FamilyArchives";
 import { MyConnection } from "@/components/home/MyConnection";
-import { ContributeCta } from "@/components/home/ContributeCta";
+import { ShareStoryCta } from "@/components/home/ShareStoryCta";
 import { GuidingPrinciple } from "@/components/home/GuidingPrinciple";
 import { loadHomeLayout } from "@/content/home-layout";
 import type { HomeSectionId } from "@/lib/cms/types";
@@ -19,7 +19,7 @@ const SECTIONS: Record<HomeSectionId, () => ReactNode> = {
   timeline: () => <Timeline />,
   interviews: () => <Interviews />,
   connection: () => <MyConnection />,
-  contribute: () => <ContributeCta />,
+  contribute: () => <ShareStoryCta />,
   guiding: () => <GuidingPrinciple />,
 };
 

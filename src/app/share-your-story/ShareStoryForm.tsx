@@ -1,12 +1,14 @@
 "use client";
 
 import { startTransition, useActionState, useEffect, useRef, useState } from "react";
-import { submitContribution, type ContributeState } from "./actions";
+import { submitStory, type ShareStoryState } from "./actions";
 import styles from "../pages.module.css";
 
-const initial: ContributeState = { ok: false, message: "" };
+const initial: ShareStoryState = { ok: false, message: "" };
 
 const FIELD_MAP: Record<string, { name: string; type: "text" | "email" | "textarea" | "file" | "checkbox" }> = {
+  "Your name": { name: "contributor_name", type: "text" },
+  // Older saved label (before the "Share Your Story" wording) still works.
   "Contributor name": { name: "contributor_name", type: "text" },
   "Private contact email": { name: "contact_email", type: "email" },
   "Person/place/event represented": { name: "subject", type: "text" },
@@ -56,8 +58,8 @@ async function prepareFile(file: File): Promise<File> {
   }
 }
 
-export function ContributeForm({ contributionFields, attachments }: Props) {
-  const [state, action, pending] = useActionState(submitContribution, initial);
+export function ShareStoryForm({ contributionFields, attachments }: Props) {
+  const [state, action, pending] = useActionState(submitStory, initial);
   const [files, setFiles] = useState<File[]>([]);
   const [preparing, setPreparing] = useState(false);
   const [fileError, setFileError] = useState("");
@@ -204,7 +206,7 @@ export function ContributeForm({ contributionFields, attachments }: Props) {
       })}
 
       <button className={`btn-primary ${styles.submit}`} type="submit" disabled={pending || preparing}>
-        {pending ? "Sending…" : "Submit contribution"}
+        {pending ? "Sending…" : "Share my story"}
       </button>
 
       {state.message ? (

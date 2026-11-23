@@ -1,16 +1,17 @@
 import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
-import styles from "./ContributeCta.module.css";
+import styles from "./ShareStoryCta.module.css";
 
-export async function ContributeCta() {
+/** Homepage invitation to add stories, memories and photos to the archive. */
+export async function ShareStoryCta() {
   const { page_context: copy } = await loadHomepage();
 
   return (
-    <section id="contribute" className={styles.contribute} aria-labelledby="contribute-heading">
+    <section id="share-your-story" className={styles.contribute} aria-labelledby="share-your-story-heading">
       <div className={`shell ${styles.contributeInner}`}>
         <div className={styles.contributeCopy}>
           <p className="eyebrow eyebrowLight">{copy.contribute_eyebrow}</p>
-          <h2 id="contribute-heading">{copy.contribute_heading}</h2>
+          <h2 id="share-your-story-heading">{copy.contribute_heading}</h2>
           <p>{copy.contribute_copy}</p>
         </div>
         <div className={styles.contributeAside}>
@@ -22,7 +23,7 @@ export async function ContributeCta() {
             width={72}
             height={72}
           />
-          <Link className={`btn-primary btn-gilt ${styles.btnCream}`} href="/contribute">
+          <Link className={`btn-primary btn-gilt ${styles.btnCream}`} href="/share-your-story">
             {copy.contribute_button} <span aria-hidden="true">→</span>
           </Link>
         </div>

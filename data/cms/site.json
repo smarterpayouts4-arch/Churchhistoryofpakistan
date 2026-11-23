@@ -34,8 +34,8 @@
         "label": "Blog"
       },
       {
-        "href": "/contribute",
-        "label": "Contribute"
+        "href": "/share-your-story",
+        "label": "Share Your Story"
       }
     ],
     "footer": [
@@ -72,8 +72,8 @@
         "label": "Sources"
       },
       {
-        "href": "/contribute",
-        "label": "Contribute"
+        "href": "/share-your-story",
+        "label": "Share Your Story"
       }
     ]
   },
@@ -166,7 +166,7 @@
       "forthcoming_body": "Additional oral-history interviews (verified interviewees, roles, transcripts, and citations) remain forthcoming. The videos below are youth motivational programmes published on the Facebook page; they are not Family Archive stills or interview records."
     },
     "contribute_notice": {
-      "strong": "Online contributions are not open yet.",
+      "strong": "Sharing stories online is not open yet.",
       "body": "Please check back before sending photographs, documents, or personal information. You can still explore the archive and learn about the project below."
     },
     "not_found": {

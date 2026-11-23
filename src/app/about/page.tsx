@@ -155,7 +155,7 @@ export default async function AboutPage() {
         >
           <ConnectionBulletList bullets={bullets} pullQuote={pull} />
           <nav className="linkRow" aria-label="Related pages">
-            <Link href="/contribute">Contribute a memory</Link>
+            <Link href="/share-your-story">Share a memory</Link>
             <Link href="/sources">View sources</Link>
             <Link href="/about#profile">Curator profile</Link>
           </nav>

@@ -448,7 +448,7 @@ export function HomepageEditor({
           Add timeline entry
         </button>
 
-        <h3 style={{ margin: "0.5rem 0 0" }}>Contribution field labels</h3>
+        <h3 style={{ margin: "0.5rem 0 0" }}>Share Your Story form — field labels</h3>
         {home.contribution_fields.map((label, i) => (
           <div key={i} className={styles.grid2}>
             <label className={styles.label}>
@@ -484,15 +484,15 @@ export function HomepageEditor({
         </p>
         {(
           [
-            ["contribute_eyebrow", "Home contribute eyebrow"],
-            ["contribute_heading", "Home contribute heading"],
-            ["contribute_button", "Home contribute button"],
-            ["contribute_copy", "Home contribute paragraph"],
+            ["contribute_eyebrow", "Home story invitation — small heading"],
+            ["contribute_heading", "Home story invitation — heading"],
+            ["contribute_button", "Home story invitation — button"],
+            ["contribute_copy", "Home story invitation — paragraph"],
             ["guiding_note", "Guiding principle note"],
             ["archive_intro", "Archive page intro"],
             ["interviews_intro", "Interviews page intro"],
             ["people_intro", "People page intro"],
-            ["contribute_intro", "Contribute page intro"],
+            ["contribute_intro", "Share Your Story page — intro"],
           ] as const
         ).map(([key, label]) => (
           <label key={key} className={styles.label}>

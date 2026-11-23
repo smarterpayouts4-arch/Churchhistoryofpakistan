@@ -11,7 +11,7 @@ import type { Contribution } from "@/lib/cms/types";
 import { formatBytes } from "@/lib/media/rules";
 
 const FIELD_LABELS: Record<string, string> = {
-  contributor_name: "Contributor",
+  contributor_name: "Shared by",
   contact_email: "Private email",
   subject: "About",
   approx_date: "Approximate date",
@@ -22,7 +22,7 @@ const FIELD_LABELS: Record<string, string> = {
   publication_consent: "Publication consent",
 };
 
-/** Submissions from the public Contribute form, with their private attachments. */
+/** Stories sent through the public Share Your Story form, with their private attachments. */
 export function ContributionsInbox({ isAdmin, enabled }: { isAdmin: boolean; enabled: boolean }) {
   const [items, setItems] = useState<Contribution[] | null>(null);
   const [filter, setFilter] = useState<"new" | "reviewed" | "archived" | "all">("new");
@@ -82,7 +82,7 @@ export function ContributionsInbox({ isAdmin, enabled }: { isAdmin: boolean; ena
     <div>
       {!enabled ? (
         <div className={s.banner} role="note">
-          <strong>The public Contribute form is switched off</strong>
+          <strong>The public Share Your Story form is switched off</strong>
           On the live site, submissions need Vercel KV (and a private Blob store for attachments). See docs/DEPLOYMENT.md.
         </div>
       ) : null}

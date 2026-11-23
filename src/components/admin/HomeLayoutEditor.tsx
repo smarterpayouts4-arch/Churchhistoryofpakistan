@@ -15,7 +15,7 @@ const LABELS: Record<string, [string, string]> = {
   timeline: ["Timeline", "Dated, sourced milestones"],
   interviews: ["Interviews", "Featured interview videos"],
   connection: ["My connection", "The curator's personal statement"],
-  contribute: ["Contribute invitation", "Invites visitors to share material"],
+  contribute: ["Share Your Story invitation", "Invites visitors to add their stories, memories and photos"],
   guiding: ["Guiding principle", "Closing quotation"],
 };
 

@@ -74,7 +74,7 @@ Also see: `reference/INVENTORY.md`, `docs/SOURCES_AND_RIGHTS.md`, `docs/ASSET_RE
 | `/interviews` | Interviews (placeholders until real content) |
 | `/churches` | Eight diocesan cathedrals / places |
 | `/people` | People records (forthcoming — no invented bios) |
-| `/contribute` | Contribution / share memories CTA |
+| `/share-your-story` | Share Your Story — visitors add stories, memories and photos (`/contribute` redirects here) |
 | `/sources` | Source register / credits / policy |
 
 Package homepage nav also lists **Timeline** as a section/nav item; treat timeline milestones as sourced content from `content/homepage.ts`, not free-form invention.

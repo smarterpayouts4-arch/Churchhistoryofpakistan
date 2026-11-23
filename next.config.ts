@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   poweredByHeader: false,
   experimental: {
-    // Contribute form: up to 4 photos (resized in the browser) + text.
+    // Share Your Story form: up to 4 photos (resized in the browser) + text.
     serverActions: { bodySizeLimit: "12mb" },
   },
   images: {
@@ -52,6 +52,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
+  },
+  // The story page moved from /contribute; keep old links and bookmarks working.
+  async redirects() {
+    return [
+      { source: "/contribute", destination: "/share-your-story", permanent: true },
+      { source: "/contribute/:path*", destination: "/share-your-story", permanent: true },
+    ];
   },
   async headers() {
     return [

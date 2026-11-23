@@ -31,7 +31,7 @@ The menu on the left is grouped:
 | **Blog** | Blog posts (drafts stay hidden until published) |
 | **Curator profile** | The About page text for Javed Qadir Bakhsh |
 | **Site text & menus** | Menu labels, footer text, page introductions |
-| **Contributions** | What visitors sent through the Contribute form |
+| **Stories** | Stories, memories and photos visitors sent through the Share Your Story page |
 | **Accounts** | Administrators only: add, change or remove people |
 | **My account** | Your name and password |
 
@@ -105,11 +105,11 @@ If two people edit the same section at the same time, the second person to save 
 - **Keep mine** saves your version anyway. Theirs is still in History.
 - **Cancel** does nothing, so you can look first.
 
-## Contributions from visitors
+## Stories from visitors
 
-The Contribute page lets visitors send a story along with up to 4 photos or PDFs. Photos are made smaller automatically in their browser. Open **Contributions** to read them:
+The Share Your Story page (`/share-your-story`; the old `/contribute` address forwards there) lets visitors send a story along with up to 4 photos or PDFs. Photos are made smaller automatically in their browser. Open **Stories** to read them:
 
-- Open a contribution to read it and look at its files.
+- Open a story to read it and look at its files.
 - **Add to library** copies an attached photo into **Photos & videos**. Only do this after the rights and sources are confirmed.
 - Mark it **Reviewed** or **Archived** when you're done. Administrators can also delete one.
 
@@ -118,7 +118,7 @@ Contact details from visitors are private. They never appear on the public site.
 ## Accounts (administrators)
 
 - **Accounts → Add a family member:** enter their name and email, choose a role, and set a first password. The **Suggest** button creates a strong one. Give it to them in person or by phone.
-  - **Administrator:** everything, including accounts and deleting contributions.
+  - **Administrator:** everything, including accounts and deleting submitted stories.
   - **Editor:** all content and photos, but not accounts.
 - You can change someone's role, reset their password, or **Switch off** an account. Switching an account off signs that person out everywhere.
 - The last administrator can't be removed, so you can't lock everyone out.

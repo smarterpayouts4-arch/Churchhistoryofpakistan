@@ -88,7 +88,7 @@
     }
   ],
   "contribution_fields": [
-    "Contributor name",
+    "Your name",
     "Private contact email",
     "Person/place/event represented",
     "Approximate date",
@@ -108,6 +108,6 @@
     "archive_intro": "Published Family Archive holdings. Each item carries provenance and a verification note. Captions follow the source Facebook page unless otherwise marked.",
     "interviews_intro": "Youth motivational programmes from the History: Church of Pakistan Facebook page (Rab Ki Khidmat / Youth Empowerment).",
     "people_intro": "Biographical records for clergy and laypeople will be published here only from verified sources. This page does not invent sample biographies.",
-    "contribute_intro": "Share photographs, documents, family memories, corrections, or information that can help preserve the story faithfully. Every contribution is reviewed for rights and citations before any publication \u2014 so that what we keep, we keep truthfully."
+    "contribute_intro": "Add your stories, memories and photographs to the archive \u2014 a family photograph, a letter, a memory of a pastor, a congregation or a school, or a correction to something we have published. Every story is read and checked for permission and sources before anything is published \u2014 so that what we keep, we keep truthfully."
   }
 }

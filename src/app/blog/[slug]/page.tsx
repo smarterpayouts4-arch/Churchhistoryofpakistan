@@ -75,7 +75,7 @@ export default async function BlogArticlePage({ params }: Props) {
           <nav className="linkRow" aria-label="Related pages" style={{ marginTop: "2rem" }}>
             <Link href="/blog">All blog posts</Link>
             <Link href="/archive">Enter the Archive</Link>
-            <Link href="/contribute">Share Your Story</Link>
+            <Link href="/share-your-story">Share Your Story</Link>
           </nav>
         </article>
       </div>

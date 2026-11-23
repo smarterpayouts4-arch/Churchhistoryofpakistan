@@ -80,7 +80,7 @@ export default async function ArchivePage() {
         />
 
         <nav className="linkRow" aria-label="Related pages">
-          <Link href="/contribute">Help add a verified record</Link>
+          <Link href="/share-your-story">Share a story or photograph</Link>
           <Link href="/sources">Sources &amp; rights</Link>
         </nav>
       </div>

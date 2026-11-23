@@ -159,7 +159,7 @@ export function AdminDashboard(props: Props) {
       items: [
         ["profile", "Curator profile"],
         ["site", "Site text & menus"],
-        ["contributions", "Contributions", counts.newContributions ? String(counts.newContributions) : undefined],
+        ["contributions", "Stories", counts.newContributions ? String(counts.newContributions) : undefined],
       ],
     },
     {
@@ -250,7 +250,7 @@ export function AdminDashboard(props: Props) {
         {tab === "contributions" ? (
           <section aria-labelledby="contrib-heading">
             <h2 id="contrib-heading" style={{ fontFamily: "var(--font-display)", marginTop: 0 }}>
-              Contributions
+              Submitted stories
             </h2>
             <ContributionsInbox isAdmin={me.role === "admin"} enabled={intakeEnabled} />
           </section>
@@ -309,7 +309,7 @@ function Overview({
     ["churches", "church", "Churches", `${churches} cathedrals`],
     ["interviews", "video", "Interviews", "Videos, posters and captions"],
     ["blog", "pen", "Blog", `${posts} posts`],
-    ["contributions", "mail", "Contributions", counts.newContributions ? `${counts.newContributions} new to review` : "Nothing new"],
+    ["contributions", "mail", "Submitted stories", counts.newContributions ? `${counts.newContributions} new to read` : "Nothing new"],
   ];
   return (
     <section aria-labelledby="overview-heading">

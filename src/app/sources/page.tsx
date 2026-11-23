@@ -90,7 +90,7 @@ export default async function SourcesPage() {
 
         <nav className="linkRow" aria-label="Related pages">
           <Link href="/churches">Churches &amp; places</Link>
-          <Link href="/contribute">Contribute</Link>
+          <Link href="/share-your-story">Share Your Story</Link>
         </nav>
       </div>
     </div>

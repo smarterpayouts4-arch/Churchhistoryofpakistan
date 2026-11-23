@@ -70,7 +70,7 @@ export default async function InterviewsPage() {
         ) : null}
 
         <nav className="linkRow" aria-label="Related pages">
-          <Link href="/contribute">Suggest an interview subject</Link>
+          <Link href="/share-your-story">Suggest an interview subject</Link>
           <Link href="/people">People records</Link>
         </nav>
       </div>

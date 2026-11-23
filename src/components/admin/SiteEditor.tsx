@@ -101,8 +101,8 @@ const GROUPS: Group[] = [
       { path: "pages.people.status_label", label: "People cards — status chip" },
       { path: "pages.interviews_page.forthcoming_title", label: "Interviews page — forthcoming panel title" },
       { path: "pages.interviews_page.forthcoming_body", label: "Interviews page — forthcoming panel text", type: "textarea", rows: 3 },
-      { path: "pages.contribute_notice.strong", label: "Contribute — intake notice bold lead" },
-      { path: "pages.contribute_notice.body", label: "Contribute — intake notice text", type: "textarea", rows: 3 },
+      { path: "pages.contribute_notice.strong", label: "Share Your Story — notice bold lead (when the form is off)" },
+      { path: "pages.contribute_notice.body", label: "Share Your Story — notice text (when the form is off)", type: "textarea", rows: 3 },
     ],
   },
   {

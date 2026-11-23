@@ -19,7 +19,7 @@ const ROUTES = [
   "/interviews",
   "/churches",
   "/people",
-  "/contribute",
+  "/share-your-story",
   "/sources",
   "/blog",
 ];
@@ -61,9 +61,9 @@ async function probe(path) {
     const checks = {
       hasMain: /id=["']main["']/.test(text),
       hasHeader: /Primary|site-header|History: Church of Pakistan/.test(text),
-      hasFooter: /Sources|Contribute|footer/i.test(text),
+      hasFooter: /Sources|Share Your Story|footer/i.test(text),
       noFakeSuccess:
-        path !== "/contribute" ||
+        path !== "/share-your-story" ||
         !/thank you for (your )?submission|successfully submitted/i.test(text),
       forthcomingHonest:
         !["/interviews", "/people"].includes(path) ||
@@ -154,7 +154,7 @@ lines.push(
   ``,
   `- Interviews: existing youth programs; additional oral-history interviews remain forthcoming. People biographies remain forthcoming.`,
   `- Archive: CMS-backed family records with source and verification notes.`,
-  `- Contribute: no fake success when \`CONTRIBUTE_WEBHOOK_URL\` unset.`,
+  `- Share Your Story: no fake success when \`CONTRIBUTE_WEBHOOK_URL\` unset.`,
   `- Curator public name: **Javed Qadir Bakhsh**, confirmed in the content register.`,
   `- Cathedral photos: Faisalabad / Hyderabad / Raiwind remain permission-needed SVGs.`,
   `- Timeline & cathedral facts sourced from \`src/content/*\` only.`,

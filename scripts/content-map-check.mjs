@@ -38,7 +38,7 @@ await check("/archive", [site.pages.archive.eyebrow, fam.items[0]?.title], [fam.
 await check("/interviews", [home.page_context.interviews_intro, ints.items[0]?.title], [ints.items[0]?.posterSrc]);
 await check("/churches", [site.pages.churches.title, cats.items[0]?.cathedral], []);
 await check("/people", [home.page_context.people_intro, ppl.frames[0]?.title], [ppl.frames[0]?.src]);
-await check("/contribute", [home.page_context.contribute_intro, site.pages.contribute_notice.strong], []);
+await check("/share-your-story", [home.page_context.contribute_intro, site.pages.contribute_notice.strong], []);
 await check("/sources", [site.pages.sources.title], []);
 await check("/blog", blog.posts.filter(p=>p.status==="published").length ? blog.posts.filter(p=>p.status==="published").map(p=>p.title) : ["First stories are being prepared"], []);
 await check("/no-such-page-xyz", [site.pages.not_found.title], []);

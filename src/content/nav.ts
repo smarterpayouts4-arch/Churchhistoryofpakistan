@@ -11,7 +11,7 @@ export const primaryNav: NavItem[] = [
   { href: "/interviews", label: "Interviews" },
   { href: "/churches", label: "Churches" },
   { href: "/people", label: "People" },
-  { href: "/contribute", label: "Contribute" },
+  { href: "/share-your-story", label: "Share Your Story" },
 ];
 
 export const footerNav: NavItem[] = [
@@ -22,7 +22,7 @@ export const footerNav: NavItem[] = [
   { href: "/churches", label: "Churches" },
   { href: "/people", label: "People" },
   { href: "/sources", label: "Sources" },
-  { href: "/contribute", label: "Contribute" },
+  { href: "/share-your-story", label: "Share Your Story" },
 ];
 
 /** Confirmed by curator — use on all public labels. */

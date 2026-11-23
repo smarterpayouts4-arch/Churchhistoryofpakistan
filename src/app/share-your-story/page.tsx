@@ -2,37 +2,38 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { loadSiteSettings } from "@/content/site";
 import { loadHomepage } from "@/content/homepage";
-import { ContributeForm } from "./ContributeForm";
+import { ShareStoryForm } from "./ShareStoryForm";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CONTRIB_MAX_FILES, CONTRIB_MAX_TOTAL_BYTES, intakeStatus } from "@/lib/contributions/intake";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = {
-  title: "Contribute",
+  title: "Share Your Story",
   description:
-    "Share photographs, documents, and family memories for History: Church of Pakistan. Intake is reviewed before publication.",
+    "Add your stories, memories and photographs to the History: Church of Pakistan archive. Every story is reviewed before it is published.",
+  alternates: { canonical: "/share-your-story" },
 };
 
-export default async function ContributePage() {
+export default async function ShareYourStoryPage() {
   const [homepage, site] = await Promise.all([loadHomepage(), loadSiteSettings()]);
   const intake = intakeStatus();
   const intakeEnabled = intake.enabled;
 
   return (
     <div className={styles.page}>
-      <PageHeader eyebrow={homepage.page_context.contribute_eyebrow} title="Contribute" intro={homepage.page_context.contribute_intro} />
+      <PageHeader eyebrow={homepage.page_context.contribute_eyebrow} title="Share Your Story" intro={homepage.page_context.contribute_intro} />
       <div className="shell pageBody">
 
         <div className={styles.notice}>
           {intakeEnabled ? (
-            <><strong>Before you contribute.</strong> Please include the source of your material and confirm that you have permission to share it. Submissions are reviewed before publication.</>
+            <><strong>Before you share.</strong> Tell us where a photograph or document comes from, and confirm you are happy for it to be shared. Every story is read and checked before anything is published.</>
           ) : (
             <><strong>{site.pages.contribute_notice.strong}</strong> {site.pages.contribute_notice.body}</>
           )}
         </div>
 
         {intakeEnabled && (
-          <ContributeForm
+          <ShareStoryForm
             contributionFields={homepage.contribution_fields}
             attachments={{
               enabled: intake.attachments,
