@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { PlaceCard } from "@/components/ui/PlaceCard";
@@ -7,10 +8,13 @@ import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Churches.module.css";
 
+const description =
+  "Eight diocesan cathedrals of the Church of Pakistan · addresses, verification notes, and photo rights status.";
+
 export const metadata: Metadata = {
   title: "Churches",
-  description:
-    "Eight diocesan cathedrals of the Church of Pakistan · addresses, verification notes, and photo rights status.",
+  description,
+  ...socialMetadata({ title: "Churches", description, path: "/churches", image: "churches" }),
 };
 
 export default async function ChurchesPage() {

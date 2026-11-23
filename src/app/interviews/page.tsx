@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { Forthcoming } from "@/components/ui/Forthcoming";
 import { InterviewCard } from "@/components/home/InterviewCard";
@@ -10,10 +11,13 @@ import { loadMediaMeta } from "@/lib/media/meta";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
 
+const description =
+  "Youth motivational programmes (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.";
+
 export const metadata: Metadata = {
   title: "Interviews",
-  description:
-    "Youth motivational programmes (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.",
+  description,
+  ...socialMetadata({ title: "Interviews", description, path: "/interviews", image: "interviews" }),
 };
 
 export default async function InterviewsPage() {

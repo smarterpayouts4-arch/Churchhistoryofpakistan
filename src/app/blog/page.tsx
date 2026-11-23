@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MediaImage } from "@/components/ui/MediaImage";
@@ -6,9 +7,13 @@ import { loadPublishedBlogPosts } from "@/content/blog";
 import styles from "../pages.module.css";
 import blog from "./blog.module.css";
 
+const description =
+  "Stories, reflections and updates from the Church of Pakistan history archive.";
+
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Stories, reflections and updates from the Church of Pakistan history archive.",
+  description,
+  ...socialMetadata({ title: "Blog", description, path: "/blog", image: "blog" }),
 };
 
 function formatDate(iso: string) {

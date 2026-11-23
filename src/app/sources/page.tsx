@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { loadCathedralItems } from "@/content/cathedrals";
 import { sources } from "@/content/sources";
@@ -6,10 +7,13 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 
+const description =
+  "Source register, photograph credits, and research notes for History: Church of Pakistan.";
+
 export const metadata: Metadata = {
   title: "Sources",
-  description:
-    "Source register, photograph credits, and research notes for History: Church of Pakistan.",
+  description,
+  ...socialMetadata({ title: "Sources", description, path: "/sources", image: "sources" }),
 };
 
 export default async function SourcesPage() {

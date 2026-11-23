@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import {
   loadFamilyArchiveItems,
@@ -13,10 +14,13 @@ import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/FamilyArchives.module.css";
 
+const description =
+  "Family Archive holdings for History: Church of Pakistan, including caption-backed Facebook harvest items with Family Archive provenance.";
+
 export const metadata: Metadata = {
   title: "Archive",
-  description:
-    "Family Archive holdings for History: Church of Pakistan, including caption-backed Facebook harvest items with Family Archive provenance.",
+  description,
+  ...socialMetadata({ title: "Archive", description, path: "/archive", image: "archive" }),
 };
 
 export default async function ArchivePage() {

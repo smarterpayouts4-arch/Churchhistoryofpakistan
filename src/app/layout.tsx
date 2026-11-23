@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { cormorant, sourceSans } from "@/lib/fonts";
 import { SITE_DESCRIPTION, siteUrl } from "@/lib/site";
+import { socialMetadata } from "@/lib/seo";
 import { loadSiteSettings } from "@/content/site";
 import { loadHomepage } from "@/content/homepage";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -21,24 +22,14 @@ export async function generateMetadata(): Promise<Metadata> {
   description: site.seo.description || SITE_DESCRIPTION,
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/media/brand/archive-cross-mark.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
     ],
     shortcut: "/favicon.ico",
-    apple: "/media/brand/archive-cross-mark.svg",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
-  openGraph: {
-    title: homepage.site_title,
-    description: site.seo.description || SITE_DESCRIPTION,
-    siteName: homepage.site_title,
-    type: "website",
-    locale: "en",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: homepage.site_title,
-    description: site.seo.description || SITE_DESCRIPTION,
-  },
+  ...socialMetadata({ description: site.seo.description || SITE_DESCRIPTION, path: "/" }),
   robots: { index: true, follow: true },
   };
 }

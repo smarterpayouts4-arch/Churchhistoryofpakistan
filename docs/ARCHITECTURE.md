@@ -87,6 +87,12 @@ SEO pieces:
 - Videos: one 16:9 frame (`InterviewPlayCard`); portrait clips are contained and centred over the poster's blur. Nothing downloads before "play"; then `preload="metadata"`, `playsInline`, native controls. Bundled videos are H.264 High / AAC-LC MP4 with `+faststart` (`npm run media:normalize -- --videos`).
 - Admin uploads (`src/components/admin/normalizeMedia.ts`): photos are EXIF-rotated and capped at 3200 px on the long edge before upload, with a blur preview; videos get width/height/duration and a captured poster frame (stored as a library photo, `posterUrl`). Videos are not re-encoded in the browser.
 
+## Share previews & icons
+
+- **Share images:** static 1200×630 PNGs in `public/media/og/` (`og-default.png` plus one per key page, each under 200 KB). Title and emblem sit inside the centre 560 px so WhatsApp/iMessage square and small-thumbnail crops stay legible. `src/lib/seo.ts` (`socialMetadata`) adds absolute `og:image` / `twitter:image` URLs (from `NEXT_PUBLIC_SITE_URL`, else the Vercel production domain, else `https://churchhistoryofpakistan.vercel.app`) with width, height and alt, and `summary_large_image`.
+- **Icons:** `public/favicon.ico` (16/32/48), `public/icon.svg`, `public/apple-touch-icon.png` (180), `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`; `src/app/manifest.ts` serves `/manifest.webmanifest` (theme `#6d2227`, background `#f3e7cf`).
+- Messaging apps cache previews for days. After changing an image, use a new file name (or add `?v=2`) to force a refresh.
+
 ## Share Your Story (visitor stories) — `src/app/share-your-story/` (`/contribute` 308-redirects here), `src/lib/contributions/intake.ts`
 
 - The form shows when there is somewhere to keep submissions: the local store, KV, or `CONTRIBUTE_WEBHOOK_URL`.

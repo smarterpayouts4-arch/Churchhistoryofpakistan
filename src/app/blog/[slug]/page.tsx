@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MediaImage } from "@/components/ui/MediaImage";
@@ -21,14 +22,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      type: "article",
-      publishedTime: post.date,
-      authors: [post.author],
-      ...(post.coverSrc ? { images: [{ url: post.coverSrc, alt: post.coverAlt || post.title }] } : {}),
-    },
+    ...(() => {
+      const social = socialMetadata({
+        title: post.title,
+        description: post.excerpt,
+        path: `/blog/${post.slug}`,
+        type: "article",
+        image: post.coverSrc ? { url: post.coverSrc, alt: post.coverAlt || post.title } : "blog",
+      });
+      return {
+        ...social,
+        openGraph: { ...social.openGraph, type: "article" as const, publishedTime: post.date, authors: [post.author] },
+      };
+    })(),
   };
 }
 

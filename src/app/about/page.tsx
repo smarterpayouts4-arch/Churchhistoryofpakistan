@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { loadHomepage } from "@/content/homepage";
 import { loadCuratorProfile } from "@/content/curator-profile";
@@ -12,10 +13,13 @@ import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/MyConnection.module.css";
 
+const description =
+  "About History: Church of Pakistan and founder-curator Javed Qadir Bakhsh · public service, Church leadership, and preserving history for coming generations.";
+
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "About History: Church of Pakistan and founder-curator Javed Qadir Bakhsh · public service, Church leadership, and preserving history for coming generations.",
+  description,
+  ...socialMetadata({ title: "About", description, path: "/about", image: "about" }),
 };
 
 export default async function AboutPage() {

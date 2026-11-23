@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { Forthcoming } from "@/components/ui/Forthcoming";
 import { GalleryImage } from "@/components/ui/GalleryImage";
@@ -12,10 +13,13 @@ import homeStyles from "@/components/home/Interviews.module.css";
 import archiveStyles from "@/components/home/FamilyArchives.module.css";
 import { Lightbox } from "@/components/ui/Lightbox";
 
+const description =
+  "People records for History: Church of Pakistan. Biographies forthcoming.";
+
 export const metadata: Metadata = {
   title: "People",
-  description:
-    "People records for History: Church of Pakistan. Biographies forthcoming.",
+  description,
+  ...socialMetadata({ title: "People", description, path: "/people", image: "people" }),
 };
 
 export default async function PeoplePage() {

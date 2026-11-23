@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { loadSiteSettings } from "@/content/site";
 import { loadHomepage } from "@/content/homepage";
@@ -7,10 +8,13 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { CONTRIB_MAX_FILES, CONTRIB_MAX_TOTAL_BYTES, intakeStatus } from "@/lib/contributions/intake";
 import styles from "../pages.module.css";
 
+const description =
+  "Add your stories, memories and photographs to the History: Church of Pakistan archive. Every story is reviewed before it is published.";
+
 export const metadata: Metadata = {
   title: "Share Your Story",
-  description:
-    "Add your stories, memories and photographs to the History: Church of Pakistan archive. Every story is reviewed before it is published.",
+  description,
+  ...socialMetadata({ title: "Share Your Story", description, path: "/share-your-story", image: "share-your-story" }),
   alternates: { canonical: "/share-your-story" },
 };
 
