@@ -5,11 +5,20 @@ import { useState } from "react";
 import type { FeaturedInterview } from "@/lib/cms/types";
 import { ImageField } from "./ImageField";
 
-function videoDimensions(url: string): Promise<{ width: number; height: number } | null> {
+function videoDimensions(url: string): Promise<{ width: number; height: number; duration?: number } | null> {
   return new Promise((resolve) => {
     const v = document.createElement("video");
     v.preload = "metadata";
-    v.onloadedmetadata = () => resolve(v.videoWidth ? { width: v.videoWidth, height: v.videoHeight } : null);
+    v.onloadedmetadata = () =>
+      resolve(
+        v.videoWidth
+          ? {
+              width: v.videoWidth,
+              height: v.videoHeight,
+              duration: Number.isFinite(v.duration) ? Math.round(v.duration) : undefined,
+            }
+          : null,
+      );
     v.onerror = () => resolve(null);
     v.src = url;
   });
@@ -61,6 +70,10 @@ export function FeaturedInterviewsEditor({
             width: item.width,
             height: item.height,
             orientation: item.orientation,
+            speaker: item.speaker ?? "",
+            durationSeconds: item.durationSeconds ?? 0,
+            captionsSrc: item.captionsSrc ?? "",
+            transcript: item.transcript ?? "",
           }),
         },
       );
@@ -113,6 +126,32 @@ export function FeaturedInterviewsEditor({
               />
             </label>
             <label className={styles.label}>
+              Speaker (optional — only when confirmed)
+              <input
+                className={styles.input}
+                value={item.speaker ?? ""}
+                onChange={(e) => patchInterview(item.id, { speaker: e.target.value })}
+              />
+            </label>
+            <label className={styles.label}>
+              Transcript (optional — shown under the player)
+              <textarea
+                className={styles.textarea}
+                rows={5}
+                value={item.transcript ?? ""}
+                onChange={(e) => patchInterview(item.id, { transcript: e.target.value })}
+              />
+            </label>
+            <label className={styles.label}>
+              Captions file (optional, .vtt under /media/)
+              <input
+                className={styles.input}
+                placeholder="/media/archive/interviews/captions/example.vtt"
+                value={item.captionsSrc ?? ""}
+                onChange={(e) => patchInterview(item.id, { captionsSrc: e.target.value })}
+              />
+            </label>
+            <label className={styles.label}>
               Alt text
               <textarea
                 className={styles.textarea}
@@ -134,6 +173,7 @@ export function FeaturedInterviewsEditor({
                     width: dims.width,
                     height: dims.height,
                     orientation: dims.height > dims.width ? "portrait" : "landscape",
+                    ...(dims.duration ? { durationSeconds: dims.duration } : {}),
                   });
                 }
               }}

@@ -51,6 +51,14 @@ export type FeaturedInterview = {
   height: number;
   orientation: "portrait" | "landscape";
   featuredOnHome: boolean;
+  /** Who speaks in the video (only when confirmed; never guessed). */
+  speaker?: string;
+  /** Running time in seconds (shown on the card). */
+  durationSeconds?: number;
+  /** WebVTT captions file under /media/ (shown as a captions track). */
+  captionsSrc?: string;
+  /** Plain-text transcript shown under the player. */
+  transcript?: string;
 };
 
 export type FeaturedInterviewsFile = {

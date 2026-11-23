@@ -61,6 +61,16 @@ export const PUT = adminRoute(async (req: NextRequest, ctx: Ctx) => {
     if (parsed.data.coverPosition) next.coverPosition = parsed.data.coverPosition;
     else delete next.coverPosition;
   }
+  for (const key of ["speaker", "captionsSrc", "transcript"] as const) {
+    const value = parsed.data[key];
+    if (value === undefined) continue;
+    if (value.trim()) next[key] = value.trim();
+    else delete next[key];
+  }
+  if (parsed.data.durationSeconds !== undefined) {
+    if (parsed.data.durationSeconds > 0) next.durationSeconds = Math.round(parsed.data.durationSeconds);
+    else delete next.durationSeconds;
+  }
   if (parsed.data.coverSrc !== undefined) {
     if (parsed.data.coverSrc) next.coverSrc = parsed.data.coverSrc;
     else delete next.coverSrc;

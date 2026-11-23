@@ -1,34 +1,6 @@
 {
   "items": [
     {
-      "id": "rab-ki-khidmat-4",
-      "title": "Rab Ki Khidmat · 4th Motivational Program",
-      "copy": "RAB KI KHIDMAT 4th Motivational Programs for #YouthEmpowerment #History:Church of Pakistan",
-      "videoSrc": "/media/archive/interviews/youth/rab-ki-khidmat-4.mp4",
-      "posterSrc": "/media/archive/interviews/youth/rab-ki-khidmat-4-poster.jpg",
-      "alt": "Vertical youth motivational reel from Rab Ki Khidmat 4th Motivational Programs for Youth Empowerment, History: Church of Pakistan Facebook.",
-      "sourceUrl": "https://www.facebook.com/reel/1097067969383008/",
-      "provenance": "Youth motivational video · History: Church of Pakistan Facebook",
-      "width": 720,
-      "height": 1280,
-      "orientation": "portrait",
-      "featuredOnHome": true
-    },
-    {
-      "id": "youth-empowerment",
-      "title": "Motivational Programs for Youth",
-      "copy": "Motivational Programs for Youth #YouthEmpowerment #History:Church of Pakistan",
-      "videoSrc": "/media/archive/interviews/youth/youth-empowerment.mp4",
-      "posterSrc": "/media/archive/interviews/youth/youth-empowerment-poster.jpg",
-      "alt": "Youth motivational program video from History: Church of Pakistan Facebook, Motivational Programs for Youth.",
-      "sourceUrl": "https://www.facebook.com/reel/1463961448887570/",
-      "provenance": "Youth motivational video · History: Church of Pakistan Facebook",
-      "width": 576,
-      "height": 716,
-      "orientation": "portrait",
-      "featuredOnHome": true
-    },
-    {
       "id": "nahum-1-7",
       "title": "NAHUM 1:7 · Rab Ki Khidmat",
       "copy": "NAHUM 1:7 RAB KI KHIDMAT",
@@ -40,7 +12,8 @@
       "width": 1280,
       "height": 720,
       "orientation": "landscape",
-      "featuredOnHome": false
+      "featuredOnHome": true,
+      "durationSeconds": 267
     }
   ]
 }

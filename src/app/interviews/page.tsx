@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Forthcoming } from "@/components/ui/Forthcoming";
-import { InterviewPlayCard } from "@/components/home/InterviewPlayCard";
+import { InterviewCard } from "@/components/home/InterviewCard";
 import { loadFeaturedInterviews } from "@/content/featured-interviews";
 import { loadHomepage } from "@/content/homepage";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -37,43 +37,37 @@ export default async function InterviewsPage() {
           {site.pages.interviews_page.forthcoming_body}
         </Forthcoming>
 
-        <div className={homeStyles.interviewGrid} style={{ marginTop: "2rem" }}>
-          {featuredInterviews.map((item) => (
-            <article key={item.id} className={homeStyles.interviewCard}>
-              <InterviewPlayCard
+        {featuredInterviews.length ? (
+          <div
+            className={homeStyles.videoGrid}
+            data-count={featuredInterviews.length}
+            style={{ marginTop: "2.5rem" }}
+          >
+            {featuredInterviews.map((item) => (
+              <InterviewCard
+                key={item.id}
+                headingLevel="h2"
+                featured={featuredInterviews.length === 1}
+                eyebrow="Rab Ki Khidmat"
                 title={item.title}
+                description={item.copy}
+                speaker={item.speaker}
+                durationSeconds={item.durationSeconds}
                 videoSrc={item.videoSrc}
-                coverSrc={item.coverSrc}
-                coverPosition={item.coverPosition}
-                posterSrc={item.posterSrc}
+                posterSrc={item.coverSrc || item.posterSrc}
                 posterBlur={meta.get(item.coverSrc || item.posterSrc)?.blur}
+                coverPosition={item.coverPosition}
                 alt={item.alt}
                 width={item.width}
                 height={item.height}
+                sourceUrl={item.sourceUrl}
+                provenance={item.provenance}
+                captionsSrc={item.captionsSrc}
+                transcript={item.transcript}
               />
-              <p className="eyebrow">Rab Ki Khidmat</p>
-              <h2 style={{ fontSize: "1.2rem", color: "var(--color-ink)" }}>
-                {item.title}
-              </h2>
-              <p>{item.copy}</p>
-              <p
-                style={{
-                  margin: "0.65rem 0.55rem 0",
-                  fontSize: "0.75rem",
-                  color: "var(--color-muted-brown)",
-                }}
-              >
-                {item.provenance}
-                {" · "}
-                <a className="tapLink" href={item.sourceUrl} rel="noopener noreferrer" target="_blank">
-                  Source reel
-                </a>
-                {" · "}
-                {item.width}×{item.height}
-              </p>
-            </article>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : null}
 
         <nav className="linkRow" aria-label="Related pages">
           <Link href="/contribute">Suggest an interview subject</Link>

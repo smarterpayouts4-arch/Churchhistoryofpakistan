@@ -31,3 +31,19 @@ Removed cropped-cover overrides from the three remaining CMS entries, so their o
 `interviews-after.png` shows the final page. The four sample contact sheets document the inspected source frames.
 
 Full-file verification: all four original MP4s decoded from start to finish with FFmpeg, exit code 0 and no decoder errors. No file corruption was detected.
+
+## 2026-11-23 — interviews clean-up
+
+Each video was checked frame by frame (start, 25/50/75%, end), with audio level and
+line-angle (tilt) measurements:
+
+| Video | Verdict | Why |
+|---|---|---|
+| nahum-1-7 (1280×720, 4:27) | **Kept** | Tripod-steady, level framing (measured tilt ≈ 0°), clean intro card, ~3 s quiet lead-in and a silent ending. |
+| rab-ki-khidmat-4 (720×1280, 5:22) | Removed | Hand-held phone reel: framing swings and tilts (verticals measured up to ~9–15° off), letterboxed intro then full-frame, social-media captions burned in. |
+| youth-empowerment (576×716, 7:44) | Removed | Starts with speech already under way and ends mid-sentence (speech at full level in the final 1.5 s); 14 s of dead air near 0:57. |
+| prince-oneil-2 (720×900, 7:28) | Removed (was not on the site) | Same recording as youth-empowerment (audio matches at a 15 s offset); also cut off at both ends. |
+
+Removed files were moved, not deleted, to `media-originals/removed-from-site/interviews/youth/`
+(git-ignored). To bring one back, move it into `public/media/archive/interviews/youth/` and add
+its entry to `data/cms/featured-interviews.json`.

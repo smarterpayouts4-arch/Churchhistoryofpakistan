@@ -88,6 +88,10 @@ export const featuredInterviewSchema = z.object({
   height: z.number().int().positive(),
   orientation: z.enum(["portrait", "landscape"]),
   featuredOnHome: z.boolean(),
+  speaker: z.string().min(1).max(200).optional(),
+  durationSeconds: z.number().positive().max(86400).optional(),
+  captionsSrc: z.string().min(1).max(500).regex(/\.vtt$/i, "Captions must be a .vtt file").optional(),
+  transcript: z.string().min(1).max(100000).optional(),
 });
 
 const publicMediaPath = z
@@ -111,6 +115,13 @@ export const featuredInterviewPatchSchema = z.object({
   width: z.number().int().positive().optional(),
   height: z.number().int().positive().optional(),
   orientation: z.enum(["portrait", "landscape"]).optional(),
+  /** "" clears the optional fields below. */
+  speaker: z.string().max(200).optional(),
+  durationSeconds: z.number().nonnegative().max(86400).optional(),
+  captionsSrc: z
+    .union([z.literal(""), publicMediaPath.refine((v) => /\.vtt$/i.test(v), "Captions must be a .vtt file")])
+    .optional(),
+  transcript: z.string().max(100000).optional(),
 });
 
 export const curatorProfileSchema = z.object({

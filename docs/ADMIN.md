@@ -74,6 +74,10 @@ Then press the **Save** button for that section.
 
 All gallery tiles are the same shape, so the page looks even. Click the photo preview on the most important spot (usually a face) and the tile keeps that spot in view. For documents, plaques, lists and wide group photos tick **Show the whole photo (no cropping)**. Visitors who open a photo always see it complete and uncropped. Phone photos are straightened automatically and very large files are reduced before upload. Small photos saved from Facebook stay small; for sharper pictures, upload the original scan or camera file.
 
+### Interview videos
+
+Each video shows as a card with its poster, running time, title and description, and plays in a pop-up player (Esc closes it). In **Featured Interviews** you can also add the **speaker** (only when confirmed), a **transcript** (shown under the player) and a **captions file** (.vtt). The running time fills in automatically when you choose a video. Landscape (16:9) videos recorded on a tripod look best.
+
 ## Editing text
 
 Type into the boxes, then press **Save**. A small message at the bottom right confirms it saved. Changes show on the live site straight away.

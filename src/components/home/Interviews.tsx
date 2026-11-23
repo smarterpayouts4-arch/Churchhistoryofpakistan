@@ -2,13 +2,13 @@ import Link from "next/link";
 import { loadHomeFeaturedInterviews } from "@/content/featured-interviews";
 import { loadSiteSettings } from "@/content/site";
 import { loadMediaMeta } from "@/lib/media/meta";
-import { InterviewPlayCard } from "./InterviewPlayCard";
+import { InterviewCard } from "./InterviewCard";
 import styles from "./Interviews.module.css";
 
 /**
  * Featured Interviews = youth motivational videos (Rab Ki Khidmat / Youth Empowerment).
- * Every video sits in the same 16:9 frame; portrait clips are shown whole,
- * centred over a blurred copy of their poster (see InterviewPlayCard).
+ * Video cards (see InterviewCard): 16:9 poster, play button, running time,
+ * title and description; the video opens in an accessible modal player.
  */
 export async function Interviews() {
   const [homeFeaturedInterviews, site, meta] = await Promise.all([
@@ -30,26 +30,32 @@ export async function Interviews() {
             {copy.view_all_label} →
           </Link>
         </div>
-        <div className={styles.interviewGrid}>
-          {homeFeaturedInterviews.map((item) => (
-            <article key={item.id} className={styles.interviewCard}>
-              <InterviewPlayCard
+        {homeFeaturedInterviews.length ? (
+          <div className={styles.videoGrid} data-count={homeFeaturedInterviews.length}>
+            {homeFeaturedInterviews.map((item) => (
+              <InterviewCard
+                key={item.id}
+                featured={homeFeaturedInterviews.length === 1}
+                eyebrow="Rab Ki Khidmat"
                 title={item.title}
+                description={item.copy}
+                speaker={item.speaker}
+                durationSeconds={item.durationSeconds}
                 videoSrc={item.videoSrc}
-                coverSrc={item.coverSrc}
-                coverPosition={item.coverPosition}
-                posterSrc={item.posterSrc}
+                posterSrc={item.coverSrc || item.posterSrc}
                 posterBlur={meta.get(item.coverSrc || item.posterSrc)?.blur}
+                coverPosition={item.coverPosition}
                 alt={item.alt}
                 width={item.width}
                 height={item.height}
+                sourceUrl={item.sourceUrl}
+                provenance={item.provenance}
+                captionsSrc={item.captionsSrc}
+                transcript={item.transcript}
               />
-              <p className={styles.interviewMeta}>Rab Ki Khidmat</p>
-              <h3>{item.title}</h3>
-              <p>{item.copy}</p>
-            </article>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : null}
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>
           <strong>{copy.note_heading}</strong> {copy.note_body}
         </p>
