@@ -16,10 +16,6 @@ const versions: Record<string, string> = {};
 export function setDocVersions(map: Record<string, string>) {
   Object.assign(versions, map);
 }
-export function getDocVersion(doc: string) {
-  return versions[doc];
-}
-
 const ROUTE_DOCS: [RegExp, string][] = [
   [/^\/api\/admin\/homepage/, "homepage.json"],
   [/^\/api\/admin\/home-layout/, "home-layout.json"],

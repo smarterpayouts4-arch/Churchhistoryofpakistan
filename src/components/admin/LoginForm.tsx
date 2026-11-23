@@ -139,7 +139,7 @@ export function LoginForm({ previewOpen = false }: Props) {
               required
             />
           </label>
-          <label className={styles.hint} style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
+          <label className={`${styles.hint} ${styles.checkRow}`}>
             <input type="checkbox" checked={showPw} onChange={(e) => setShowPw(e.target.checked)} /> Show password
           </label>
           <button className={styles.primaryBtn} type="submit" disabled={pending}>

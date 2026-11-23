@@ -2,8 +2,7 @@ import Link from "next/link";
 import { loadHomeFeaturedInterviews } from "@/content/featured-interviews";
 import { loadSiteSettings } from "@/content/site";
 import { loadMediaMeta } from "@/lib/media/meta";
-import { InterviewCard } from "./InterviewCard";
-import styles from "./Interviews.module.css";
+import { InterviewGrid } from "./InterviewGrid";
 
 /**
  * Featured Interviews = youth motivational videos (Rab Ki Khidmat / Youth Empowerment).
@@ -30,32 +29,7 @@ export async function Interviews() {
             {copy.view_all_label} →
           </Link>
         </div>
-        {homeFeaturedInterviews.length ? (
-          <div className={styles.videoGrid} data-count={homeFeaturedInterviews.length}>
-            {homeFeaturedInterviews.map((item) => (
-              <InterviewCard
-                key={item.id}
-                featured={homeFeaturedInterviews.length === 1}
-                eyebrow="Rab Ki Khidmat"
-                title={item.title}
-                description={item.copy}
-                speaker={item.speaker}
-                durationSeconds={item.durationSeconds}
-                videoSrc={item.videoSrc}
-                posterSrc={item.coverSrc || item.posterSrc}
-                posterBlur={meta.get(item.coverSrc || item.posterSrc)?.blur}
-                coverPosition={item.coverPosition}
-                alt={item.alt}
-                width={item.width}
-                height={item.height}
-                sourceUrl={item.sourceUrl}
-                provenance={item.provenance}
-                captionsSrc={item.captionsSrc}
-                transcript={item.transcript}
-              />
-            ))}
-          </div>
-        ) : null}
+        <InterviewGrid items={homeFeaturedInterviews} meta={meta} />
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>
           <strong>{copy.note_heading}</strong> {copy.note_body}
         </p>

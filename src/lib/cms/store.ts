@@ -354,9 +354,6 @@ export const readCmsPublic = cache(async (filename: string): Promise<unknown> =>
   return readDoc(filename as DocName);
 });
 
-export function cmsDir(): string {
-  return CMS_DIR;
-}
 export function localStoreDir(): string {
   return LOCAL_DIR;
 }

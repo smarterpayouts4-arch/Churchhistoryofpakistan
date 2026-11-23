@@ -162,29 +162,6 @@ a:hover {
   color: var(--color-on-burgundy);
 }
 
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: 0.7rem 1.35rem;
-  border: var(--rule-width) solid var(--color-burgundy);
-  border-radius: var(--radius-sm);
-  background: var(--color-paper);
-  color: var(--color-burgundy);
-  font-family: var(--font-body);
-  font-size: var(--text-small);
-  font-weight: 600;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background: var(--color-parchment);
-}
-
 .sr-only {
   position: absolute;
   width: 1px;

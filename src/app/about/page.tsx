@@ -82,19 +82,9 @@ export default async function AboutPage() {
             ))}
           </div>
 
-          <article className={styles.card} style={{ marginTop: "1.5rem" }}>
-            <h3 style={{ marginTop: 0 }}>{p.education.title}</h3>
-            {p.education.body.map((para) => (
-              <p key={para.slice(0, 40)}>{para}</p>
-            ))}
-          </article>
+          <ProseCard title={p.education.title} body={p.education.body} marginTop="1.5rem" />
 
-          <article className={styles.card} style={{ marginTop: "1.25rem" }}>
-            <h3 style={{ marginTop: 0 }}>{p.publicService.title}</h3>
-            {p.publicService.body.map((para) => (
-              <p key={para.slice(0, 40)}>{para}</p>
-            ))}
-          </article>
+          <ProseCard title={p.publicService.title} body={p.publicService.body} marginTop="1.25rem" />
 
           <article className={styles.card} style={{ marginTop: "1.25rem" }}>
             <h3 style={{ marginTop: 0 }}>{p.churchService.title}</h3>
@@ -108,19 +98,9 @@ export default async function AboutPage() {
             </ul>
           </article>
 
-          <article className={styles.card} style={{ marginTop: "1.25rem" }}>
-            <h3 style={{ marginTop: 0 }}>{p.historyMission.title}</h3>
-            {p.historyMission.body.map((para) => (
-              <p key={para.slice(0, 40)}>{para}</p>
-            ))}
-          </article>
+          <ProseCard title={p.historyMission.title} body={p.historyMission.body} marginTop="1.25rem" />
 
-          <article className={styles.card} style={{ marginTop: "1.25rem" }}>
-            <h3 style={{ marginTop: 0 }}>{p.digitalWork.title}</h3>
-            {p.digitalWork.body.map((para) => (
-              <p key={para.slice(0, 40)}>{para}</p>
-            ))}
-          </article>
+          <ProseCard title={p.digitalWork.title} body={p.digitalWork.body} marginTop="1.25rem" />
 
           <article className={styles.card} style={{ marginTop: "1.25rem" }}>
             <h3 style={{ marginTop: 0 }}>{p.legacy.title}</h3>
@@ -166,5 +146,17 @@ export default async function AboutPage() {
         </ConnectionLayout>
       </div>
     </div>
+  );
+}
+
+/** A titled card of paragraphs (curator biography sections). */
+function ProseCard({ title, body, marginTop }: { title: string; body: string[]; marginTop: string }) {
+  return (
+    <article className={styles.card} style={{ marginTop }}>
+      <h3 style={{ marginTop: 0 }}>{title}</h3>
+      {body.map((para) => (
+        <p key={para.slice(0, 40)}>{para}</p>
+      ))}
+    </article>
   );
 }

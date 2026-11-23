@@ -10,14 +10,28 @@ import styles from "./Hero.module.css";
 export async function Hero() {
   const [{ hero, strapline }, records, site] = await Promise.all([loadHomepage(), loadFamilyArchiveHomePreview(1), loadSiteSettings()]);
   const featured = records[0];
+  // "History: Church of Pakistan" → italic "History:" over "Church of Pakistan".
+  // The colon stays part of the first line (it was being sliced away before).
   const colon = hero.title.indexOf(":");
+  const lead = colon > 0 ? hero.title.slice(0, colon).trim() : "";
+  const rest = colon > 0 ? hero.title.slice(colon + 1).trim() : hero.title;
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
       <div className={`shell ${styles.heroGrid}`}>
         <div className={styles.heroCopy}>
           <p className="eyebrow"><span className={styles.statusDot} />{hero.eyebrow}</p>
-          <h1 id="hero-title" className={styles.heroTitle} aria-label={hero.title}>
-            {colon > 0 ? <><span>{hero.title.slice(0, colon)}</span>{hero.title.slice(colon + 1).trim()}</> : hero.title}
+          <h1 id="hero-title" className={styles.heroTitle}>
+            {lead ? (
+              <>
+                <span className={styles.heroLead}>
+                  {lead}
+                  <span className={styles.heroColon}>:</span>
+                </span>{" "}
+                <span className={styles.heroRest}>{rest}</span>
+              </>
+            ) : (
+              rest
+            )}
           </h1>
           <p className={styles.lede}>{hero.purpose}</p>
           <div className={styles.actions}>

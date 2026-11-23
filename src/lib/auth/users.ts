@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { readDoc, writeDoc } from "@/lib/cms/store";
-import type { AdminRole, AdminUser, UsersFile } from "@/lib/cms/types";
+import type { AdminUser, UsersFile } from "@/lib/cms/types";
 import { isBcryptHash, verifyPassword, burnPasswordCheck } from "./password";
 
 /**
@@ -140,8 +140,4 @@ export async function touchLastLogin(userId: string) {
   const users = await getUsers();
   const now = new Date().toISOString();
   await saveUsers(users.map((u) => (u.id === userId ? { ...u, lastLoginAt: now } : u)));
-}
-
-export function roleAllows(role: AdminRole, needed: AdminRole) {
-  return needed === "editor" || role === "admin";
 }

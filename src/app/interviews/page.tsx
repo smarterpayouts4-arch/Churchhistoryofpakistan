@@ -2,14 +2,13 @@ import type { Metadata } from "next";
 import { socialMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { Forthcoming } from "@/components/ui/Forthcoming";
-import { InterviewCard } from "@/components/home/InterviewCard";
+import { InterviewGrid } from "@/components/home/InterviewGrid";
 import { loadFeaturedInterviews } from "@/content/featured-interviews";
 import { loadHomepage } from "@/content/homepage";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
 import { loadMediaMeta } from "@/lib/media/meta";
 import styles from "../pages.module.css";
-import homeStyles from "@/components/home/Interviews.module.css";
 
 const description =
   "Youth motivational programmes (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.";
@@ -41,37 +40,12 @@ export default async function InterviewsPage() {
           {site.pages.interviews_page.forthcoming_body}
         </Forthcoming>
 
-        {featuredInterviews.length ? (
-          <div
-            className={homeStyles.videoGrid}
-            data-count={featuredInterviews.length}
-            style={{ marginTop: "2.5rem" }}
-          >
-            {featuredInterviews.map((item) => (
-              <InterviewCard
-                key={item.id}
-                headingLevel="h2"
-                featured={featuredInterviews.length === 1}
-                eyebrow="Rab Ki Khidmat"
-                title={item.title}
-                description={item.copy}
-                speaker={item.speaker}
-                durationSeconds={item.durationSeconds}
-                videoSrc={item.videoSrc}
-                posterSrc={item.coverSrc || item.posterSrc}
-                posterBlur={meta.get(item.coverSrc || item.posterSrc)?.blur}
-                coverPosition={item.coverPosition}
-                alt={item.alt}
-                width={item.width}
-                height={item.height}
-                sourceUrl={item.sourceUrl}
-                provenance={item.provenance}
-                captionsSrc={item.captionsSrc}
-                transcript={item.transcript}
-              />
-            ))}
-          </div>
-        ) : null}
+        <InterviewGrid
+          items={featuredInterviews}
+          meta={meta}
+          headingLevel="h2"
+          style={{ marginTop: "2.5rem" }}
+        />
 
         <nav className="linkRow" aria-label="Related pages">
           <Link href="/share-your-story">Suggest an interview subject</Link>

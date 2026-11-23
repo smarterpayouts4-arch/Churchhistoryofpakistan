@@ -21,6 +21,7 @@
   color: var(--color-ink);
   text-decoration: none;
   flex-shrink: 0;
+  min-height: 44px;
 }
 
 .brand img {
@@ -55,6 +56,9 @@
 }
 
 .nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: .85rem;
   color: var(--color-ink);
   text-decoration: none;
@@ -129,7 +133,11 @@
     box-shadow: 0 16px 24px #29252210;
   }
 
+  /* Phone landscape: the sheet scrolls if it is taller than the screen. */
   .navOpen {
+    max-height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: .5rem 2rem;

@@ -58,11 +58,14 @@ async function prepareFile(file: File): Promise<File> {
   }
 }
 
+const STORY_MAX = 8000;
+
 export function ShareStoryForm({ contributionFields, attachments }: Props) {
   const [state, action, pending] = useActionState(submitStory, initial);
   const [files, setFiles] = useState<File[]>([]);
   const [preparing, setPreparing] = useState(false);
   const [fileError, setFileError] = useState("");
+  const [lengths, setLengths] = useState<Record<string, number>>({});
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -71,7 +74,10 @@ export function ShareStoryForm({ contributionFields, attachments }: Props) {
   const [seenState, setSeenState] = useState(state);
   if (seenState !== state) {
     setSeenState(state);
-    if (state.ok) setFiles([]);
+    if (state.ok) {
+      setFiles([]);
+      setLengths({});
+    }
   }
   useEffect(() => {
     if (state.ok) formRef.current?.reset();
@@ -129,7 +135,10 @@ export function ShareStoryForm({ contributionFields, attachments }: Props) {
           return (
             <div className={styles.field} key={label}>
               <label className={styles.checkboxLabel}>
-                <input type="checkbox" name={meta.name} required /> {label}
+                <input type="checkbox" name={meta.name} required />
+                <span>
+                  {label} <span className={styles.requiredMark}>(required)</span>
+                </span>
               </label>
             </div>
           );
@@ -138,7 +147,19 @@ export function ShareStoryForm({ contributionFields, attachments }: Props) {
           return (
             <div className={styles.field} key={label}>
               <label htmlFor={meta.name}>{label}</label>
-              <textarea id={meta.name} name={meta.name} maxLength={8000} />
+              <textarea
+                id={meta.name}
+                name={meta.name}
+                maxLength={STORY_MAX}
+                aria-describedby={`${meta.name}-count`}
+                onChange={(e) => {
+                  const n = e.target.value.length;
+                  setLengths((all) => ({ ...all, [meta.name]: n }));
+                }}
+              />
+              <span id={`${meta.name}-count`} className={`${styles.meta} ${styles.counter}`}>
+                {(lengths[meta.name] ?? 0).toLocaleString("en-GB")} / {STORY_MAX.toLocaleString("en-GB")} characters
+              </span>
             </div>
           );
         }

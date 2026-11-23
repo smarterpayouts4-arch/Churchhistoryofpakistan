@@ -76,8 +76,11 @@
 }
 
 .placeLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   margin-top: auto;
-  padding-top: 1.1rem;
+  padding-top: .6rem;
   text-decoration: none;
   font-size: .79rem;
   font-weight: 600;

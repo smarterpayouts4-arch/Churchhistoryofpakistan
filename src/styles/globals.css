@@ -94,11 +94,6 @@ section[id], article[id], h1[id], h2[id] {
   margin-bottom: 2.5rem;
 }
 
-.sectionHeadingCentered {
-  text-align: center;
-  max-width: 52rem;
-  margin: 0 auto 3rem;
-}
 
 .sectionHeadingSplit {
   display: flex;
@@ -150,11 +145,7 @@ section[id], article[id], h1[id], h2[id] {
   font-weight: 600;
 }
 
-.doubleRule, .ruleOrnament {
-  display: none;
-}
-
-.btn-primary, .btn-secondary {
+.btn-primary {
   min-height: 50px;
   padding: .85rem 1.35rem;
   border-radius: 0;
@@ -165,9 +156,6 @@ section[id], article[id], h1[id], h2[id] {
   transition: background .2s, color .2s;
 }
 
-.btn-secondary {
-  background: transparent;
-}
 
 :focus-visible {
   outline: 2px solid var(--color-burgundy);
@@ -266,7 +254,7 @@ section[id], article[id], h1[id], h2[id] {
 
 
 .forthcomingBody { margin-top: .75rem; }
-.tapLink { display: inline-flex; align-items: center; min-height: 44px; }
+.tapLink { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 
 @media (max-width: 760px) { .pageHeader { padding: 2.5rem 0 2rem; } .pageBody { padding: 2rem 0 3rem; } }
 

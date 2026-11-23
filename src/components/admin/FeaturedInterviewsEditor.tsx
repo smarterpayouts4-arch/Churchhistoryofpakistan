@@ -192,10 +192,7 @@ export function FeaturedInterviewsEditor({
               onChange={(url) => patchInterview(item.id, { coverSrc: url })}
               hint="Falls back to the poster photo."
             />
-            <label
-              className={styles.label}
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-            >
+            <label className={`${styles.label} ${styles.checkRow}`}>
               <input
                 type="checkbox"
                 checked={item.featuredOnHome}

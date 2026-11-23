@@ -38,10 +38,26 @@
   max-width: 640px;
 }
 
-.heroTitle > span {
+/* Italic burgundy "History:" on its own line. */
+.heroLead {
   display: block;
   font-style: italic;
   color: var(--color-burgundy);
+  letter-spacing: -.035em;
+  /* keep the italic "y" descender clear of the cap height below */
+  margin-bottom: .06em;
+}
+
+/* Colon in the same italic burgundy, nudged clear of the italic "y" overhang
+   (the tight negative tracking otherwise pulls it into the letter). */
+.heroColon {
+  letter-spacing: 0;
+  margin-left: .05em;
+}
+
+.heroRest {
+  display: block;
+  text-wrap: balance;
 }
 
 .lede {
@@ -199,6 +215,8 @@
 .heroBottom a {
   text-decoration: none;
   display: flex;
+  align-items: center;
+  min-height: 44px;
   gap: 1.8rem;
   white-space: nowrap;
 }
@@ -210,6 +228,23 @@
 
 }
 
+/* Tablets and phones: keep "Enter the Archive" and "Watch Interviews" on one
+   row (down to a 360px-wide phone) instead of wrapping into an uneven stack. */
+@media(max-width: 1050px) {
+  .actions {
+    gap: .75rem 1rem;
+  }
+
+  .actions :global(.btn-primary) {
+    gap: 1rem;
+    padding-inline: 1.1rem;
+  }
+
+  .textLink {
+    gap: .75rem;
+  }
+}
+
 @media(max-width: 760px) {
   .heroGrid {
     grid-template-columns: 1fr;
@@ -217,8 +252,10 @@
     padding-block: 3rem;
   }
 
+  /* Portrait phones keep the 3.5rem minimum; short landscape screens cap the
+     size by height so the heading never fills the whole viewport. */
   .heroTitle {
-    font-size: clamp(3.5rem, 12vw, 5rem);
+    font-size: clamp(2.75rem, min(max(3.5rem, 12vw), 15svh), 5rem);
     max-width: 32rem;
   }
 

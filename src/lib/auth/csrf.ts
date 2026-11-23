@@ -1,4 +1,4 @@
-import { randomBytes, timingSafeEqual } from "crypto";
+import { timingSafeEqual } from "crypto";
 import type { NextRequest } from "next/server";
 
 /**
@@ -10,10 +10,6 @@ import type { NextRequest } from "next/server";
  */
 export const CSRF_COOKIE = "hcop_csrf";
 export const CSRF_HEADER = "x-csrf-token";
-
-export function newCsrfToken() {
-  return randomBytes(24).toString("base64url");
-}
 
 function sameOrigin(req: NextRequest): boolean {
   const host = req.headers.get("x-forwarded-host") || req.headers.get("host");

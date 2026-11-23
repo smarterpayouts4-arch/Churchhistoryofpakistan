@@ -83,7 +83,7 @@ export function ImageField({
             </p>
           ) : null}
           {onFitChange && value && kind === "image" ? (
-            <label className={styles.hint} style={{ display: "flex", gap: "0.45rem", alignItems: "center", marginBottom: "0.45rem" }}>
+            <label className={`${styles.hint} ${styles.checkRow}`} style={{ marginBottom: "0.45rem" }}>
               <input
                 type="checkbox"
                 checked={fit === "contain"}

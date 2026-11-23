@@ -208,6 +208,11 @@
 .titleButton {
   all: unset;
   cursor: pointer;
+  /* 44px touch target without changing the card's rhythm. */
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: -7px;
 }
 
 .titleButton:hover {

@@ -16,8 +16,3 @@ export async function loadCathedralItems(): Promise<CathedralRecord[]> {
   const data = await loadCathedrals();
   return data.items;
 }
-
-export async function loadCathedralNote(): Promise<string> {
-  const data = await loadCathedrals();
-  return data.note;
-}

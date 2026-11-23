@@ -158,39 +158,48 @@
   gap: 3rem 2rem;
 }
 
-.extraGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.extraCard {
-  margin: 0;
-  background: var(--color-paper);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-frame);
-  overflow: hidden;
-}
-
-.extraCard .media {
-  margin-bottom: 0;
-  aspect-ratio: 4 / 3;
-}
-
-@media (max-width: 760px) {
-  .extraGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 /* PageHeader owns the top spacing on newer secondary routes. */
 .page:has(> :global(.pageHeader)) { padding-top: 0; padding-bottom: 0; }
 .submit { justify-self: start; min-height: 44px; }
+.counter { justify-self: end; font-variant-numeric: tabular-nums; }
+.requiredMark { color: var(--color-muted-brown); font-size: .85em; }
+
+/* Native file picker button, styled to match the form (44px target). */
+.field input[type="file"] {
+  min-height: 44px;
+  padding: .45rem .6rem;
+  cursor: pointer;
+}
+
+.field input[type="file"]::file-selector-button {
+  min-height: 36px;
+  margin-right: .85rem;
+  padding: 0 1rem;
+  border: 1px solid var(--color-burgundy);
+  background: transparent;
+  color: var(--color-burgundy);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.field input[type="file"]::file-selector-button:hover {
+  background: var(--color-burgundy);
+  color: var(--color-paper);
+}
 .noticeOk { border-color: var(--color-burgundy); }
 .noticeError { border-color: var(--color-deep-burgundy); }
 
 .urlList { overflow-wrap: anywhere; }
+
+/* Citation links in lists: 44px touch targets on touch screens. */
+@media (pointer: coarse) {
+  .urlList a,
+  .list strong a {
+    display: inline-block;
+    padding-block: .75rem;
+  }
+}
 
 /* —— Share Your Story: attachments —— */
 .field .fieldLabel {
@@ -226,7 +235,7 @@
 }
 
 .fileRemove {
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 .75rem;
   border: 1px solid var(--color-border);
   background: transparent;
