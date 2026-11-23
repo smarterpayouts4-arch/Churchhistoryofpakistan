@@ -11,12 +11,25 @@
   min-width: 0;
 }
 
+/* One frame shape for every video (portrait clips sit centred inside it). */
 .interviewMedia {
   width: 100%;
+  aspect-ratio: 16 / 9;
   margin: 0 0 1.5rem;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
   background: var(--color-letterbox);
+}
+
+.interviewBackdrop {
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  filter: blur(22px) saturate(.85) brightness(.55);
+  transform: scale(1.05);
 }
 
 .interviewCoverButton {
@@ -112,14 +125,13 @@
 
 .peopleMedia {
   position: relative;
+  overflow: hidden;
   aspect-ratio: 4 / 3;
   background: var(--color-parchment);
   margin-bottom: 1.2rem;
 }
 
-.peoplePhoto {
-  object-fit: contain;
-}
+/* .peoplePhoto: fit + focal point are set per photo by GalleryImage */
 
 @media(max-width: 980px) {
   .interviewGrid {

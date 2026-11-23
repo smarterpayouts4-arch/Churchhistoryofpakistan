@@ -29,6 +29,13 @@ export const familyArchiveReferenceSchema = z.object({
   note: z.string().max(2000).optional(),
 });
 
+/** CSS object-position, e.g. "50% 30%" (the admin focal point). */
+export const objectPosition = z
+  .string()
+  .regex(/^\d{1,3}(\.\d+)?% \d{1,3}(\.\d+)?%$/, "Focal point must look like 50% 30%");
+/** Gallery tile fit: "cover" fills the tile (cropped at the focal point), "contain" shows the whole photo. */
+export const imageFitSchema = z.enum(["cover", "contain"]);
+
 export const familyArchiveItemSchema = z.object({
   id: z.string().min(1).max(120),
   title: z.string().min(1).max(300),
@@ -42,6 +49,8 @@ export const familyArchiveItemSchema = z.object({
   verificationStatus: verificationStatusSchema,
   contextNote: z.string().max(8000).optional(),
   references: z.array(familyArchiveReferenceSchema).max(20).optional(),
+  imagePosition: objectPosition.optional(),
+  imageFit: imageFitSchema.optional(),
 });
 
 export const familyArchiveUpsertSchema = familyArchiveItemSchema.extend({
@@ -212,6 +221,8 @@ export const peopleFrameSchema = z.object({
   title: z.string().min(1).max(200),
   src: publicMediaPath,
   alt: z.string().min(1).max(1000),
+  position: objectPosition.optional(),
+  fit: imageFitSchema.optional(),
 });
 
 export const peopleFramesFileSchema = z.object({

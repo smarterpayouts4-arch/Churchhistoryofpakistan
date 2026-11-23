@@ -46,7 +46,8 @@
       "provenance": "Family Archive",
       "sourceLabel": "Facebook page History: Church of Pakistan",
       "sourceUrl": "https://www.facebook.com/photo/?fbid=122244188804258275&set=pb.61557748274698.-2207520000",
-      "verificationStatus": "needs-verification"
+      "verificationStatus": "needs-verification",
+      "imageFit": "contain"
     },
     {
       "id": "fb-gujranwala-seminary-memorial-tablet",
@@ -57,7 +58,8 @@
       "provenance": "Family Archive",
       "sourceLabel": "Facebook page History: Church of Pakistan",
       "sourceUrl": "https://www.facebook.com/photo/?fbid=122243490350258275&set=pb.61557748274698.-2207520000",
-      "verificationStatus": "needs-verification"
+      "verificationStatus": "needs-verification",
+      "imageFit": "contain"
     },
     {
       "id": "fb-urdu-church-honour-plaque",
@@ -68,7 +70,8 @@
       "provenance": "Family Archive",
       "sourceLabel": "Facebook page History: Church of Pakistan",
       "sourceUrl": "https://www.facebook.com/photo/?fbid=122244188846258275&set=pb.61557748274698.-2207520000",
-      "verificationStatus": "needs-verification"
+      "verificationStatus": "needs-verification",
+      "imageFit": "contain"
     },
     {
       "id": "fb-board-of-honour-central-church",
@@ -79,7 +82,8 @@
       "provenance": "Family Archive",
       "sourceLabel": "Facebook page History: Church of Pakistan",
       "sourceUrl": "https://www.facebook.com/p/History-Church-of-Pakistan-61557748274698/",
-      "verificationStatus": "facebook-caption"
+      "verificationStatus": "facebook-caption",
+      "imageFit": "contain"
     },
     {
       "id": "fb-bishop-johnston-qadir-bakhsh-35th-death-anniversary",
@@ -134,7 +138,8 @@
       "provenance": "Family Archive",
       "sourceLabel": "Facebook page History: Church of Pakistan",
       "sourceUrl": "https://www.facebook.com/p/History-Church-of-Pakistan-61557748274698/",
-      "verificationStatus": "needs-verification"
+      "verificationStatus": "needs-verification",
+      "imageFit": "contain"
     },
     {
       "id": "fb-district-superintendent-lahore-1-9",
@@ -156,7 +161,8 @@
       "provenance": "Family Archive",
       "sourceLabel": "Facebook page History: Church of Pakistan",
       "sourceUrl": "https://www.facebook.com/photo/?fbid=122243709470258275&set=pb.61557748274698.-2207520000",
-      "verificationStatus": "needs-verification"
+      "verificationStatus": "needs-verification",
+      "imageFit": "contain"
     },
     {
       "id": "fb-board-honour-pastors-10-16",
@@ -167,7 +173,8 @@
       "provenance": "Family Archive",
       "sourceLabel": "Facebook page History: Church of Pakistan",
       "sourceUrl": "https://www.facebook.com/p/History-Church-of-Pakistan-61557748274698/",
-      "verificationStatus": "facebook-caption"
+      "verificationStatus": "facebook-caption",
+      "imageFit": "contain"
     },
     {
       "id": "fb-founder-methodist-church-july-16",

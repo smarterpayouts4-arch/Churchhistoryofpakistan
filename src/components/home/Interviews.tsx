@@ -1,15 +1,21 @@
 import Link from "next/link";
 import { loadHomeFeaturedInterviews } from "@/content/featured-interviews";
 import { loadSiteSettings } from "@/content/site";
+import { loadMediaMeta } from "@/lib/media/meta";
 import { InterviewPlayCard } from "./InterviewPlayCard";
 import styles from "./Interviews.module.css";
 
 /**
  * Featured Interviews = youth motivational videos (Rab Ki Khidmat / Youth Empowerment).
- * Source proportions and contain sizing preserve the full preview and video.
+ * Every video sits in the same 16:9 frame; portrait clips are shown whole,
+ * centred over a blurred copy of their poster (see InterviewPlayCard).
  */
 export async function Interviews() {
-  const [homeFeaturedInterviews, site] = await Promise.all([loadHomeFeaturedInterviews(), loadSiteSettings()]);
+  const [homeFeaturedInterviews, site, meta] = await Promise.all([
+    loadHomeFeaturedInterviews(),
+    loadSiteSettings(),
+    loadMediaMeta(),
+  ]);
   const copy = site.home_sections.interviews;
 
   return (
@@ -33,6 +39,7 @@ export async function Interviews() {
                 coverSrc={item.coverSrc}
                 coverPosition={item.coverPosition}
                 posterSrc={item.posterSrc}
+                posterBlur={meta.get(item.coverSrc || item.posterSrc)?.blur}
                 alt={item.alt}
                 width={item.width}
                 height={item.height}

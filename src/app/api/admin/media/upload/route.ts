@@ -7,7 +7,7 @@ import { randomUUID } from "crypto";
 import { imageSize } from "image-size";
 import { adminRoute } from "@/lib/admin/route";
 import { addMediaItem, UPLOAD_PUBLIC_PREFIX } from "@/lib/media/library";
-import { kindForType, maxBytesFor, safeMediaFilename, formatBytes } from "@/lib/media/rules";
+import { BLUR_DATA_URL_RE, MAX_BLUR_DATA_URL, kindForType, maxBytesFor, safeMediaFilename, formatBytes } from "@/lib/media/rules";
 import type { MediaItem } from "@/lib/cms/types";
 
 export const runtime = "nodejs";
@@ -106,6 +106,19 @@ export const POST = adminRoute(async (req: NextRequest, _ctx, session) => {
 
   let width: number | undefined;
   let height: number | undefined;
+  // Measured in the browser (videos: frame size; photos fall back to the file header).
+  const dims = /^(\d{1,5})x(\d{1,5})$/.exec(req.headers.get("x-dimensions") || "");
+  if (dims) {
+    width = Number(dims[1]);
+    height = Number(dims[2]);
+  }
+  const blurRaw = req.headers.get("x-blur") || "";
+  const blurDataURL = blurRaw.length <= MAX_BLUR_DATA_URL && BLUR_DATA_URL_RE.test(blurRaw) ? blurRaw : undefined;
+  const posterRaw = decodeURIComponent(req.headers.get("x-poster-url") || "");
+  const posterUrl =
+    posterRaw.startsWith(`${UPLOAD_PUBLIC_PREFIX}/`) && !posterRaw.includes("..") ? posterRaw : undefined;
+  const durationRaw = Number(req.headers.get("x-duration") || NaN);
+  const duration = Number.isFinite(durationRaw) && durationRaw > 0 && durationRaw < 86400 ? durationRaw : undefined;
   if (kind === "image") {
     try {
       const dim = imageSize(await fs.readFile(full));
@@ -124,6 +137,9 @@ export const POST = adminRoute(async (req: NextRequest, _ctx, session) => {
     contentType: type,
     bytes,
     ...(width && height ? { width, height } : {}),
+    ...(blurDataURL ? { blurDataURL } : {}),
+    ...(posterUrl ? { posterUrl } : {}),
+    ...(duration ? { duration } : {}),
     alt,
     storage: "local",
     uploadedAt: new Date().toISOString(),

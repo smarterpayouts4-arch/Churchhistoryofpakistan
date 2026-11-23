@@ -87,7 +87,11 @@ export function PeopleFramesEditor({
               label="Photo"
               required
               value={frame.src}
-              onChange={(url) => patchFrame(frame.id, { src: url })}
+              onChange={(url) => patchFrame(frame.id, { src: url, position: undefined })}
+              position={frame.position}
+              onPositionChange={(position) => patchFrame(frame.id, { position })}
+              fit={frame.fit}
+              onFitChange={(fit) => patchFrame(frame.id, { fit })}
             />
           </article>
         ))}

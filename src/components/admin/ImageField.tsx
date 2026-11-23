@@ -17,6 +17,9 @@ type Props = {
   /** Optional focal point ("50% 20%"): click the preview to set it. */
   position?: string;
   onPositionChange?: (pos: string) => void;
+  /** Optional gallery fit: "contain" = show the whole photo in its tile (no cropping). */
+  fit?: "cover" | "contain";
+  onFitChange?: (fit: "cover" | "contain" | undefined) => void;
 };
 
 /**
@@ -32,6 +35,8 @@ export function ImageField({
   hint,
   position,
   onPositionChange,
+  fit,
+  onFitChange,
 }: Props) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -76,6 +81,16 @@ export function ImageField({
             <p className={styles.hint} style={{ marginBottom: "0.45rem" }}>
               Tip: click the preview on the most important spot (e.g. a face) to keep it in frame.
             </p>
+          ) : null}
+          {onFitChange && value && kind === "image" ? (
+            <label className={styles.hint} style={{ display: "flex", gap: "0.45rem", alignItems: "center", marginBottom: "0.45rem" }}>
+              <input
+                type="checkbox"
+                checked={fit === "contain"}
+                onChange={(e) => onFitChange(e.target.checked ? "contain" : undefined)}
+              />
+              Show the whole photo (no cropping) — best for documents, plaques and wide panoramas.
+            </label>
           ) : null}
           <div className={styles.rowActions}>
             <button type="button" className={styles.secondaryBtn} onClick={() => setOpen(true)}>

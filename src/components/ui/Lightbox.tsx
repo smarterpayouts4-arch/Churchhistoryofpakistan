@@ -10,6 +10,8 @@ export type LightboxPhoto = {
   title: string;
   caption?: string;
   meta?: string;
+  /** Blur placeholder from the media manifest. */
+  blur?: string;
 };
 
 /**
@@ -104,7 +106,7 @@ export function Lightbox({ group, photos }: { group: string; photos: LightboxPho
             }}
           >
             <div className={styles.frame} key={photo.src}>
-              <MediaImage src={photo.src} alt={photo.alt} fill sizes="100vw" />
+              <MediaImage src={photo.src} alt={photo.alt} fill sizes="100vw" blurDataURL={photo.blur} />
             </div>
             <figcaption className={styles.caption}>
               <strong>{photo.title}</strong>

@@ -80,6 +80,13 @@ SEO pieces:
 - Limits: photos 30 MB, videos 1 GB. HEIC is rejected with instructions.
 - Every image field uses `ImageField` → `MediaPicker` → `MediaLibrary`. Nobody types URLs. Optional focal points are stored as CSS `object-position`, and cropping saves a new file.
 
+## Gallery & video presentation
+
+- Every gallery tile has a fixed shape (archive 4:5, churches and people 4:3) set with CSS `aspect-ratio`. `src/components/ui/GalleryImage.tsx` fills it with `object-fit: cover` around the item's focal point (`imagePosition` / `position`). When cover would hide more than ~30% of a photo (panoramas, tall scans) or the admin ticked "Show the whole photo" (`imageFit`/`fit: "contain"`), the whole photo is shown centred over a blurred copy of itself. The lightbox always shows the full, uncropped photo.
+- `next/image`: AVIF then WebP, `quality` 80 (`images.qualities` in `next.config.ts`), `sizes` matched to each grid, blur placeholders from `src/lib/media/media-meta.json` (bundled media) or the media index (uploads) via `src/lib/media/meta.ts`.
+- Videos: one 16:9 frame (`InterviewPlayCard`); portrait clips are contained and centred over the poster's blur. Nothing downloads before "play"; then `preload="metadata"`, `playsInline`, native controls. Bundled videos are H.264 High / AAC-LC MP4 with `+faststart` (`npm run media:normalize -- --videos`).
+- Admin uploads (`src/components/admin/normalizeMedia.ts`): photos are EXIF-rotated and capped at 3200 px on the long edge before upload, with a blur preview; videos get width/height/duration and a captured poster frame (stored as a library photo, `posterUrl`). Videos are not re-encoded in the browser.
+
 ## Contributions — `src/app/contribute/`, `src/lib/contributions/intake.ts`
 
 - The form shows when there is somewhere to keep submissions: the local store, KV, or `CONTRIBUTE_WEBHOOK_URL`.

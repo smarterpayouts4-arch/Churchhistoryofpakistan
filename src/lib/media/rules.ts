@@ -52,3 +52,7 @@ export function isImageUrl(url: string) {
 export function isVideoUrl(url: string) {
   return /\.(mp4|webm|mov)(\?|$)/i.test(url);
 }
+
+/** A tiny base64 blur preview made in the browser (kept small: ≤ 3 KB). */
+export const BLUR_DATA_URL_RE = /^data:image\/(webp|jpeg|png);base64,[A-Za-z0-9+/]+={0,2}$/;
+export const MAX_BLUR_DATA_URL = 3000;

@@ -19,6 +19,8 @@ type ArchiveFormState = {
   verificationStatus: "facebook-caption" | "needs-verification";
   contextNote: string;
   references: { label: string; url: string; note: string }[];
+  imagePosition?: string;
+  imageFit?: "cover" | "contain";
 };
 
 const emptyArchiveForm: ArchiveFormState = {
@@ -88,6 +90,8 @@ export function FamilyArchivesEditor({
       dateLabel: item.dateLabel || "",
       verificationStatus: item.verificationStatus,
       contextNote: item.contextNote || "",
+      imagePosition: item.imagePosition,
+      imageFit: item.imageFit,
       references: (item.references ?? []).map((r) => ({
         label: r.label,
         url: r.url,
@@ -156,6 +160,8 @@ export function FamilyArchivesEditor({
         dateLabel: form.dateLabel,
         verificationStatus: form.verificationStatus,
         contextNote: form.contextNote.trim() || undefined,
+        imagePosition: form.imagePosition || undefined,
+        imageFit: form.imageFit || undefined,
         ...(includeReferences ? { references } : {}),
       };
       const url = editingId
@@ -341,8 +347,13 @@ export function FamilyArchivesEditor({
             required
             value={form.imageSrc}
             onChange={(url, entry) =>
-              setForm((f) => ({ ...f, imageSrc: url, ...(entry?.alt && !f.alt ? { alt: entry.alt } : {}) }))
+              setForm((f) => ({ ...f, imageSrc: url, imagePosition: undefined, ...(entry?.alt && !f.alt ? { alt: entry.alt } : {}) }))
             }
+            hint="Gallery tiles are all the same shape (4:5). Click the preview on the key spot (a face) to choose what stays in frame; visitors always see the full photo when they open it."
+            position={form.imagePosition}
+            onPositionChange={(imagePosition) => setForm((f) => ({ ...f, imagePosition }))}
+            fit={form.imageFit}
+            onFitChange={(imageFit) => setForm((f) => ({ ...f, imageFit }))}
           />
           <label className={styles.label}>
             Verification

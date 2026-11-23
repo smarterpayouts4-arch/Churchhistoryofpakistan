@@ -3,10 +3,20 @@
 import { csrfToken } from "./adminFetch";
 import type { MediaItem } from "@/lib/cms/types";
 import { formatBytes, kindForType, maxBytesFor, safeMediaFilename } from "@/lib/media/rules";
+import { prepareImage, prepareVideo } from "./normalizeMedia";
 
 export type UploadProgress = (fraction: number) => void;
 
 export type StorageInfo = { blob: boolean; hosted: boolean };
+
+/** Extra facts measured in the browser and stored with the library item. */
+type Extra = {
+  width?: number;
+  height?: number;
+  blurDataURL?: string;
+  posterUrl?: string;
+  duration?: number;
+};
 
 /** Read pixel size in the browser so Blob uploads carry width/height too. */
 function imageDimensions(file: File): Promise<{ width: number; height: number } | null> {
@@ -41,7 +51,7 @@ export function checkFile(file: File): string | null {
   return null;
 }
 
-function localUpload(file: File, alt: string, onProgress?: UploadProgress): Promise<MediaItem> {
+function localUpload(file: File, alt: string, extra: Extra, onProgress?: UploadProgress): Promise<MediaItem> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/admin/media/upload");
@@ -49,6 +59,10 @@ function localUpload(file: File, alt: string, onProgress?: UploadProgress): Prom
     xhr.setRequestHeader("x-filename", encodeURIComponent(file.name));
     xhr.setRequestHeader("x-alt", encodeURIComponent(alt));
     xhr.setRequestHeader("x-csrf-token", csrfToken());
+    if (extra.blurDataURL) xhr.setRequestHeader("x-blur", extra.blurDataURL);
+    if (extra.posterUrl) xhr.setRequestHeader("x-poster-url", encodeURIComponent(extra.posterUrl));
+    if (extra.duration) xhr.setRequestHeader("x-duration", String(extra.duration));
+    if (extra.width && extra.height) xhr.setRequestHeader("x-dimensions", `${extra.width}x${extra.height}`);
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) onProgress?.(e.loaded / e.total);
     };
@@ -67,9 +81,14 @@ function localUpload(file: File, alt: string, onProgress?: UploadProgress): Prom
   });
 }
 
-async function blobUpload(file: File, alt: string, onProgress?: UploadProgress): Promise<MediaItem> {
+async function blobUpload(file: File, alt: string, extra: Extra, onProgress?: UploadProgress): Promise<MediaItem> {
   const { upload } = await import("@vercel/blob/client");
-  const dims = file.type.startsWith("image/") ? await imageDimensions(file) : null;
+  const dims =
+    extra.width && extra.height
+      ? { width: extra.width, height: extra.height }
+      : file.type.startsWith("image/")
+        ? await imageDimensions(file)
+        : null;
   const pathname = `uploads/${new Date().getFullYear()}/${safeMediaFilename(file.name, file.type)}`;
   const blob = await upload(pathname, file, {
     access: "public",
@@ -87,6 +106,9 @@ async function blobUpload(file: File, alt: string, onProgress?: UploadProgress):
       contentType: file.type,
       bytes: file.size,
       ...(dims ?? {}),
+      ...(extra.blurDataURL ? { blurDataURL: extra.blurDataURL } : {}),
+      ...(extra.posterUrl ? { posterUrl: extra.posterUrl } : {}),
+      ...(extra.duration ? { duration: extra.duration } : {}),
       alt,
     }),
   });
@@ -95,19 +117,57 @@ async function blobUpload(file: File, alt: string, onProgress?: UploadProgress):
   return body.item;
 }
 
-/** Upload one file to the right place (Vercel Blob when connected, else this computer). */
-export function uploadMedia(
-  file: File,
+function send(file: File, storage: StorageInfo, alt: string, extra: Extra, onProgress?: UploadProgress) {
+  return storage.blob ? blobUpload(file, alt, extra, onProgress) : localUpload(file, alt, extra, onProgress);
+}
+
+/**
+ * Upload one file to the right place (Vercel Blob when connected, else this
+ * computer). Photos are straightened (EXIF) and capped at a web-friendly
+ * size first; videos get a poster frame (added to the library as a photo).
+ */
+export async function uploadMedia(
+  original: File,
   storage: StorageInfo,
   opts: { alt?: string; onProgress?: UploadProgress } = {},
 ): Promise<MediaItem> {
-  const problem = checkFile(file);
-  if (problem) return Promise.reject(new Error(problem));
-  if (storage.blob) return blobUpload(file, opts.alt ?? "", opts.onProgress);
-  if (storage.hosted) {
-    return Promise.reject(
-      new Error("Uploads are switched off: photo storage (Vercel Blob) is not connected on the live site yet."),
-    );
+  const problem = checkFile(original);
+  if (problem) throw new Error(problem);
+  if (!storage.blob && storage.hosted) {
+    throw new Error("Uploads are switched off: photo storage (Vercel Blob) is not connected on the live site yet.");
   }
-  return localUpload(file, opts.alt ?? "", opts.onProgress);
+  const alt = opts.alt ?? "";
+  if (original.type.startsWith("image/")) {
+    const prepared = await prepareImage(original);
+    const { file, ...extra } = prepared;
+    return send(file, storage, alt, extra, opts.onProgress);
+  }
+  const video = await prepareVideo(original);
+  let posterUrl: string | undefined;
+  if (video.poster) {
+    try {
+      const poster = await send(
+        video.poster,
+        storage,
+        alt ? `Poster frame: ${alt}` : "",
+        { width: undefined, height: undefined, blurDataURL: video.posterBlur },
+      );
+      posterUrl = poster.url;
+    } catch {
+      /* the video still uploads without a poster */
+    }
+  }
+  return send(
+    original,
+    storage,
+    alt,
+    {
+      width: video.width,
+      height: video.height,
+      duration: video.duration,
+      posterUrl,
+      blurDataURL: video.posterBlur,
+    },
+    opts.onProgress,
+  );
 }

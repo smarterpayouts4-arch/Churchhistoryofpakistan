@@ -49,3 +49,6 @@ next-env.d.ts
 /data/local-store/
 *.tmp
 /docs/AUDIT_REPORT.md
+
+# Untouched copies of media replaced by npm run media:normalize (never delete)
+/media-originals/

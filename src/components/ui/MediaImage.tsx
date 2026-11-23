@@ -11,7 +11,14 @@ type MediaImageProps = {
   fill?: boolean;
   unoptimized?: boolean;
   style?: React.CSSProperties;
+  /** Tiny base64 preview (from the media manifest) shown while loading. */
+  blurDataURL?: string;
+  /** next/image quality; must be listed in images.qualities (next.config.ts). */
+  quality?: number;
 };
+
+/** Site-wide photo quality: visually lossless for archival scans at AVIF/WebP sizes. */
+export const PHOTO_QUALITY = 80;
 
 function isSvg(src: string) {
   return src.toLowerCase().endsWith(".svg");
@@ -28,7 +35,10 @@ export function MediaImage({
   fill,
   unoptimized,
   style,
+  blurDataURL,
+  quality = PHOTO_QUALITY,
 }: MediaImageProps) {
+  const blur = blurDataURL ? { placeholder: "blur" as const, blurDataURL } : {};
   if (isSvg(src)) {
     if (fill) {
       return (
@@ -72,6 +82,8 @@ export function MediaImage({
         fetchPriority={priority ? "high" : undefined}
         unoptimized={unoptimized}
         sizes={sizes ?? "100vw"}
+        quality={quality}
+        {...blur}
         style={{ objectFit: "contain", ...style }}
       />
     );
@@ -88,6 +100,8 @@ export function MediaImage({
       fetchPriority={priority ? "high" : undefined}
       unoptimized={unoptimized}
       sizes={sizes}
+      quality={quality}
+      {...blur}
       style={style}
     />
   );

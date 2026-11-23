@@ -18,9 +18,7 @@
   overflow: hidden;
 }
 
-.placeMedia img {
-  object-fit: contain;
-}
+/* .placeMedia img: fit + focal point are set per photo by GalleryImage */
 
 .rightsBadge {
   position: absolute;

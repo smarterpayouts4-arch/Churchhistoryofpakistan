@@ -21,7 +21,13 @@ export type FamilyArchiveItem = {
   contextNote?: string;
   /** Linked public-record sources for contextNote (not Facebook provenance). */
   references?: FamilyArchiveReference[];
+  /** Focal point for the gallery tile crop (CSS object-position). */
+  imagePosition?: string;
+  /** "contain" shows the whole photo in its tile (documents, panoramas). Default: automatic. */
+  imageFit?: ImageFit;
 };
+
+export type ImageFit = "cover" | "contain";
 
 export type FamilyArchivesFile = {
   note: string;
@@ -56,6 +62,8 @@ export type PeopleFrame = {
   title: string;
   src: string;
   alt: string;
+  position?: string;
+  fit?: ImageFit;
 };
 
 export type PeopleFramesFile = {
@@ -301,6 +309,11 @@ export type MediaItem = {
   bytes: number;
   width?: number;
   height?: number;
+  /** Tiny base64 preview shown while the full photo loads. */
+  blurDataURL?: string;
+  /** Videos: poster frame (a library photo) and length in seconds. */
+  posterUrl?: string;
+  duration?: number;
   alt: string;
   storage: "local" | "vercel-blob";
   uploadedAt: string;

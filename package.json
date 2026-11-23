@@ -2,7 +2,7 @@
   "name": "history-church-of-pakistan",
   "version": "0.1.0",
   "private": true,
-  "description": "History: Church of Pakistan \u2014 local digital heritage archive (Design #1 Archival Heritage)",
+  "description": "History: Church of Pakistan — local digital heritage archive (Design #1 Archival Heritage)",
   "engines": {
     "node": ">=20"
   },
@@ -18,7 +18,8 @@
     "admin:hash-password": "node scripts/hash-password.mjs",
     "storage:seed": "node scripts/seed-storage.mjs",
     "storage:check": "node scripts/storage-check.mjs",
-    "cms:export": "node scripts/cms-export.mjs"
+    "cms:export": "node scripts/cms-export.mjs",
+    "media:normalize": "node scripts/media-normalize.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.9.0",
@@ -40,6 +41,7 @@
     "@types/sanitize-html": "^2.16.2",
     "eslint": "^9.17.0",
     "eslint-config-next": "16.4.6",
+    "sharp": "^0.35.5",
     "typescript": "^5.7.0"
   },
   "pnpm": {

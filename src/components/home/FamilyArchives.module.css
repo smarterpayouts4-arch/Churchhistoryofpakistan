@@ -15,17 +15,14 @@
 }
 
 .archiveFrame {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 5;
   position: relative;
   overflow: hidden;
   margin-bottom: 1.25rem;
   background: var(--color-parchment);
 }
 
-.archivePhoto {
-  object-fit: contain;
-  object-position: center;
-}
+/* fit + focal point are set per photo by GalleryImage */
 
 .archiveOverlay {
   position: absolute;

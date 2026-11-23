@@ -61,7 +61,7 @@ export default async function BlogArticlePage({ params }: Props) {
               <div className={blog.grid}>
                 {related.map((r) => (
                   <Link key={r.id} href={`/blog/${r.slug}`} className={blog.card}>
-                    {r.coverSrc ? <div className={blog.media}><MediaImage src={r.coverSrc} alt={r.coverAlt || r.title} fill sizes="(max-width: 640px) 50vw, 400px" style={{ objectFit: "cover" }} /></div> : null}
+                    {r.coverSrc ? <div className={blog.media}><MediaImage src={r.coverSrc} alt={r.coverAlt || r.title} fill sizes="(max-width: 640px) calc(100vw - 2.5rem), 400px" style={{ objectFit: "cover" }} /></div> : null}
                     <div className={blog.cardBody}>
                       <p className={blog.meta}>{formatDate(r.date)}</p>
                       <h3 className={blog.cardTitle}>{r.title}</h3>

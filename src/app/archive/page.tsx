@@ -7,6 +7,7 @@ import {
 import { loadHomepage } from "@/content/homepage";
 import { ArchiveCard } from "@/components/ui/ArchiveCard";
 import { Lightbox } from "@/components/ui/Lightbox";
+import { loadMediaMeta } from "@/lib/media/meta";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
@@ -19,11 +20,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ArchivePage() {
-  const [familyArchiveItems, FAMILY_ARCHIVE_NOTE, homepage, site] = await Promise.all([
+  const [familyArchiveItems, FAMILY_ARCHIVE_NOTE, homepage, site, meta] = await Promise.all([
     loadFamilyArchiveItems(),
     loadFamilyArchiveNote(),
     loadHomepage(),
     loadSiteSettings(),
+    loadMediaMeta(),
   ]);
 
   return (
@@ -73,6 +75,7 @@ export default async function ArchivePage() {
             title: item.title,
             caption: item.caption,
             meta: [item.dateLabel, item.provenance].filter(Boolean).join(" · "),
+            blur: meta.get(item.imageSrc)?.blur,
           }))}
         />
 

@@ -43,7 +43,12 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: "12mb" },
   },
   images: {
-    formats: ["image/webp", "image/avif"],
+    // AVIF first (smallest at equal quality), WebP fallback.
+    formats: ["image/avif", "image/webp"],
+    // Allowed quality values: 80 for photos (MediaImage default), 75 for admin thumbnails.
+    qualities: [75, 80],
+    // Optimised variants are content-hashed by URL; keep them for 31 days.
+    minimumCacheTTL: 2678400,
     remotePatterns: [
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],

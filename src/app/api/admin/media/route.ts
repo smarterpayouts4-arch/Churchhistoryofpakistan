@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 import { z } from "zod";
 import { adminRoute, readJsonBody } from "@/lib/admin/route";
 import { addMediaItem, BLOB_HOST_RE, listLibrary } from "@/lib/media/library";
-import { kindForType, maxBytesFor } from "@/lib/media/rules";
+import { BLUR_DATA_URL_RE, MAX_BLUR_DATA_URL, kindForType, maxBytesFor } from "@/lib/media/rules";
 import { storageStatus } from "@/lib/cms/store";
 import type { MediaItem } from "@/lib/cms/types";
 
@@ -22,6 +22,9 @@ const registerSchema = z.object({
   bytes: z.number().int().nonnegative(),
   width: z.number().int().positive().optional(),
   height: z.number().int().positive().optional(),
+  blurDataURL: z.string().max(MAX_BLUR_DATA_URL).regex(BLUR_DATA_URL_RE).optional(),
+  posterUrl: z.string().regex(BLOB_HOST_RE).optional(),
+  duration: z.number().nonnegative().max(86400).optional(),
   alt: z.string().max(1000).default(""),
 });
 

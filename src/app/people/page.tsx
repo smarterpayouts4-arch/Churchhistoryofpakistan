@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Forthcoming } from "@/components/ui/Forthcoming";
-import { MediaImage } from "@/components/ui/MediaImage";
+import { GalleryImage } from "@/components/ui/GalleryImage";
+import { loadMediaMeta } from "@/lib/media/meta";
 import { loadHomepage } from "@/content/homepage";
 import { loadPeopleFrames } from "@/content/people-frames";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -18,10 +19,11 @@ export const metadata: Metadata = {
 };
 
 export default async function PeoplePage() {
-  const [frames, homepage, site] = await Promise.all([
+  const [frames, homepage, site, meta] = await Promise.all([
     loadPeopleFrames(),
     loadHomepage(),
     loadSiteSettings(),
+    loadMediaMeta(),
   ]);
   const copy = site.pages.people;
 
@@ -40,13 +42,13 @@ export default async function PeoplePage() {
           {frames.map((frame, i) => (
             <article key={frame.id} className={homeStyles.interviewCard}>
               <div className={homeStyles.peopleMedia}>
-                <MediaImage
+                <GalleryImage
                   src={frame.src}
                   alt={frame.alt}
-                  fill
-                  style={{ objectFit: "contain", objectPosition: "center" }}
-                  className={homeStyles.peoplePhoto}
-                  sizes="(max-width: 640px) 50vw, (max-width: 1100px) 50vw, 400px"
+                  ratio={4 / 3}
+                  position={frame.position}
+                  fit={frame.fit}
+                  sizes="(max-width: 600px) calc(100vw - 2.5rem), (max-width: 980px) 46vw, 420px"
                 />
                 <button type="button" className={archiveStyles.enlarge} data-lightbox-open={`people:${i}`}>
                   <span className="sr-only">View larger photo: {frame.title}</span>
@@ -65,7 +67,7 @@ export default async function PeoplePage() {
 
         <Lightbox
           group="people"
-          photos={frames.map((frame) => ({ src: frame.src, alt: frame.alt, title: frame.title }))}
+          photos={frames.map((frame) => ({ src: frame.src, alt: frame.alt, title: frame.title, blur: meta.get(frame.src)?.blur }))}
         />
 
         <nav className="linkRow" aria-label="Related pages">

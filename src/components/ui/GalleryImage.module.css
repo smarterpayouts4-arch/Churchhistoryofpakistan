@@ -1,0 +1,14 @@
+/* Blurred copy of the photo behind a "contain" image, so every tile is full. */
+.backdrop {
+  position: absolute;
+  inset: -12%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px) saturate(.9) brightness(.92);
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.photo {
+  z-index: 0;
+}

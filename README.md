@@ -33,6 +33,7 @@ Open http://localhost:5000, and http://localhost:5000/admin/login for the admin.
 | `npm run admin:hash-password` | Make a bcrypt hash for `ADMIN_PASSWORD_HASH` |
 | `npm run storage:check` | Show which storage the current environment uses (names only) |
 | `npm run storage:seed` | Copy `data/cms/*.json` into Vercel KV (fills empty keys; `-- --force` overwrites) |
+| `npm run media:normalize` | Straighten/resize photos, refresh blur previews + sizes (`src/lib/media/media-meta.json`), trim black bars off video posters. `-- --videos` also re-encodes videos to web MP4 (needs ffmpeg). Originals are copied to `media-originals/` (git-ignored, never deleted). `-- --dry-run` to preview |
 | `npm run cms:export` | Download content edited online (KV) back into `data/cms/` so it can be committed |
 | `npm run audit:site` | Link and content presence audit (needs a running server) |
 

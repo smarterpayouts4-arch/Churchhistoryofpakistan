@@ -5,14 +5,16 @@ import {
 } from "@/content/family-archives";
 import { ArchiveCard } from "@/components/ui/ArchiveCard";
 import { Lightbox } from "@/components/ui/Lightbox";
+import { loadMediaMeta } from "@/lib/media/meta";
 import { loadSiteSettings } from "@/content/site";
 import styles from "./FamilyArchives.module.css";
 
 export async function FamilyArchives() {
-  const [familyArchiveHomePreview, FAMILY_ARCHIVE_NOTE, site] = await Promise.all([
+  const [familyArchiveHomePreview, FAMILY_ARCHIVE_NOTE, site, meta] = await Promise.all([
     loadFamilyArchiveHomePreview(4),
     loadFamilyArchiveNote(),
     loadSiteSettings(),
+    loadMediaMeta(),
   ]);
   const copy = site.home_sections.archives;
 
@@ -30,7 +32,7 @@ export async function FamilyArchives() {
         </div>
         <div className={styles.archiveGrid}>
           {familyArchiveHomePreview.map((item, i) => (
-            <ArchiveCard key={item.id} item={item} lightbox={`home-archive:${i}`}>
+            <ArchiveCard key={item.id} item={item} lightbox={`home-archive:${i}`} sizes="(max-width: 600px) calc(100vw - 2.5rem), (max-width: 1100px) 46vw, 310px">
               <span className={styles.provenance}>{item.provenance}</span>
               {item.dateLabel ? (
                 <span className={styles.archiveDate}>{item.dateLabel}</span>
@@ -47,6 +49,7 @@ export async function FamilyArchives() {
             title: item.title,
             caption: item.caption,
             meta: [item.dateLabel, item.provenance].filter(Boolean).join(" · "),
+            blur: meta.get(item.imageSrc)?.blur,
           }))}
         />
         <p className="forthcoming" style={{ marginTop: "1.5rem" }}>

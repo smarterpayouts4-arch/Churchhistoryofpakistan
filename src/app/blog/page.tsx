@@ -53,7 +53,7 @@ export default async function BlogIndexPage() {
             {rest.map((post) => (
               <Link key={post.id} href={`/blog/${post.slug}`} className={blog.card}>
                 {post.coverSrc ? (
-                  <div className={blog.media}><MediaImage src={post.coverSrc} alt={post.coverAlt || post.title} fill sizes="(max-width: 640px) 50vw, 400px" style={{ objectFit: "cover" }} /></div>
+                  <div className={blog.media}><MediaImage src={post.coverSrc} alt={post.coverAlt || post.title} fill sizes="(max-width: 640px) calc(100vw - 2.5rem), 400px" style={{ objectFit: "cover" }} /></div>
                 ) : null}
                 <div className={blog.cardBody}>
                   <p className={blog.meta}>{post.author} · {formatDate(post.date)}</p>

@@ -6,6 +6,7 @@ import { loadFeaturedInterviews } from "@/content/featured-interviews";
 import { loadHomepage } from "@/content/homepage";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
+import { loadMediaMeta } from "@/lib/media/meta";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Interviews.module.css";
 
@@ -16,10 +17,11 @@ export const metadata: Metadata = {
 };
 
 export default async function InterviewsPage() {
-  const [featuredInterviews, homepage, site] = await Promise.all([
+  const [featuredInterviews, homepage, site, meta] = await Promise.all([
     loadFeaturedInterviews(),
     loadHomepage(),
     loadSiteSettings(),
+    loadMediaMeta(),
   ]);
 
   return (
@@ -44,6 +46,7 @@ export default async function InterviewsPage() {
                 coverSrc={item.coverSrc}
                 coverPosition={item.coverPosition}
                 posterSrc={item.posterSrc}
+                posterBlur={meta.get(item.coverSrc || item.posterSrc)?.blur}
                 alt={item.alt}
                 width={item.width}
                 height={item.height}

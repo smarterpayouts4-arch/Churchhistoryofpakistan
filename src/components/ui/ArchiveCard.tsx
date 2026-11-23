@@ -1,30 +1,37 @@
 import type { ReactNode } from "react";
 import type { FamilyArchiveItem } from "@/lib/cms/types";
-import { MediaImage } from "@/components/ui/MediaImage";
+import { GalleryImage } from "@/components/ui/GalleryImage";
 import { ArchivePublicRecord } from "@/components/ui/ArchivePublicRecord";
 import styles from "@/components/home/FamilyArchives.module.css";
 
-export function ArchiveCard({
+/** Tile shape for every archive photo (4:5 suits this mostly-portrait collection). */
+export const ARCHIVE_TILE_RATIO = 4 / 5;
+
+export async function ArchiveCard({
   item,
   titleTag: Title = "h3",
   children,
   lightbox,
+  sizes = "(max-width: 600px) calc(100vw - 2.5rem), (max-width: 1100px) 46vw, 420px",
 }: {
   item: FamilyArchiveItem;
   titleTag?: "h2" | "h3";
   children?: ReactNode;
   /** "<group>:<index>" — makes the photo open in the matching <Lightbox>. */
   lightbox?: string;
+  /** next/image sizes for the grid this card sits in. */
+  sizes?: string;
 }) {
   return (
     <article id={Title === "h2" ? item.id : undefined} className={styles.archiveCard}>
       <div className={styles.archiveFrame}>
-        <MediaImage
+        <GalleryImage
           src={item.imageSrc}
           alt={item.alt}
-          fill
-          style={{ objectFit: "contain", objectPosition: "center" }}
-          sizes="(max-width: 640px) 50vw, (max-width: 1100px) 50vw, 400px"
+          ratio={ARCHIVE_TILE_RATIO}
+          sizes={sizes}
+          position={item.imagePosition}
+          fit={item.imageFit}
           className={styles.archivePhoto}
         />
         <div className={styles.archiveOverlay} aria-hidden="true">
