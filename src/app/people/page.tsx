@@ -60,7 +60,7 @@ export default async function PeoplePage() {
                 </button>
               </div>
               <p className="eyebrow">{copy.card_eyebrow}</p>
-              <h2 style={{ fontSize: "1.15rem", color: "var(--color-ink)" }}>
+              <h2 style={{ fontSize: "1.3rem", color: "var(--color-ink)" }}>
                 {frame.title}
               </h2>
               <p>{copy.card_note}</p>

@@ -30,7 +30,7 @@
   background: var(--color-paper);
   color: var(--color-ink);
   padding: .25rem .5rem;
-  font-size: .58rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: .035em;
   text-transform: uppercase;
@@ -49,12 +49,12 @@
 }
 
 .placeCopy :global(.eyebrow) {
-  font-size: .64rem;
+  font-size: 1rem;
   margin-bottom: .7rem;
 }
 
 .placeCopy h2, .placeCopy h3 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 500;
   color: var(--color-ink);
   margin: 0 0 .65rem;
@@ -63,7 +63,7 @@
 
 .placeCopy p {
   color: var(--color-muted-brown);
-  font-size: .86rem;
+  font-size: 1rem;
   margin: .3rem 0;
 }
 
@@ -72,7 +72,7 @@
 }
 
 .address {
-  font-size: .77rem !important;
+  font-size: 1.125rem !important;
 }
 
 .placeLink {
@@ -82,7 +82,7 @@
   margin-top: auto;
   padding-top: .6rem;
   text-decoration: none;
-  font-size: .79rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -95,7 +95,7 @@
   border-left: 2px solid var(--color-antique-gold);
   padding: .3rem 0 .3rem 1rem;
   color: var(--color-muted-brown);
-  font-size: .8rem;
+  font-size: 1.125rem;
 }
 
 @media(max-width: 1100px) {

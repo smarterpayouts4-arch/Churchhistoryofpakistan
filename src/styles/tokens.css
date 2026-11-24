@@ -50,13 +50,13 @@
   --text-display: clamp(3.5rem, 6.4vw, 6.5rem);
   --text-h1: clamp(2.3rem, 3.7vw, 3.75rem);
   --text-h2: clamp(1.9rem, 3vw, 2.75rem);
-  --text-h3: 1.5rem;
-  --text-body: 1.0625rem;
-  --text-small: 0.875rem;
-  --text-label: 0.75rem;
+  --text-h3: 1.625rem;
+  --text-body: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem); /* 18px phones -> 20px desktop (senior readers) */
+  --text-small: 1rem; /* never below 16px */
+  --text-label: 1rem;
 
   --leading-display: 1.15;
-  --leading-body: 1.65;
+  --leading-body: 1.6;
   --tracking-display: 0.01em;
   --tracking-label: 0.08em;
 
@@ -99,6 +99,11 @@ body {
   line-height: var(--leading-body);
   background: var(--color-parchment);
   color: var(--color-ink);
+}
+
+/* Browser default for <small> is ~13px; keep fine print readable for older visitors. */
+small {
+  font-size: max(1rem, .875em);
 }
 
 h1,
@@ -183,7 +188,7 @@ a:hover {
  --gilt: var(--color-antique-gold); --gilt-ink: var(--color-burgundy); --gilt-hover: var(--color-border);
  --mist: var(--color-parchment); --emerald-950-rgb: 79 23 27; --emerald-900-rgb: 79 23 27; --emerald-800-rgb: 109 34 39;
  --gilt-rgb: 175 139 88; --mist-rgb: 243 231 207; --ivory-rgb: 251 245 233; --paper-rgb: 251 245 233; --oxblood-rgb: 109 34 39;
- --radius-pill: 4px; --radius-lg: 4px; --text-lead: 1.15rem; --text-hero: var(--text-display);
+ --radius-pill: 4px; --radius-lg: 4px; --text-lead: clamp(1.25rem, 1.15rem + 0.4vw, 1.4rem); --text-hero: var(--text-display);
  --font-display-italic: var(--font-display); --leading-heading: 1.15;
  --ease-out: cubic-bezier(.22,1,.36,1); --dur-fast: 160ms; --dur-med: 320ms;
  --shadow-sm: var(--shadow-frame); --shadow-card: var(--shadow-frame); --shadow-lift: var(--shadow-frame);

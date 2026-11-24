@@ -35,14 +35,14 @@
   display: block;
   background: var(--color-paper);
   color: var(--color-ink);
-  font-size: .58rem;
+  font-size: 1rem;
   letter-spacing: .08em;
   text-transform: uppercase;
   padding: .3rem .55rem;
 }
 
 .archiveCard h2, .archiveCard h3 {
-  font-size: 1.45rem;
+  font-size: 1.55rem;
   color: var(--color-ink);
   font-weight: 600;
   letter-spacing: -.02em;
@@ -51,7 +51,7 @@
 }
 
 .archiveCaption {
-  font-size: .86rem;
+  font-size: 1.125rem;
   color: var(--color-muted-brown);
   margin: 0 0 1rem;
   line-height: 1.7;
@@ -66,7 +66,7 @@
 
 .provenance, .archiveDate, .archiveStatus {
   display: inline-block;
-  font-size: .64rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: .06em;
   padding: .3rem .5rem;
@@ -88,7 +88,7 @@
 }
 
 .archiveSource {
-  font-size: .75rem;
+  font-size: 1.125rem;
   color: var(--color-muted-brown);
   overflow-wrap: anywhere;
 }
@@ -101,7 +101,7 @@
   min-height: 44px;
   margin-top: 1rem;
   padding-top: .35rem;
-  font-size: .8rem;
+  font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
 }
@@ -119,7 +119,7 @@
 
 .archivePublicRecordLabel {
   margin: 0 0 .5rem;
-  font-size: .7rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: .08em;
   font-weight: 700;
@@ -128,7 +128,7 @@
 
 .archivePublicRecordNote {
   margin: 0 0 .75rem;
-  font-size: .85rem;
+  font-size: 1.125rem;
   line-height: 1.65;
   color: var(--color-ink);
 }
@@ -139,7 +139,7 @@
   margin: 0;
   display: grid;
   gap: .5rem;
-  font-size: .78rem;
+  font-size: 1rem;
   overflow-wrap: anywhere;
 }
 
@@ -165,7 +165,7 @@
   }
 
   .archiveCard h2, .archiveCard h3 {
-    font-size: 1.65rem;
+    font-size: 1.8rem;
   }
 
 }
@@ -201,7 +201,7 @@
   right: .7rem;
   background: var(--color-ink);
   color: var(--color-paper);
-  font-size: .6rem;
+  font-size: 1rem;
   letter-spacing: .1em;
   text-transform: uppercase;
   padding: .35rem .6rem;

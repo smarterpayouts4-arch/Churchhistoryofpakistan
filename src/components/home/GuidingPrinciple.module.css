@@ -20,7 +20,7 @@
 
 .guidingNote {
   color: var(--color-muted-brown);
-  font-size: .95rem;
+  font-size: 1.125rem;
   max-width: 42rem;
   margin: 1.7rem auto 0;
   line-height: 1.8;

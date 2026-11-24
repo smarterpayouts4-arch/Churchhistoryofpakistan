@@ -22,7 +22,7 @@
 .sidebarGroup {
   margin: var(--space-3) 0 0.2rem;
   padding: 0 0.6rem;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -80,7 +80,7 @@
   background: transparent;
   color: var(--color-muted-brown);
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -103,7 +103,7 @@
   border-radius: 999px;
   background: var(--color-antique-gold);
   color: var(--color-ink);
-  font-size: 0.72rem;
+  font-size: 1rem;
   font-weight: 800;
   text-align: center;
 }
@@ -183,7 +183,7 @@
 
 .banner strong,
 .bannerInfo strong {
-  font-size: 0.95rem;
+  font-size: 1.0625rem;
 }
 
 /* ---------- Toasts ---------- */
@@ -232,7 +232,7 @@
   border: 0;
   background: transparent;
   color: var(--color-muted-brown);
-  font-size: 1.1rem;
+  font-size: 1.225rem;
   line-height: 1;
   cursor: pointer;
 }
@@ -323,7 +323,7 @@
   border-radius: 999px;
   background: var(--color-parchment);
   color: var(--color-ink);
-  font-size: 1.1rem;
+  font-size: 1.225rem;
   cursor: pointer;
 }
 
@@ -364,7 +364,7 @@
 .dropzone strong,
 .dropzoneActive strong {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   color: var(--color-burgundy);
 }
 
@@ -465,7 +465,7 @@
   display: grid;
   gap: 0.1rem;
   padding: 0.45rem 0.55rem 0.55rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .mediaLabel strong {
@@ -486,7 +486,7 @@
   padding: 0.1rem 0.45rem;
   background: rgb(20 14 10 / 0.75);
   color: #fff;
-  font-size: 0.68rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -499,7 +499,7 @@
   padding: 0.1rem 0.45rem;
   background: var(--color-antique-gold);
   color: var(--color-ink);
-  font-size: 0.68rem;
+  font-size: 1rem;
   font-weight: 800;
 }
 
@@ -622,7 +622,7 @@
   place-items: center;
   height: 100%;
   color: var(--color-muted-brown);
-  font-size: 0.8rem;
+  font-size: 1rem;
   text-align: center;
 }
 
@@ -651,7 +651,7 @@
 .fieldName {
   margin: 0 0 0.45rem;
   overflow-wrap: anywhere;
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--color-muted-brown);
 }
 
@@ -710,7 +710,7 @@
 .grip {
   cursor: grab;
   color: var(--color-muted-brown);
-  font-size: 1.2rem;
+  font-size: 1.325rem;
   user-select: none;
 }
 
@@ -762,7 +762,7 @@
   padding: 0.1rem 0.55rem;
   border-radius: 999px;
   background: var(--color-parchment-deep);
-  font-size: 0.72rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -779,7 +779,7 @@
   padding: 0.8rem;
   background: var(--color-parchment);
   border: 1px solid var(--color-border);
-  font-size: 0.78rem;
+  font-size: 1rem;
   white-space: pre-wrap;
 }
 
@@ -794,7 +794,7 @@
   display: grid;
   gap: 0.25rem;
   width: 8rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .attachGrid img {

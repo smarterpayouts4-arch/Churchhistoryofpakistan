@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.05rem;
+  font-size: 1.125rem;
 }
 
 .publishText span {
@@ -119,7 +119,7 @@
 .publishBtn {
   min-height: 52px;
   padding-inline: 1.4rem;
-  font-size: 1.05rem;
+  font-size: 1.125rem;
 }
 
 .publishBtn:hover:not(:disabled),
@@ -151,7 +151,7 @@
 .iconBtn {
   width: 48px;
   padding: 0;
-  font-size: 1.15rem;
+  font-size: 1.275rem;
 }
 
 .iconBtn:disabled {
@@ -246,7 +246,7 @@
 }
 
 .tabText strong {
-  font-size: 0.98rem;
+  font-size: 1.0625rem;
   line-height: 1.25;
 }
 
@@ -263,7 +263,7 @@
   border-radius: 999px;
   background: var(--color-antique-gold);
   color: var(--color-ink);
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.03em;
 }
@@ -290,13 +290,13 @@
 .panelTitle {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 1.9rem;
 }
 
 .where {
   margin: 0.2rem 0 0;
   color: var(--color-muted-brown);
-  font-size: var(--text-small);
+  font-size: 1.125rem;
 }
 
 .where a {
@@ -316,7 +316,7 @@
 
 .count strong {
   font-family: var(--font-display);
-  font-size: 1.9rem;
+  font-size: 2.05rem;
   line-height: 1;
   color: var(--color-ink);
 }
@@ -409,7 +409,7 @@
 .draftMeta {
   margin: 0;
   color: var(--color-muted-brown);
-  font-size: var(--text-small);
+  font-size: 1.125rem;
 }
 
 .empty {
@@ -574,7 +574,7 @@
   background: rgb(28 24 20 / 0.78);
   color: #fff;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
 .status {
@@ -584,7 +584,7 @@
   border-radius: 999px;
   background: var(--color-antique-gold);
   color: var(--color-ink);
-  font-size: 0.72rem;
+  font-size: 1rem;
   font-weight: 800;
 }
 
@@ -595,7 +595,7 @@
   border-radius: var(--radius-sm);
   background: rgb(28 24 20 / 0.8);
   color: #fff;
-  font-size: 0.78rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -640,7 +640,7 @@
   background: #fff;
   color: var(--color-ink);
   font: inherit;
-  font-size: 1rem;
+  font-size: 1.125rem;
 }
 
 .textarea {
@@ -698,7 +698,7 @@
 .dialog h3 {
   margin: 0 0 0.5rem;
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 1.75rem;
 }
 
 .dialog p {
@@ -742,7 +742,7 @@
   .ghostBtn {
     min-height: 48px;
     padding-inline: 0.8rem;
-    font-size: 1rem;
+    font-size: 1.125rem;
     white-space: nowrap;
   }
   .wide {

@@ -63,7 +63,7 @@
 .lede {
   max-width: 29rem;
   color: var(--color-muted-brown);
-  font-size: 1.08rem;
+  font-size: 1.125rem;
   line-height: 1.8;
   margin: 1.75rem 0;
 }
@@ -77,7 +77,7 @@
 }
 
 .textLink {
-  font-size: .9rem;
+  font-size: 1.0625rem;
   font-weight: 600;
   text-decoration: none;
   display: inline-flex;
@@ -112,12 +112,12 @@
 }
 
 .curator small {
-  font-size: .7rem;
+  font-size: 1rem;
   color: var(--color-muted-brown);
 }
 
 .curator strong {
-  font-size: .82rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -130,7 +130,7 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  font-size: .62rem;
+  font-size: 1rem;
   letter-spacing: .13em;
   text-transform: uppercase;
   margin-bottom: .85rem;
@@ -176,13 +176,13 @@
 
 .caption strong {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.275rem;
   font-weight: 600;
   line-height: 1.25;
 }
 
 .caption span {
-  font-size: .69rem;
+  font-size: 1rem;
   color: var(--color-muted-brown);
 }
 
@@ -204,7 +204,7 @@
   gap: 2rem;
   border-top: 1px solid var(--color-border);
   padding-block: 1.4rem;
-  font-size: .73rem;
+  font-size: 1rem;
   color: var(--color-muted-brown);
 }
 
@@ -285,14 +285,14 @@
 .bandFrame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--color-letterbox); }
 .bandSlide { position: absolute; inset: 0; transition: opacity 1.2s ease; }
 .bandImg { filter: saturate(.94); }
-.bandCaption { position: absolute; inset: auto 0 0; margin: 0; padding: 2.5rem 1rem .8rem; background: linear-gradient(transparent, #1c1814e6); color: var(--color-paper); font-size: .85rem; }
+.bandCaption { position: absolute; inset: auto 0 0; margin: 0; padding: 2.5rem 1rem .8rem; background: linear-gradient(transparent, #1c1814e6); color: var(--color-paper); font-size: 1.125rem; }
 .bandDots { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }
 .bandDotBtn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; }
 .bandDot, .bandDotActive { display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--color-border); }
 .bandDotActive { width: 22px; border-radius: 8px; background: var(--color-burgundy); }
 .bandStepper { display: inline-flex; align-items: center; gap: .25rem; }
-.bandStepBtn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--color-border); border-radius: 50%; background: transparent; color: var(--color-burgundy); font-size: 1.35rem; line-height: 1; cursor: pointer; }
+.bandStepBtn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--color-border); border-radius: 50%; background: transparent; color: var(--color-burgundy); font-size: 1.45rem; line-height: 1; cursor: pointer; }
 .bandStepBtn:hover { border-color: var(--color-burgundy); }
-.bandCount { min-width: 4.5rem; text-align: center; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--color-muted-brown); }
-.rotationButton { min-height: 44px; border: 0; background: transparent; color: var(--color-burgundy); font-size: .8rem; cursor: pointer; }
+.bandCount { min-width: 4.5rem; text-align: center; font-size: 1rem; font-variant-numeric: tabular-nums; color: var(--color-muted-brown); }
+.rotationButton { min-height: 44px; border: 0; background: transparent; color: var(--color-burgundy); font-size: 1rem; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .bandSlide { transition: none; } }

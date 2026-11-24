@@ -21,7 +21,7 @@
   color: var(--color-ink);
   text-decoration: none;
   flex-shrink: 0;
-  min-height: 44px;
+  min-height: 48px;
 }
 
 .brand img {
@@ -36,34 +36,42 @@
 
 .brandStrong {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -.025em;
   line-height: 1.15;
 }
 
 .brandSmall {
-  font-size: .63rem;
+  font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: .17em;
+  letter-spacing: .08em;
+  line-height: 1.2;
   color: var(--color-muted-brown);
 }
 
+/* —— Desktop: links in one row —— */
 .nav {
   display: flex;
   align-items: center;
-  gap: clamp(.85rem, 1.65vw, 1.6rem);
+  gap: clamp(.9rem, 1.4vw, 1.5rem);
+}
+
+.drawerHead,
+.backdrop {
+  display: none;
 }
 
 .nav a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  font-size: .85rem;
+  min-height: 48px;
+  font-size: 1.0625rem;
   color: var(--color-ink);
   text-decoration: none;
   padding: .65rem 0;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav a[aria-current="page"] {
@@ -84,88 +92,252 @@
   color: var(--color-burgundy);
 }
 
-.nav a:last-child {
+.nav a.cta {
   border: 1px solid var(--color-burgundy);
   color: var(--color-burgundy);
   padding: .65rem 1rem;
 }
 
-.nav a:last-child:hover {
+.nav a.cta:hover {
   background: var(--color-burgundy);
   color: var(--color-paper);
 }
 
-.menuButton {
+.nav a.cta[aria-current="page"]::after {
   display: none;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  padding: .55rem .8rem;
-  color: var(--color-ink);
-  min-height: 44px;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
-@media(max-width: 1050px) {
+/* Admin: deliberately quiet, last item. */
+.nav a.admin {
+  color: var(--color-muted-brown);
+  font-size: 1rem;
+  padding-left: clamp(.9rem, 1.4vw, 1.5rem);
+  border-left: 1px solid var(--color-border);
+}
+
+.nav a.admin:hover,
+.nav a.admin[aria-current="page"] {
+  color: var(--color-burgundy);
+}
+
+.nav a.admin[aria-current="page"]::after {
+  left: clamp(.9rem, 1.4vw, 1.5rem);
+}
+
+.menuButton {
+  display: none;
+  align-items: center;
+  gap: .6rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: .6rem .9rem;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  min-height: 48px;
+  min-width: 48px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.menuButton:hover {
+  border-color: var(--color-burgundy);
+  color: var(--color-burgundy);
+}
+
+.burger {
+  display: grid;
+  gap: 4px;
+  width: 20px;
+}
+
+.burger span {
+  display: block;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+/* —— Phones & tablets: slide-in drawer from the right —— */
+@media (max-width: 1180px) {
   .inner {
     min-height: 80px;
     gap: 1rem;
   }
 
   .brandStrong {
-    font-size: 1.15rem;
+    font-size: 1.3rem;
   }
 
   .menuButton {
+    display: inline-flex;
+  }
+
+  .backdrop {
     display: block;
-    cursor: pointer;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgb(28 24 20 / .55);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility 0s linear .25s;
+  }
+
+  .backdropOpen {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .25s ease, visibility 0s;
   }
 
   .nav {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
+    position: fixed;
+    top: 0;
     right: 0;
+    bottom: 0;
+    z-index: 201;
+    width: min(22rem, 86vw);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0 1.25rem 2rem;
     background: var(--color-paper);
-    padding: 1.5rem var(--gutter) 2rem;
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 16px 24px #29252210;
-  }
-
-  /* Phone landscape: the sheet scrolls if it is taller than the screen. */
-  .navOpen {
-    max-height: calc(100dvh - 100%);
+    border-left: 1px solid var(--color-border);
+    box-shadow: -16px 0 40px rgb(41 37 34 / .18);
     overflow-y: auto;
     overscroll-behavior: contain;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .5rem 2rem;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1), visibility 0s linear .3s;
+  }
+
+  .navOpen {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1), visibility 0s;
+  }
+
+  .drawerHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80px;
+    margin-bottom: .5rem;
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    background: var(--color-paper);
+  }
+
+  .drawerTitle {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-burgundy);
+  }
+
+  .closeButton {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 48px;
+    min-width: 48px;
+    padding: .5rem .9rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .closeButton > span:first-child {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .closeButton:hover {
+    border-color: var(--color-burgundy);
+    color: var(--color-burgundy);
   }
 
   .nav a {
-    padding: .8rem 0;
+    min-height: 56px;
+    padding: .75rem .25rem;
+    font-size: 1.25rem;
+    border-bottom: 1px solid rgb(205 187 156 / .55);
   }
 
+  .nav a[aria-current="page"] {
+    font-weight: 600;
+  }
+
+  .nav a[aria-current="page"]::after {
+    top: .9rem;
+    bottom: .9rem;
+    left: -1.25rem;
+    right: auto;
+    width: 4px;
+    height: auto;
+  }
+
+  .nav a.cta {
+    justify-content: center;
+    margin-top: 1.25rem;
+    border: 1px solid var(--color-burgundy);
+    background: var(--color-burgundy);
+    color: var(--color-paper);
+    font-weight: 600;
+  }
+
+  .nav a.cta:hover {
+    background: var(--color-deep-burgundy);
+  }
+
+  .nav a.admin {
+    margin-top: auto;
+    padding-left: .25rem;
+    border-left: 0;
+    border-bottom: 0;
+    border-top: 1px solid var(--color-border);
+    font-size: 1.0625rem;
+  }
+
+  .nav a.cta {
+    margin-bottom: 1.5rem;
+  }
+
+  .nav a.admin[aria-current="page"]::after {
+    left: -1.25rem;
+  }
 }
 
-@media(max-width: 380px) {
+@media (max-width: 480px) {
   .brand img {
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
   }
 
   .brandStrong {
-    font-size: 1rem;
-    max-width: 130px;
+    font-size: 1.15rem;
   }
 
+  /* The tagline is decorative; on narrow phones it is dropped rather than shrunk below 16px. */
   .brandSmall {
-    font-size: .47rem;
+    display: none;
   }
 
   .brand {
     gap: .5rem;
+    min-width: 0;
+    flex-shrink: 1;
   }
 
   .inner {
@@ -173,7 +345,16 @@
   }
 
   .menuButton {
-    padding-inline: .6rem;
+    padding-inline: .7rem;
   }
+}
 
+@media (max-width: 360px) {
+  .menuLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
 }

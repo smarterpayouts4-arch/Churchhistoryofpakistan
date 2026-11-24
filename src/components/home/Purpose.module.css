@@ -25,7 +25,7 @@
 
 .introduction > p:not(:first-child) {
   color: var(--color-muted-brown);
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.8;
 }
 
@@ -50,13 +50,13 @@
 }
 
 .number {
-  font-size: .75rem;
+  font-size: 1rem;
   color: var(--color-burgundy);
   padding-top: .35rem;
 }
 
 .purposeCard h3 {
-  font-size: 1.6rem;
+  font-size: 1.75rem;
   font-weight: 500;
   color: var(--color-ink);
   margin: 0 0 .65rem;
@@ -65,7 +65,7 @@
 
 .purposeCard p {
   color: var(--color-muted-brown);
-  font-size: .92rem;
+  font-size: 1.0625rem;
   margin: 0;
   line-height: 1.75;
 }

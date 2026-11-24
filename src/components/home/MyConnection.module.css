@@ -62,12 +62,12 @@
 .connectionCaption {
   font-family: var(--font-display);
   color: var(--color-ink);
-  font-size: 1.45rem;
+  font-size: 1.55rem;
   margin: 1rem 0 .3rem;
 }
 
 .connectionMeta {
-  font-size: .75rem;
+  font-size: 1.125rem;
   color: var(--color-muted-brown);
   line-height: 1.6;
   margin: 0;

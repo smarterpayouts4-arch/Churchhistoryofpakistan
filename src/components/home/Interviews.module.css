@@ -13,7 +13,7 @@
 
 .interviewCard h2, .interviewCard h3 {
   color: var(--color-ink);
-  font-size: 1.65rem;
+  font-size: 1.8rem;
   line-height: 1.2;
   font-weight: 500;
   margin: .6rem 0;
@@ -22,19 +22,19 @@
 
 .interviewCard > p {
   color: var(--color-muted-brown);
-  font-size: .88rem;
+  font-size: 1rem;
   margin: .2rem 0;
   overflow-wrap: anywhere;
 }
 
 .interviewCard > p:first-of-type {
-  font-size: .64rem;
+  font-size: 1rem;
   color: var(--color-burgundy);
 }
 
 .interviewStatus {
   align-self: start;
-  font-size: .67rem;
+  font-size: 1rem;
   border: 1px solid var(--color-border);
   padding: .35rem .65rem;
   margin-top: 1rem;
@@ -176,7 +176,7 @@
   border-radius: 3px;
   background: rgb(20 16 13 / .82);
   color: #fff;
-  font-size: .78rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: .02em;
   font-variant-numeric: tabular-nums;
@@ -189,7 +189,7 @@
 
 .cardEyebrow {
   margin: 0 0 .45rem;
-  font-size: .66rem;
+  font-size: 1rem;
   letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--color-burgundy);
@@ -199,7 +199,7 @@
 .cardTitle {
   margin: 0 0 .4rem;
   color: var(--color-ink);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   line-height: 1.2;
   font-weight: 500;
   letter-spacing: -.015em;
@@ -226,14 +226,14 @@
 
 .speaker {
   margin: 0 0 .4rem;
-  font-size: .9rem;
+  font-size: 1.0625rem;
   color: var(--color-ink);
 }
 
 .description {
   margin: 0 0 .7rem;
   color: var(--color-muted-brown);
-  font-size: .9rem;
+  font-size: 1.0625rem;
   line-height: 1.55;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -244,7 +244,7 @@
 
 .provenance {
   margin: 0 0 .55rem;
-  font-size: .8rem;
+  font-size: 1.125rem;
   color: var(--color-muted-brown);
 }
 
@@ -254,7 +254,7 @@
   align-items: center;
   gap: .35rem .9rem;
   margin: 0;
-  font-size: .76rem;
+  font-size: 1rem;
   color: var(--color-muted-brown);
 }
 
@@ -287,7 +287,7 @@
 
   .card[data-featured="true"] .description {
     -webkit-line-clamp: 6;
-    font-size: 1rem;
+    font-size: 1.125rem;
   }
 }
 
@@ -333,7 +333,7 @@
 .playerTitle {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   line-height: 1.25;
 }
 
@@ -345,7 +345,7 @@
   background: transparent;
   color: var(--color-paper);
   cursor: pointer;
-  font-size: .85rem;
+  font-size: 1rem;
 }
 
 .playerClose:hover {
@@ -381,33 +381,33 @@
 
 .playerMeta {
   margin: 0 0 .4rem;
-  font-size: .8rem;
+  font-size: 1rem;
   color: var(--color-parchment);
 }
 
 .playerDescription {
   margin: 0 0 .8rem;
-  font-size: .95rem;
+  font-size: 1.0625rem;
   line-height: 1.55;
 }
 
 .transcript summary {
   cursor: pointer;
   font-weight: 600;
-  font-size: .9rem;
+  font-size: 1.0625rem;
 }
 
 .transcript div {
   max-height: 40vh;
   overflow: auto;
   margin-top: .6rem;
-  font-size: .92rem;
+  font-size: 1.0625rem;
   line-height: 1.6;
 }
 
 .transcriptNote {
   margin: 0;
-  font-size: .8rem;
+  font-size: 1rem;
   color: rgb(251 247 239 / .6);
 }
 

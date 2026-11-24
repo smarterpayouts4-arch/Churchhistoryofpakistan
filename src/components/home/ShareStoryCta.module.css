@@ -45,7 +45,7 @@
   text-decoration: none;
   background: var(--color-burgundy);
   color: var(--color-paper);
-  font-size: .9rem;
+  font-size: 1.0625rem;
   font-weight: 600;
   white-space: nowrap;
 }
