@@ -23,6 +23,7 @@ import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, PHOTO_ACCEPT, VIDEO_ACCEPT, formatByt
 import x from "./sections.module.css";
 import { LINE, PROSE } from "./typing";
 import { BufferedInput, BufferedTextarea } from "./BufferedField";
+import { LocalTime } from "./LocalTime";
 
 type Storage = SectionsSnapshot["storage"];
 
@@ -54,11 +55,6 @@ function titleFromFilename(name: string) {
     .replace(/\s+/g, " ")
     .trim();
   return words ? words[0]!.toUpperCase() + words.slice(1) : "";
-}
-
-function ago(iso?: string) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
 }
 
 /**
@@ -650,7 +646,7 @@ export function SectionMediaManager({
 
         {section.draft ? (
           <p className={x.draftMeta}>
-            Draft saved {ago(section.draft.updatedAt)}.{" "}
+            Draft saved <LocalTime iso={section.draft.updatedAt} />.{" "}
             <button
               type="button"
               className={x.linkBtn}

@@ -33,6 +33,7 @@ import { Toaster } from "./Toaster";
 import { ConflictDialog } from "./ConflictDialog";
 import { setDocVersions } from "./adminFetch";
 import { toast } from "./toast";
+import { LocalTime } from "./LocalTime";
 import s from "./studio.module.css";
 import styles from "@/app/admin/admin.module.css";
 
@@ -89,11 +90,6 @@ const DOC_FOR_TAB: Partial<Record<Tab, [string, string]>> = {
   profile: ["curator-profile.json", "Curator profile"],
   site: ["site.json", "Site settings & page text"],
 };
-
-function ago(iso?: string) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
-}
 
 export function AdminDashboard(props: Props) {
   const {
@@ -200,9 +196,13 @@ export function AdminDashboard(props: Props) {
         {docInfo ? (
           <div className={s.paneHead}>
             <p className={s.paneMeta}>
-              {last && last.by !== "original"
-                ? `Last saved ${ago(last.at)} by ${last.by}.`
-                : "No admin edits yet — this is the original content."}{" "}
+              {last && last.by !== "original" ? (
+                <>
+                  Last saved <LocalTime iso={last.at} /> by {last.by}.
+                </>
+              ) : (
+                "No admin edits yet — this is the original content."
+              )}{" "}
               These settings go live as soon as you save (no Publish step).
             </p>
             <HistoryButton doc={docInfo[0]} label={docInfo[1]} />
