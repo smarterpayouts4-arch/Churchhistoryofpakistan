@@ -137,25 +137,36 @@
   .shell {
     grid-template-columns: 1fr;
   }
+  /* Phones and tablets: every admin area is visible at once as wrapping
+     buttons (no sideways-scrolling strip that hides "More settings"). */
   .sidebar {
     position: static;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr));
+    gap: 0.4rem;
   }
   .sidebarGroup {
     display: none;
   }
   .navBtn,
-  .navBtnActive,
-  .moreBtn {
-    scroll-snap-align: start;
+  .navBtnActive {
+    justify-content: center;
+    min-height: 48px;
+    text-align: center;
+    border: 1px solid var(--color-border);
+  }
+  .navBtnActive {
+    border-color: var(--color-burgundy);
+  }
+  .navBtn:hover {
+    transform: none;
   }
   .moreBtn {
-    margin-top: 0;
-    border-top: 0;
-    border-left: 1px solid var(--color-border);
+    grid-column: 1 / -1;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 0.2rem;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
   }
 }
 

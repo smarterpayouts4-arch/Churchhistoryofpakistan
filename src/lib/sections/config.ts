@@ -39,7 +39,7 @@ export const SECTIONS: readonly SectionConfig[] = [
   {
     id: "gallery",
     label: "Family Archive gallery",
-    where: "The photo gallery on the Archive page (the first four also show on the homepage).",
+    where: "The photo gallery on the Archive page. The first four that are not already in the homepage slideshow also show on the homepage.",
     href: "/archive",
     kind: "image",
     max: MAX_IMAGES_PER_SECTION,

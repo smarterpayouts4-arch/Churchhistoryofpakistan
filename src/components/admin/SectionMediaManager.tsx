@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { photoKey } from "@/lib/media/dedupe";
 import { Icon } from "./Icon";
 import { Thumb } from "./Thumb";
 import { adminFetch } from "./adminFetch";
@@ -287,7 +288,7 @@ export function SectionMediaManager({
     const noun = cfg.kind === "video" ? "video" : "photo";
     setConfirm({
       title: `Delete this ${noun}?`,
-      body: `“${it.title || it.alt || `${noun} ${index + 1}`}” will be taken off ${cfg.label} when you press Publish.`,
+      body: `${it.title || it.alt ? `“${it.title || it.alt}”` : `${noun === "video" ? "Video" : "Photo"} ${index + 1}`} will be taken off ${cfg.label} when you press Publish. Until then you can bring it back with Discard.`,
       action: `Delete ${noun}`,
       run: () => {
         update(cfg.id, items.filter((_, i) => i !== index));
@@ -354,6 +355,16 @@ export function SectionMediaManager({
   const noun = cfg.kind === "video" ? "videos" : "photos";
   const full = items.length >= cfg.max;
   const over = items.length > cfg.max;
+  // Tiles showing the same picture as an earlier tile (the website shows it once).
+  const sameAs: (number | undefined)[] = [];
+  {
+    const firstAt = new Map<string, number>();
+    items.forEach((it, i) => {
+      const k = photoKey(it.src);
+      if (k && firstAt.has(k)) sameAs[i] = firstAt.get(k)! + 1;
+      else if (k) firstAt.set(k, i);
+    });
+  }
   const liveIds = new Set(section.live.map((i) => i.id));
   const liveSrc = new Map(section.live.map((i) => [i.id, i.src]));
   const usedPct = Math.min(100, Math.round((storage.usedBytes / storage.budgetBytes) * 100));
@@ -442,7 +453,9 @@ export function SectionMediaManager({
               <span className={x.tabText}>
                 <strong>{c.label}</strong>
                 <small>
-                  {n} of {c.max} {c.kind === "video" ? "videos" : "photos"}
+                  {n > c.max
+                    ? `${n} ${c.kind === "video" ? "videos" : "photos"} · limit ${c.max}`
+                    : `${n} of ${c.max} ${c.kind === "video" ? "videos" : "photos"}`}
                 </small>
               </span>
               {s.draft ? <span className={x.tabDirty}>Unpublished</span> : null}
@@ -462,12 +475,12 @@ export function SectionMediaManager({
               </a>
             </p>
           </div>
-          <div className={x.count} aria-label={`${items.length} of ${cfg.max} ${noun}`}>
+          <div className={x.count} aria-label={over ? `${items.length} ${noun}, limit ${cfg.max}` : `${items.length} of ${cfg.max} ${noun}`}>
             <strong>
-              {items.length} of {cfg.max}
+              {over ? items.length : `${items.length} of ${cfg.max}`}
             </strong>{" "}
             {noun}
-            <span>{full ? "Full" : `${cfg.max - items.length} ${cfg.max - items.length === 1 ? "space" : "spaces"} left`}</span>
+            <span>{over ? `Over the limit of ${cfg.max}` : full ? "Full" : `${cfg.max - items.length} ${cfg.max - items.length === 1 ? "space" : "spaces"} left`}</span>
           </div>
         </div>
 
@@ -553,6 +566,7 @@ export function SectionMediaManager({
               index={i}
               count={items.length}
               status={!liveIds.has(it.id) ? "new" : liveSrc.get(it.id) !== it.src ? "replaced" : null}
+              sameAs={sameAs[i]}
               onMove={move}
               onEdit={(patch) => edit(i, patch)}
               onReplace={(f) => replaceFile(i, f)}
@@ -656,6 +670,7 @@ function Tile({
   index,
   count,
   status,
+  sameAs,
   onMove,
   onEdit,
   onReplace,
@@ -665,6 +680,8 @@ function Tile({
   item: SectionItem;
   index: number;
   count: number;
+  /** 1-based number of an earlier tile with the same picture (shown once on the website). */
+  sameAs?: number;
   status: "new" | "replaced" | null;
   onMove: (from: number, to: number) => void;
   onEdit: (patch: Partial<SectionItem>) => void;
@@ -740,6 +757,12 @@ function Tile({
         </span>
       </div>
 
+      {sameAs ? (
+        <p className={x.sameNote}>
+          Same picture as photo {sameAs}, so the website shows it only once. You can delete one of them.
+        </p>
+      ) : null}
+
       <div className={x.fields}>
         {cfg.titled ? (
           <label className={x.label}>
@@ -770,11 +793,15 @@ function Tile({
       </div>
 
       <div className={x.actions}>
-        <button type="button" className={x.iconBtn} onClick={() => onMove(index, index - 1)} disabled={index === 0} aria-label={`Move ${name} earlier`}>
-          ←
+        <button type="button" className={x.moveBtn} onClick={() => onMove(index, index - 1)} disabled={index === 0} aria-label={`Move ${name} earlier`}>
+          <span aria-hidden="true" className={x.arrowSide}>←</span>
+          <span aria-hidden="true" className={x.arrowUp}>↑</span>
+          <span aria-hidden="true">Earlier</span>
         </button>
-        <button type="button" className={x.iconBtn} onClick={() => onMove(index, index + 1)} disabled={index === count - 1} aria-label={`Move ${name} later`}>
-          →
+        <button type="button" className={x.moveBtn} onClick={() => onMove(index, index + 1)} disabled={index === count - 1} aria-label={`Move ${name} later`}>
+          <span aria-hidden="true">Later</span>
+          <span aria-hidden="true" className={x.arrowSide}>→</span>
+          <span aria-hidden="true" className={x.arrowUp}>↓</span>
         </button>
         <span className={x.spacer} />
         <button type="button" className={x.actionBtn} onClick={() => replaceInput.current?.click()}>

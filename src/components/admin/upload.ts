@@ -94,6 +94,10 @@ function localUpload(
   });
 }
 
+/** Shown when the server will not start a direct-to-storage upload. */
+export const UPLOAD_NOT_STARTED =
+  "Couldn't start the upload. This section may be full or not take this kind of file. Reload the page and try again.";
+
 async function blobUpload(
   file: File,
   alt: string,
@@ -109,16 +113,26 @@ async function blobUpload(
         ? await imageDimensions(file)
         : null;
   const pathname = `uploads/${new Date().getFullYear()}/${safeMediaFilename(file.name, file.type)}`;
-  const blob = await upload(pathname, file, {
-    access: "public",
-    handleUploadUrl: "/api/admin/media/blob",
-    headers: { "x-csrf-token": csrfToken() },
-    ...(target
-      ? { clientPayload: JSON.stringify({ ...target, kind: file.type.startsWith("video/") ? "video" : "image" }) }
-      : {}),
-    multipart: file.size > 8 * 1024 * 1024,
-    onUploadProgress: (p) => onProgress?.(p.percentage / 100),
-  });
+  let blob: Awaited<ReturnType<typeof upload>>;
+  try {
+    blob = await upload(pathname, file, {
+      access: "public",
+      handleUploadUrl: "/api/admin/media/blob",
+      headers: { "x-csrf-token": csrfToken() },
+      ...(target
+        ? { clientPayload: JSON.stringify({ ...target, kind: file.type.startsWith("video/") ? "video" : "image" }) }
+        : {}),
+      multipart: file.size > 8 * 1024 * 1024,
+      onUploadProgress: (p) => onProgress?.(p.percentage / 100),
+    });
+  } catch (err) {
+    // The server refused to start the upload (section full, wrong kind of
+    // file, signed out, CSRF expired). @vercel/blob reports that as a
+    // technical "Failed to retrieve the client token" error; say it plainly.
+    const msg = err instanceof Error ? err.message : String(err);
+    if (/client token/i.test(msg)) throw new Error(UPLOAD_NOT_STARTED);
+    throw err;
+  }
   const res = await fetch("/api/admin/media", {
     method: "POST",
     headers: { "content-type": "application/json", "x-csrf-token": csrfToken() },

@@ -9,6 +9,41 @@
   pointer-events: none;
 }
 
+.backdropOffDesk {
+  display: none;
+}
+
 .photo {
   z-index: 0;
+}
+
+/* Fit is a class (not an inline style) so phones can use a different one. */
+.cover {
+  object-fit: cover;
+  object-position: var(--focal, 50% 30%);
+}
+
+.contain {
+  object-fit: contain;
+  object-position: 50% 50%;
+}
+
+@media (max-width: 600px) {
+  .backdropOffPhone {
+    display: none;
+  }
+
+  .backdropOnPhone {
+    display: block;
+  }
+
+  .photo.phoneCover {
+    object-fit: cover;
+    object-position: var(--focal, 50% 30%);
+  }
+
+  .photo.phoneContain {
+    object-fit: contain;
+    object-position: 50% 50%;
+  }
 }

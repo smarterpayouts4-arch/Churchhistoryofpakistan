@@ -60,6 +60,20 @@
   text-wrap: balance;
 }
 
+/* Keep "Church of Pakistan" on one line at every width: the title is sized to
+   its own column (container query units), "Church of Pakistan" is ~6.6em wide,
+   so 1/7 of the column leaves headroom for font loading. */
+@supports (font-size: 1cqi) {
+  .heroCopy {
+    container-type: inline-size;
+  }
+
+  .heroTitle,
+  .heroTitle.heroTitle {
+    font-size: clamp(2.5rem, min(100cqi / 7, 18svh), 6.5rem);
+  }
+}
+
 .lede {
   max-width: 29rem;
   color: var(--color-muted-brown);

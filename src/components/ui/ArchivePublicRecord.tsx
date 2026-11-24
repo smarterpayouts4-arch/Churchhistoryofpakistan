@@ -15,8 +15,12 @@ export function ArchivePublicRecord({ item }: Props) {
   if (!note && refs.length === 0) return null;
 
   return (
-    <aside className={styles.archivePublicRecord} aria-label="Public record and press">
-      <p className={styles.archivePublicRecordLabel}>Public record / press</p>
+    // Collapsed by default so the gallery stays scannable (and short on phones);
+    // one tap opens the sourced note and links.
+    <details className={styles.archivePublicRecord}>
+      <summary className={styles.archivePublicRecordLabel}>
+        Public record / press{refs.length > 0 ? ` · ${refs.length} ${refs.length === 1 ? "link" : "links"}` : ""}
+      </summary>
       {note ? <p className={styles.archivePublicRecordNote}>{note}</p> : null}
       {refs.length > 0 ? (
         <ul className={styles.archivePublicRecordRefs}>
@@ -32,6 +36,6 @@ export function ArchivePublicRecord({ item }: Props) {
           ))}
         </ul>
       ) : null}
-    </aside>
+    </details>
   );
 }

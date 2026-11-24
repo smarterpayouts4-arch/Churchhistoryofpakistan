@@ -5,6 +5,7 @@
  */
 
 import { readCmsPublic } from "@/lib/cms/store";
+import { uniqueByPhoto, withoutPhotos } from "@/lib/media/dedupe";
 import type { FamilyArchiveItem, FamilyArchivesFile } from "@/lib/cms/types";
 
 export type { FamilyArchiveItem, FamilyArchiveReference, VerificationStatus } from "@/lib/cms/types";
@@ -18,16 +19,22 @@ export async function loadFamilyArchiveNote(): Promise<string> {
   return data.note;
 }
 
+/** Public gallery items; the same photo posted twice is shown once (first wins). */
 export async function loadFamilyArchiveItems(): Promise<FamilyArchiveItem[]> {
   const data = await loadFamilyArchivesFile();
-  return data.items;
+  return uniqueByPhoto(data.items, (item) => item.imageSrc);
 }
 
+/**
+ * Homepage preview: the first `count` gallery photos that are not already in
+ * the homepage slideshow (`exclude`), so the two never show the same picture.
+ */
 export async function loadFamilyArchiveHomePreview(
   count = 4,
+  exclude: Iterable<string | undefined> = [],
 ): Promise<FamilyArchiveItem[]> {
   const items = await loadFamilyArchiveItems();
-  return items.slice(0, count);
+  return withoutPhotos(items, (item) => item.imageSrc, exclude).slice(0, count);
 }
 
 /** @deprecated Prefer loadFamilyArchiveNote() for runtime CMS data. */

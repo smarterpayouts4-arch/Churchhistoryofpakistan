@@ -7,11 +7,14 @@ import { ArchiveCard } from "@/components/ui/ArchiveCard";
 import { Lightbox } from "@/components/ui/Lightbox";
 import { loadMediaMeta } from "@/lib/media/meta";
 import { loadSiteSettings } from "@/content/site";
+import { loadHomepage } from "@/content/homepage";
 import styles from "./FamilyArchives.module.css";
 
 export async function FamilyArchives() {
+  const { hero } = await loadHomepage();
   const [familyArchiveHomePreview, FAMILY_ARCHIVE_NOTE, site, meta] = await Promise.all([
-    loadFamilyArchiveHomePreview(4),
+    // Skip photos already in the homepage slideshow above.
+    loadFamilyArchiveHomePreview(4, (hero.band_images ?? []).map((img) => img.src)),
     loadFamilyArchiveNote(),
     loadSiteSettings(),
     loadMediaMeta(),

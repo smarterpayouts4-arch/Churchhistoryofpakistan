@@ -4,12 +4,14 @@ import { loadFamilyArchiveHomePreview } from "@/content/family-archives";
 import { CURATOR_DISPLAY_NAME } from "@/content/nav";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { loadSiteSettings } from "@/content/site";
+import { uniqueByPhoto } from "@/lib/media/dedupe";
 import { HeroBand } from "./HeroBand";
 import styles from "./Hero.module.css";
 
 export async function Hero() {
   const [{ hero, strapline }, records, site] = await Promise.all([loadHomepage(), loadFamilyArchiveHomePreview(1), loadSiteSettings()]);
   const featured = records[0];
+  const bandImages = uniqueByPhoto(hero.band_images ?? [], (img) => img.src);
   // "History: Church of Pakistan" → italic "History:" over "Church of Pakistan".
   // The colon stays part of the first line (it was being sliced away before).
   const colon = hero.title.indexOf(":");
@@ -44,9 +46,9 @@ export async function Hero() {
             <span aria-hidden="true">↗</span>
           </Link>
         </div>
-        {hero.band_images?.length ? <figure className={styles.featured}>
+        {bandImages.length ? <figure className={styles.featured}>
           <div className={styles.imageTopline}><span>From the collection</span><span>Family archive</span></div>
-          <HeroBand images={hero.band_images} />
+          <HeroBand images={bandImages} />
         </figure> : featured && <figure className={styles.featured}>
           <div className={styles.imageTopline}><span>From the collection</span><span>01 / Family archive</span></div>
           <Link href={`/archive#${featured.id}`} className={styles.photoLink} aria-label={`View ${featured.title}`}>

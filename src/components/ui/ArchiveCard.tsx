@@ -6,6 +6,8 @@ import styles from "@/components/home/FamilyArchives.module.css";
 
 /** Tile shape for every archive photo (4:5 suits this mostly-portrait collection). */
 export const ARCHIVE_TILE_RATIO = 4 / 5;
+/** Phones (max-width 600px) use a shorter 4:3 tile so one photo never fills the screen. */
+export const ARCHIVE_PHONE_TILE_RATIO = 4 / 3;
 
 export async function ArchiveCard({
   item,
@@ -29,6 +31,7 @@ export async function ArchiveCard({
           src={item.imageSrc}
           alt={item.alt}
           ratio={ARCHIVE_TILE_RATIO}
+          phoneRatio={ARCHIVE_PHONE_TILE_RATIO}
           sizes={sizes}
           position={item.imagePosition}
           fit={item.imageFit}

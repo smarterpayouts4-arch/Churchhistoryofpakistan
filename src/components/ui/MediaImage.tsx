@@ -47,6 +47,8 @@ export function MediaImage({
           src={src}
           alt={alt}
           className={className}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
           style={{
             position: "absolute",
             inset: 0,
@@ -66,6 +68,8 @@ export function MediaImage({
         width={width}
         height={height}
         className={className}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
         style={style}
       />
     );

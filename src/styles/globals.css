@@ -136,8 +136,10 @@ section[id], article[id], h1[id], h2[id] {
   background: transparent;
   padding: .4rem 0 .4rem 1.1rem;
   color: var(--color-muted-brown);
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.7;
+  /* comfortable line length (~70 characters) even on wide screens */
+  max-width: 44rem;
 }
 
 .forthcoming strong {

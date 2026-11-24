@@ -16,6 +16,8 @@
 
 .archiveFrame {
   aspect-ratio: 4 / 5;
+  /* never taller than most of the screen (landscape phones, small tablets) */
+  max-height: 78svh;
   position: relative;
   overflow: hidden;
   margin-bottom: 1.25rem;
@@ -112,18 +114,52 @@
 
 .archivePublicRecord {
   margin: 1rem 0;
-  padding: 1rem;
+  padding: 0 1rem;
   background: var(--color-parchment);
   border-left: 2px solid var(--color-burgundy);
 }
 
+.archivePublicRecord[open] .archivePublicRecordLabel {
+  margin-bottom: .5rem;
+}
+
 .archivePublicRecordLabel {
-  margin: 0 0 .5rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 48px;
+  cursor: pointer;
+  list-style: none;
+  margin: 0;
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: .08em;
   font-weight: 700;
   color: var(--color-burgundy);
+}
+
+.archivePublicRecordLabel::-webkit-details-marker {
+  display: none;
+}
+
+.archivePublicRecordLabel::before {
+  content: "+";
+  display: inline-grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 1px solid currentColor;
+  font-size: 1.1rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.archivePublicRecord[open] .archivePublicRecordLabel::before {
+  content: "−";
+}
+
+.archivePublicRecord[open] {
+  padding-bottom: 1rem;
 }
 
 .archivePublicRecordNote {
@@ -165,7 +201,20 @@
   }
 
   .archiveCard h2, .archiveCard h3 {
-    font-size: 1.8rem;
+    font-size: 1.55rem;
+  }
+
+  /* Phones: a shorter 4:3 photo (GalleryImage picks cover/contain for this
+     shape) so the photo, title and caption fit on one screen. */
+  .archiveFrame {
+    aspect-ratio: 4 / 3;
+    max-height: 55svh;
+    margin-bottom: 1rem;
+  }
+
+  /* The provenance tag is repeated under the title; on a phone the photo stays clean. */
+  .archiveOverlay {
+    display: none;
   }
 
 }
@@ -218,4 +267,8 @@
 
 @media (hover: none) {
   .enlargeHint { opacity: .85; translate: 0 0; }
+}
+
+@media (max-width: 600px) {
+  .enlargeHint { top: .5rem; right: .5rem; letter-spacing: .05em; padding: .2rem .5rem; }
 }

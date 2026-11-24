@@ -117,17 +117,18 @@
 
 .field .checkboxLabel {
   display: flex;
-  align-items: center;
-  gap: .75rem;
-  min-height: 44px;
+  align-items: flex-start;
+  gap: .85rem;
+  min-height: 48px;
+  padding-block: .35rem;
   cursor: pointer;
 }
 
 .field input[type="checkbox"] {
-  width: 1.2rem;
-  height: 1.2rem;
-  flex: 0 0 1.2rem;
-  margin: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: 0 0 1.6rem;
+  margin: .1rem 0 0;
   padding: 0;
   accent-color: var(--color-burgundy);
 }
