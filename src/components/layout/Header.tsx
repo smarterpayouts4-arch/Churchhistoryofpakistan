@@ -91,7 +91,7 @@ export function Header({ siteName, navItems = primaryNav }: { siteName: string; 
   return (
     <header className={styles.header} data-scrolled={scrolled}>
       <div className={`shell ${styles.inner}`}>
-        <Link className={styles.brand} href="/" aria-label={`${siteName} home`} onClick={() => setOpen(false)}>
+        <Link className={styles.brand} href="/" onClick={() => setOpen(false)}>
           <Image src="/media/brand/archive-cross-mark.svg" alt="" width={42} height={42} unoptimized />
           <span className={styles.brandText}>
             <span className={styles.brandStrong}>{siteName}</span>

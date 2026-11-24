@@ -26,6 +26,8 @@ function buildCsp(nonce: string) {
     // real browser upload is blocked.
     `connect-src 'self' https://vercel.com/api/blob/ https://*.blob.vercel-storage.com${isDev ? " ws: wss:" : ""}`,
     `media-src 'self' blob: ${blob}`,
+    // The admin's HEIC converter decodes photos in a worker started from a blob: URL.
+    "worker-src 'self' blob:",
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",

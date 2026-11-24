@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "Interviews",
   description,
   ...socialMetadata({ title: "Interviews", description, path: "/interviews", image: "interviews" }),
+  alternates: { canonical: "/interviews" },
 };
 
 export default async function InterviewsPage() {

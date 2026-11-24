@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Hero } from "@/components/home/Hero";
 import { Purpose } from "@/components/home/Purpose";
@@ -10,6 +11,11 @@ import { ShareStoryCta } from "@/components/home/ShareStoryCta";
 import { GuidingPrinciple } from "@/components/home/GuidingPrinciple";
 import { loadHomeLayout } from "@/content/home-layout";
 import type { HomeSectionId } from "@/lib/cms/types";
+
+/** Title, description and share preview come from the root layout. */
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const SECTIONS: Record<HomeSectionId, () => ReactNode> = {
   hero: () => <Hero />,

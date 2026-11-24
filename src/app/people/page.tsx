@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   title: "People",
   description,
   ...socialMetadata({ title: "People", description, path: "/people", image: "people" }),
+  alternates: { canonical: "/people" },
 };
 
 export default async function PeoplePage() {

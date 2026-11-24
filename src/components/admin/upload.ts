@@ -2,8 +2,9 @@
 
 import { csrfToken } from "./adminFetch";
 import type { MediaItem } from "@/lib/cms/types";
-import { formatBytes, kindForType, maxBytesFor, safeMediaFilename } from "@/lib/media/rules";
+import { effectiveType, formatBytes, isHeicType, kindForType, maxBytesFor, MAX_IMAGE_BYTES, safeMediaFilename } from "@/lib/media/rules";
 import { prepareImage, prepareVideo } from "./normalizeMedia";
+import { heicToJpeg } from "./heic";
 
 export type UploadProgress = (fraction: number) => void;
 
@@ -38,15 +39,32 @@ function imageDimensions(file: File): Promise<{ width: number; height: number } 
   });
 }
 
+/**
+ * The same file with a type the browser left empty filled in from its
+ * extension (some phones and file managers send "" for HEIC, MOV, etc.).
+ */
+export function withType(file: File): File {
+  if (file.type) return file;
+  const type = effectiveType(file);
+  return type ? new File([file], file.name, { type, lastModified: file.lastModified }) : file;
+}
+
+/** True for HEIC/HEIF photos, which are converted to JPEG before upload. */
+export function isHeic(file: File): boolean {
+  return isHeicType(effectiveType(file), file.name);
+}
+
 /** Problem with a file before uploading, in plain language (or null). */
 export function checkFile(file: File): string | null {
-  const type = file.type || "";
-  if (/heic|heif/i.test(type) || /\.hei[cf]$/i.test(file.name)) {
-    return `${file.name}: iPhone HEIC photos can't be shown on websites. On the phone, choose “Most Compatible” or share the photo as JPEG, then try again.`;
+  const type = effectiveType(file);
+  if (isHeicType(type, file.name)) {
+    return file.size > MAX_IMAGE_BYTES
+      ? `${file.name} is ${formatBytes(file.size)} — the limit is ${formatBytes(MAX_IMAGE_BYTES)}.`
+      : null;
   }
   const kind = kindForType(type);
   if (!kind) {
-    return `${file.name}: please choose a photo (JPEG, PNG, WebP, GIF, AVIF) or a video (MP4, WebM, MOV).`;
+    return `${file.name}: please choose a photo (JPEG, PNG, WebP, GIF, AVIF, HEIC) or a video (MP4, WebM, MOV).`;
   }
   if (file.size > maxBytesFor(kind)) {
     return `${file.name} is ${formatBytes(file.size)} — the limit is ${formatBytes(maxBytesFor(kind))}.`;
@@ -131,7 +149,8 @@ function overallLimitMs(bytes: number) {
  * event; `stopped` rejects with an UploadStoppedError when the upload is
  * stuck, too slow, or cancelled through the caller's AbortSignal.
  */
-function watchdog(bytes: number, outer?: AbortSignal) {
+function watchdog(bytes: number, outer?: AbortSignal, opts: { progressEvents?: boolean } = {}) {
+  const progressEvents = opts.progressEvents ?? true;
   const ctrl = new AbortController();
   const started = Date.now();
   let last = started;
@@ -148,7 +167,9 @@ function watchdog(bytes: number, outer?: AbortSignal) {
   const limit = overallLimitMs(bytes);
   const timer = window.setInterval(() => {
     const now = Date.now();
-    if (now - last > UPLOAD_STALL_MS) stop("stalled");
+    // Without progress events there is nothing to measure a stall by, so
+    // only the overall limit applies.
+    if (progressEvents && now - last > UPLOAD_STALL_MS) stop("stalled");
     else if (now - started > limit) stop("timeout");
   }, 1000);
   const onOuter = () => stop("cancelled");
@@ -183,25 +204,27 @@ async function blobUpload(
         ? await imageDimensions(file)
         : null;
   const pathname = `uploads/${new Date().getFullYear()}/${safeMediaFilename(file.name, file.type)}`;
+  const options = {
+    access: "public" as const,
+    handleUploadUrl: "/api/admin/media/blob",
+    headers: { "x-csrf-token": csrfToken() },
+    ...(target
+      ? { clientPayload: JSON.stringify({ ...target, kind: file.type.startsWith("video/") ? "video" : "image" }) }
+      : {}),
+    multipart: file.size > 8 * 1024 * 1024,
+  };
   let blob: Awaited<ReturnType<typeof upload>>;
-  const guard = watchdog(file.size, signal);
   try {
-    const sending = upload(pathname, file, {
-      access: "public",
-      handleUploadUrl: "/api/admin/media/blob",
-      headers: { "x-csrf-token": csrfToken() },
-      ...(target
-        ? { clientPayload: JSON.stringify({ ...target, kind: file.type.startsWith("video/") ? "video" : "image" }) }
-        : {}),
-      multipart: file.size > 8 * 1024 * 1024,
-      abortSignal: guard.signal,
-      onUploadProgress: (p) => {
-        guard.tick();
-        onProgress?.(p.percentage / 100);
-      },
-    });
-    sending.catch(() => {});
-    blob = await Promise.race([sending, guard.stopped]);
+    try {
+      blob = await blobAttempt(upload, pathname, file, options, true, onProgress, signal);
+    } catch (err) {
+      if (!(err instanceof StreamUploadTrouble)) throw err;
+      // Browsers that claim streamed uploads but can't send them (seen in a
+      // Safari engine build) fail here. Send once more the plain way: no
+      // streaming and no progress events, guarded by the overall time limit.
+      onProgress?.(0);
+      blob = await blobAttempt(upload, pathname, file, options, false, onProgress, signal);
+    }
   } catch (err) {
     if (err instanceof UploadStoppedError) throw err;
     // The server refused to start the upload (section full, wrong kind of
@@ -210,8 +233,6 @@ async function blobUpload(
     const msg = err instanceof Error ? err.message : String(err);
     if (/client token/i.test(msg)) throw new Error(UPLOAD_NOT_STARTED);
     throw err;
-  } finally {
-    guard.done();
   }
   const res = await fetch("/api/admin/media", {
     method: "POST",
@@ -232,6 +253,92 @@ async function blobUpload(
   const body = (await res.json().catch(() => ({}))) as { item?: MediaItem; error?: string };
   if (!res.ok || !body.item) throw new Error(body.error || "Could not add the file to the library.");
   return body.item;
+}
+
+/** A streamed upload went wrong in a way a plain upload may not. */
+class StreamUploadTrouble extends Error {
+  constructor() {
+    super("Streamed upload failed; retrying without streaming.");
+    this.name = "StreamUploadTrouble";
+  }
+}
+
+/** A network-level failure (no answer from the server), as opposed to a refusal. */
+function isNetworkFailure(err: unknown) {
+  const msg = err instanceof Error ? `${err.name} ${err.message}` : String(err);
+  return /TypeError|NetworkError|Failed to fetch|Load failed|network|request was aborted|unknown error/i.test(msg) && !/client token|store does not exist|access denied/i.test(msg);
+}
+
+/** How soon a network failure still counts as "the streamed upload never worked". */
+const QUICK_FAILURE_MS = 20_000;
+
+type BlobUploadFn = (typeof import("@vercel/blob/client"))["upload"];
+
+/**
+ * One attempt at a direct-to-storage upload. With `progress`, @vercel/blob
+ * streams the file where the browser says it can (and reports progress);
+ * without it, it sends the file as one plain request.
+ *
+ * In streamed mode the attempt is abandoned with StreamUploadTrouble when the
+ * library starts over internally (progress goes backwards) or the network
+ * fails within the first seconds, so the caller can retry the plain way.
+ */
+async function blobAttempt(
+  upload: BlobUploadFn,
+  pathname: string,
+  file: File,
+  options: Omit<Parameters<BlobUploadFn>[2], "abortSignal" | "onUploadProgress">,
+  progress: boolean,
+  onProgress?: UploadProgress,
+  signal?: AbortSignal,
+) {
+  const guard = watchdog(file.size, signal, { progressEvents: progress });
+  const started = Date.now();
+  let highest = -1;
+  let trouble: (() => void) | null = null;
+  const troubled = new Promise<never>((_, rej) => {
+    trouble = () => rej(new StreamUploadTrouble());
+  });
+  troubled.catch(() => {});
+  const restart = new AbortController();
+  guard.signal.addEventListener("abort", () => restart.abort(), { once: true });
+  try {
+    const sending = upload(pathname, file, {
+      ...options,
+      abortSignal: restart.signal,
+      ...(progress
+        ? {
+            onUploadProgress: (p: { loaded: number; percentage: number }) => {
+              guard.tick();
+              if (p.loaded < highest && trouble) {
+                restart.abort();
+                trouble();
+                return;
+              }
+              highest = Math.max(highest, p.loaded);
+              onProgress?.(p.percentage / 100);
+            },
+          }
+        : {}),
+    });
+    sending.catch(() => {});
+    try {
+      return await Promise.race([sending, guard.stopped, troubled]);
+    } catch (err) {
+      if (
+        progress &&
+        !(err instanceof UploadStoppedError) &&
+        !(err instanceof StreamUploadTrouble) &&
+        Date.now() - started < QUICK_FAILURE_MS &&
+        isNetworkFailure(err)
+      ) {
+        throw new StreamUploadTrouble();
+      }
+      throw err;
+    }
+  } finally {
+    guard.done();
+  }
 }
 
 function send(
@@ -258,12 +365,14 @@ export async function uploadMedia(
   storage: StorageInfo,
   opts: { alt?: string; onProgress?: UploadProgress; target?: SectionTarget; signal?: AbortSignal } = {},
 ): Promise<MediaItem> {
+  original = withType(original);
   const problem = checkFile(original);
   if (problem) throw new Error(problem);
   if (!storage.blob && storage.hosted) {
     throw new Error("Uploads are switched off: photo storage (Vercel Blob) is not connected on the live site yet.");
   }
   const alt = opts.alt ?? "";
+  if (isHeic(original)) original = await heicToJpeg(original);
   if (original.type.startsWith("image/")) {
     const prepared = await prepareImage(original);
     const { file, ...extra } = prepared;

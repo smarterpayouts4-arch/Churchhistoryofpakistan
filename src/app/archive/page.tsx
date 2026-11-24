@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   title: "Archive",
   description,
   ...socialMetadata({ title: "Archive", description, path: "/archive", image: "archive" }),
+  alternates: { canonical: "/archive" },
 };
 
 export default async function ArchivePage() {

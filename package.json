@@ -24,6 +24,7 @@
   "dependencies": {
     "@vercel/blob": "^2.9.0",
     "bcryptjs": "^3.0.3",
+    "heic-to": "1.6.7",
     "image-size": "^2.1.0",
     "jose": "^6.2.12",
     "marked": "^18.2.1",

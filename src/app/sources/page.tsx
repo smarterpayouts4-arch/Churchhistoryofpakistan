@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Sources",
   description,
   ...socialMetadata({ title: "Sources", description, path: "/sources", image: "sources" }),
+  alternates: { canonical: "/sources" },
 };
 
 export default async function SourcesPage() {

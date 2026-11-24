@@ -6,7 +6,8 @@ import { Icon } from "./Icon";
 import { Thumb } from "./Thumb";
 import { adminFetch } from "./adminFetch";
 import { invalidateLibrary } from "./mediaStore";
-import { checkFile, uploadMedia, UploadStoppedError, type StorageInfo } from "./upload";
+import { checkFile, uploadMedia, UploadStoppedError, withType, type StorageInfo } from "./upload";
+import { HEVC_WARNING, isHevcVideo } from "./videoCodec";
 import { toast } from "./toast";
 import {
   SECTIONS,
@@ -18,7 +19,7 @@ import {
   type SectionState,
   type SectionsSnapshot,
 } from "@/lib/sections/config";
-import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, formatBytes } from "@/lib/media/rules";
+import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, PHOTO_ACCEPT, VIDEO_ACCEPT, formatBytes } from "@/lib/media/rules";
 import x from "./sections.module.css";
 
 type Storage = SectionsSnapshot["storage"];
@@ -199,8 +200,8 @@ export function SectionMediaManager({
 
   async function addFiles(list: FileList | File[]) {
     setNotice(null);
-    const files = Array.from(list);
-    const wrongKind = files.filter((f) => !f.type.startsWith(cfg.kind === "video" ? "video/" : "image/") && !/\.hei[cf]$/i.test(f.name));
+    const files = Array.from(list).map(withType);
+    const wrongKind = files.filter((f) => !f.type.startsWith(cfg.kind === "video" ? "video/" : "image/"));
     if (wrongKind.length) {
       toast.error(cfg.kind === "video" ? "This section only takes videos (MP4, WebM or MOV)." : "This section only takes photos.");
     }
@@ -220,6 +221,11 @@ export function SectionMediaManager({
       if (problem) {
         setProgress((p) => [...p, { key, name: file.name, fraction: 1, error: problem }]);
         continue;
+      }
+      if (file.type.startsWith("video/") && (await isHevcVideo(file))) {
+        // Allowed, but some browsers can't play it: say so and carry on.
+        setNotice(HEVC_WARNING);
+        toast.info(HEVC_WARNING);
       }
       setProgress((p) => [...p, { key, name: file.name, fraction: 0 }]);
       const ctrl = new AbortController();
@@ -264,12 +270,14 @@ export function SectionMediaManager({
     void refreshStorage();
   }
 
-  async function replaceFile(index: number, file: File) {
+  async function replaceFile(index: number, chosen: File) {
+    const file = withType(chosen);
     const problem = checkFile(file);
     if (problem) return void toast.error(problem);
     if (!file.type.startsWith(cfg.kind === "video" ? "video/" : "image/")) {
       return void toast.error(cfg.kind === "video" ? "Please choose a video." : "Please choose a photo.");
     }
+    if (file.type.startsWith("video/") && (await isHevcVideo(file))) toast.info(HEVC_WARNING);
     const key = `replace-${Math.random()}`;
     const itemId = latest.current[index]?.id;
     setProgress((p) => [...p, { key, name: `Replacing with ${file.name}`, fraction: 0 }]);
@@ -717,7 +725,7 @@ function DropZone({ cfg, onFiles }: { cfg: SectionConfig; onFiles: (f: FileList)
         type="file"
         hidden
         multiple
-        accept={cfg.kind === "video" ? "video/mp4,video/webm,video/quicktime" : "image/jpeg,image/png,image/webp,image/gif,image/avif"}
+        accept={cfg.kind === "video" ? VIDEO_ACCEPT : PHOTO_ACCEPT}
         onChange={(e) => {
           if (e.target.files?.length) onFiles(e.target.files);
           e.target.value = "";
@@ -877,7 +885,7 @@ function Tile({
           ref={replaceInput}
           type="file"
           hidden
-          accept={video ? "video/mp4,video/webm,video/quicktime" : "image/jpeg,image/png,image/webp,image/gif,image/avif"}
+          accept={video ? VIDEO_ACCEPT : PHOTO_ACCEPT}
           onChange={(e) => {
             const f = e.target.files?.[0];
             if (f) onReplace(f);

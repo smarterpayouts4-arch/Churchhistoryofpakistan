@@ -6,11 +6,12 @@ import styles from "@/app/admin/admin.module.css";
 import s from "./studio.module.css";
 import { adminFetch } from "./adminFetch";
 import { invalidateLibrary, loadLibrary, type LibraryEntry, type LibraryState } from "./mediaStore";
-import { checkFile, uploadMedia } from "./upload";
+import { checkFile, uploadMedia, withType } from "./upload";
+import { HEVC_WARNING, isHevcVideo } from "./videoCodec";
 import { toast } from "./toast";
 import { Thumb } from "./Thumb";
 import { CropTool } from "./CropTool";
-import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, formatBytes } from "@/lib/media/rules";
+import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, PHOTO_ACCEPT, VIDEO_ACCEPT, formatBytes } from "@/lib/media/rules";
 
 type Filter = "all" | "uploaded" | "site" | "unused";
 
@@ -76,7 +77,7 @@ export function MediaLibrary({ mode = "manage", kind, selectedUrl, onPick }: Pro
   }, [state, filter, kindFilter, query, mode, selectedUrl]);
 
   async function handleFiles(list: FileList | File[]) {
-    const files = Array.from(list);
+    const files = Array.from(list).map(withType);
     if (!files.length || !state) return;
     const accepted: File[] = [];
     for (const f of files) {
@@ -86,6 +87,13 @@ export function MediaLibrary({ mode = "manage", kind, selectedUrl, onPick }: Pro
       else accepted.push(f);
     }
     if (!accepted.length) return;
+    for (const f of accepted) {
+      // Allowed, but some browsers can't play HEVC: say so and carry on.
+      if (f.type.startsWith("video/") && (await isHevcVideo(f))) {
+        toast.info(HEVC_WARNING);
+        break;
+      }
+    }
     setProgress((p) => [...p, ...accepted.map((f) => ({ name: f.name, fraction: 0 }))]);
     let lastUrl: string | undefined;
     let ok = 0;
@@ -120,11 +128,7 @@ export function MediaLibrary({ mode = "manage", kind, selectedUrl, onPick }: Pro
 
   const selectedEntry = state?.entries.find((e) => e.url === selected);
   const accept =
-    kind === "video"
-      ? "video/mp4,video/webm,video/quicktime"
-      : kind === "image"
-        ? "image/jpeg,image/png,image/webp,image/gif,image/avif"
-        : "image/jpeg,image/png,image/webp,image/gif,image/avif,video/mp4,video/webm,video/quicktime";
+    kind === "video" ? VIDEO_ACCEPT : kind === "image" ? PHOTO_ACCEPT : `${PHOTO_ACCEPT},${VIDEO_ACCEPT}`;
 
   const uploadsOff = state && !state.storage.blob && state.storage.hosted;
 

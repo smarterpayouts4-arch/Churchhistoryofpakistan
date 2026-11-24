@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Blog",
   description,
   ...socialMetadata({ title: "Blog", description, path: "/blog", image: "blog" }),
+  alternates: { canonical: "/blog" },
 };
 
 function formatDate(iso: string) {
