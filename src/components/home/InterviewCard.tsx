@@ -37,13 +37,6 @@ export function formatDuration(total?: number): string | null {
   return h ? `${h}:${String(m).padStart(2, "0")}:${sec}` : `${m}:${sec}`;
 }
 
-function spokenDuration(total?: number): string | null {
-  if (!total) return null;
-  const m = Math.floor(total / 60);
-  const s = Math.round(total % 60);
-  return [m ? `${m} minute${m === 1 ? "" : "s"}` : "", s ? `${s} second${s === 1 ? "" : "s"}` : ""].filter(Boolean).join(" ");
-}
-
 /**
  * Oral-history style video card: a clean 16:9 poster with a play button and
  * running time, then title, speaker and a short description. Pressing play
@@ -99,7 +92,8 @@ export function InterviewCard(props: InterviewCardProps) {
         className={styles.thumb}
         onClick={show}
         aria-haspopup="dialog"
-        aria-label={`Play video: ${title}${duration ? ` (${spokenDuration(durationSeconds)})` : ""}`}
+        // The name includes the running time exactly as shown on the poster.
+        aria-label={`Play video: ${title}${duration ? `, ${duration}` : ""}`}
       >
         {portrait && posterBlur ? (
           <span aria-hidden="true" className={styles.thumbBackdrop} style={{ backgroundImage: `url("${posterBlur}")` }} />
