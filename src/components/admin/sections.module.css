@@ -95,6 +95,7 @@
 
 .publishBtn,
 .addBtn,
+.retryBtn,
 .ghostBtn,
 .actionBtn,
 .moveBtn,
@@ -124,7 +125,8 @@
 }
 
 .publishBtn:hover:not(:disabled),
-.addBtn:hover {
+.addBtn:hover,
+.retryBtn:hover {
   background: var(--color-deep-burgundy);
   transform: translateY(-1px);
 }
@@ -179,6 +181,7 @@
 
 .publishBtn:focus-visible,
 .addBtn:focus-visible,
+.retryBtn:focus-visible,
 .ghostBtn:focus-visible,
 .actionBtn:focus-visible,
 .deleteBtn:focus-visible,

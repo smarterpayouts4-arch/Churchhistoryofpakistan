@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { adminRoute } from "@/lib/admin/route";
 import { isContentDoc, readRevision, writeDoc } from "@/lib/cms/store";
 import { DOC_SCHEMAS } from "@/lib/cms/schemas";
+import { deletedMediaMessage, withoutDeletedMedia } from "@/lib/cms/restore-media";
 
 export const runtime = "nodejs";
 
@@ -21,8 +22,17 @@ export const GET = adminRoute<Ctx>(async (_req, ctx) => {
   if (!r) return NextResponse.json({ error: "Unknown section." }, { status: 404 });
   const data = await readRevision(r.name, r.id);
   if (!data) return NextResponse.json({ error: "That version was not found." }, { status: 404 });
-  return NextResponse.json({ data });
+  // Tell the owner up front about photos/videos that were deleted since.
+  const check = await withoutDeletedMedia(r.name, data);
+  return NextResponse.json({
+    data,
+    deleted: { photos: check.droppedPhotos, videos: check.droppedVideos, blocked: check.unresolved > 0 },
+    warning: check.unresolved > 0 ? BLOCKED : deletedMediaMessage(check.droppedPhotos, check.droppedVideos),
+  });
 });
+
+const BLOCKED =
+  "This version uses photos that were already deleted, so it can't be restored. Pick a newer version instead.";
 
 /** Restore a saved version. The restore itself becomes a new revision. */
 export const POST = adminRoute<Ctx>(async (_req, ctx) => {
@@ -30,7 +40,10 @@ export const POST = adminRoute<Ctx>(async (_req, ctx) => {
   if (!r) return NextResponse.json({ error: "Unknown section." }, { status: 404 });
   const data = await readRevision(r.name, r.id);
   if (!data) return NextResponse.json({ error: "That version was not found." }, { status: 404 });
-  const parsed = DOC_SCHEMAS[r.name].safeParse(data);
+  // Never bring back files that were deleted: leave those photos/videos out.
+  const check = await withoutDeletedMedia(r.name, data);
+  if (check.unresolved > 0) return NextResponse.json({ error: BLOCKED }, { status: 422 });
+  const parsed = DOC_SCHEMAS[r.name].safeParse(check.data);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "That older version no longer passes today's checks, so it can't be restored automatically." },
@@ -42,5 +55,10 @@ export const POST = adminRoute<Ctx>(async (_req, ctx) => {
     restoredFrom: r.id,
   });
   revalidatePath("/", "layout");
-  return NextResponse.json({ ok: true });
+  const skipped = deletedMediaMessage(check.droppedPhotos, check.droppedVideos);
+  return NextResponse.json({
+    ok: true,
+    skipped: { photos: check.droppedPhotos, videos: check.droppedVideos },
+    message: skipped ? `${skipped} Everything else was restored.` : null,
+  });
 });

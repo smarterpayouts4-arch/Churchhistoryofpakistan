@@ -60,9 +60,12 @@ function localUpload(
   extra: Extra,
   onProgress?: UploadProgress,
   target?: SectionTarget,
+  signal?: AbortSignal,
 ): Promise<MediaItem> {
-  return new Promise((resolve, reject) => {
+  const guard = watchdog(file.size, signal);
+  const sending = new Promise<MediaItem>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
+    guard.signal.addEventListener("abort", () => xhr.abort(), { once: true });
     xhr.open("POST", "/api/admin/media/upload");
     xhr.setRequestHeader("content-type", file.type);
     xhr.setRequestHeader("x-filename", encodeURIComponent(file.name));
@@ -77,6 +80,7 @@ function localUpload(
       if (target.replace) xhr.setRequestHeader("x-section-replace", "1");
     }
     xhr.upload.onprogress = (e) => {
+      guard.tick();
       if (e.lengthComputable) onProgress?.(e.loaded / e.total);
     };
     xhr.onload = () => {
@@ -92,11 +96,76 @@ function localUpload(
     xhr.onerror = () => reject(new Error("The upload was interrupted. Check your connection and try again."));
     xhr.send(file);
   });
+  sending.catch(() => {});
+  return Promise.race([sending, guard.stopped]).finally(() => guard.done());
 }
 
 /** Shown when the server will not start a direct-to-storage upload. */
 export const UPLOAD_NOT_STARTED =
   "Couldn't start the upload. This section may be full or not take this kind of file. Reload the page and try again.";
+
+/** No bytes moving for this long means the upload is stuck. */
+export const UPLOAD_STALL_MS = 30_000;
+
+/** Why an upload was stopped before it finished. */
+export class UploadStoppedError extends Error {
+  constructor(public reason: "stalled" | "timeout" | "cancelled") {
+    super(
+      reason === "cancelled"
+        ? "Upload cancelled."
+        : reason === "stalled"
+          ? "The upload stopped: nothing was sent for 30 seconds. Check the internet connection, then press Try again."
+          : "The upload took too long and was stopped. Check the internet connection, then press Try again.",
+    );
+    this.name = "UploadStoppedError";
+  }
+}
+
+/** Longest any one upload may take: 5 minutes plus 1 minute per 5 MB. */
+function overallLimitMs(bytes: number) {
+  return 5 * 60_000 + Math.ceil(bytes / (5 * 1024 * 1024)) * 60_000;
+}
+
+/**
+ * Stall + overall timeout for one network upload. `tick()` on every progress
+ * event; `stopped` rejects with an UploadStoppedError when the upload is
+ * stuck, too slow, or cancelled through the caller's AbortSignal.
+ */
+function watchdog(bytes: number, outer?: AbortSignal) {
+  const ctrl = new AbortController();
+  const started = Date.now();
+  let last = started;
+  let reason: UploadStoppedError["reason"] | null = null;
+  let reject: (e: Error) => void = () => {};
+  const stopped = new Promise<never>((_, rej) => (reject = rej));
+  stopped.catch(() => {});
+  const stop = (r: UploadStoppedError["reason"]) => {
+    if (reason) return;
+    reason = r;
+    ctrl.abort();
+    reject(new UploadStoppedError(r));
+  };
+  const limit = overallLimitMs(bytes);
+  const timer = window.setInterval(() => {
+    const now = Date.now();
+    if (now - last > UPLOAD_STALL_MS) stop("stalled");
+    else if (now - started > limit) stop("timeout");
+  }, 1000);
+  const onOuter = () => stop("cancelled");
+  if (outer?.aborted) stop("cancelled");
+  else outer?.addEventListener("abort", onOuter, { once: true });
+  return {
+    signal: ctrl.signal,
+    stopped,
+    tick: () => {
+      last = Date.now();
+    },
+    done: () => {
+      window.clearInterval(timer);
+      outer?.removeEventListener("abort", onOuter);
+    },
+  };
+}
 
 async function blobUpload(
   file: File,
@@ -104,6 +173,7 @@ async function blobUpload(
   extra: Extra,
   onProgress?: UploadProgress,
   target?: SectionTarget,
+  signal?: AbortSignal,
 ): Promise<MediaItem> {
   const { upload } = await import("@vercel/blob/client");
   const dims =
@@ -114,8 +184,9 @@ async function blobUpload(
         : null;
   const pathname = `uploads/${new Date().getFullYear()}/${safeMediaFilename(file.name, file.type)}`;
   let blob: Awaited<ReturnType<typeof upload>>;
+  const guard = watchdog(file.size, signal);
   try {
-    blob = await upload(pathname, file, {
+    const sending = upload(pathname, file, {
       access: "public",
       handleUploadUrl: "/api/admin/media/blob",
       headers: { "x-csrf-token": csrfToken() },
@@ -123,15 +194,24 @@ async function blobUpload(
         ? { clientPayload: JSON.stringify({ ...target, kind: file.type.startsWith("video/") ? "video" : "image" }) }
         : {}),
       multipart: file.size > 8 * 1024 * 1024,
-      onUploadProgress: (p) => onProgress?.(p.percentage / 100),
+      abortSignal: guard.signal,
+      onUploadProgress: (p) => {
+        guard.tick();
+        onProgress?.(p.percentage / 100);
+      },
     });
+    sending.catch(() => {});
+    blob = await Promise.race([sending, guard.stopped]);
   } catch (err) {
+    if (err instanceof UploadStoppedError) throw err;
     // The server refused to start the upload (section full, wrong kind of
     // file, signed out, CSRF expired). @vercel/blob reports that as a
     // technical "Failed to retrieve the client token" error; say it plainly.
     const msg = err instanceof Error ? err.message : String(err);
     if (/client token/i.test(msg)) throw new Error(UPLOAD_NOT_STARTED);
     throw err;
+  } finally {
+    guard.done();
   }
   const res = await fetch("/api/admin/media", {
     method: "POST",
@@ -161,10 +241,11 @@ function send(
   extra: Extra,
   onProgress?: UploadProgress,
   target?: SectionTarget,
+  signal?: AbortSignal,
 ) {
   return storage.blob
-    ? blobUpload(file, alt, extra, onProgress, target)
-    : localUpload(file, alt, extra, onProgress, target);
+    ? blobUpload(file, alt, extra, onProgress, target, signal)
+    : localUpload(file, alt, extra, onProgress, target, signal);
 }
 
 /**
@@ -175,7 +256,7 @@ function send(
 export async function uploadMedia(
   original: File,
   storage: StorageInfo,
-  opts: { alt?: string; onProgress?: UploadProgress; target?: SectionTarget } = {},
+  opts: { alt?: string; onProgress?: UploadProgress; target?: SectionTarget; signal?: AbortSignal } = {},
 ): Promise<MediaItem> {
   const problem = checkFile(original);
   if (problem) throw new Error(problem);
@@ -186,7 +267,7 @@ export async function uploadMedia(
   if (original.type.startsWith("image/")) {
     const prepared = await prepareImage(original);
     const { file, ...extra } = prepared;
-    return send(file, storage, alt, extra, opts.onProgress, opts.target);
+    return send(file, storage, alt, extra, opts.onProgress, opts.target, opts.signal);
   }
   const video = await prepareVideo(original);
   let posterUrl: string | undefined;
@@ -197,9 +278,13 @@ export async function uploadMedia(
         storage,
         alt ? `Poster frame: ${alt}` : "",
         { width: undefined, height: undefined, blurDataURL: video.posterBlur },
+        undefined,
+        undefined,
+        opts.signal,
       );
       posterUrl = poster.url;
-    } catch {
+    } catch (err) {
+      if (err instanceof UploadStoppedError && err.reason === "cancelled") throw err;
       /* the video still uploads without a poster */
     }
   }
@@ -216,5 +301,6 @@ export async function uploadMedia(
     },
     opts.onProgress,
     opts.target,
+    opts.signal,
   );
 }

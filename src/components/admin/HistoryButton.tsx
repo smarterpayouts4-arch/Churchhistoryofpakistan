@@ -50,14 +50,20 @@ export function HistoryButton({ doc, label }: { doc: string; label: string }) {
   }
 
   async function restore(r: Revision) {
-    if (!window.confirm(`Restore the version from ${when(r.at)}? The current version stays in History, so this can be undone.`)) return;
+    // Photos/videos deleted since this version can't come back: say so first.
+    const check = await adminFetch(`/api/admin/docs/${slug}/revisions/${r.id}`);
+    const info = (await check.json().catch(() => ({}))) as { warning?: string | null; deleted?: { blocked?: boolean } };
+    if (info.deleted?.blocked) return void toast.error(info.warning || "This version can't be restored.");
+    const warning = info.warning ? `\n\n${info.warning} Everything else will be restored.` : "";
+    if (!window.confirm(`Restore the version from ${when(r.at)}? The current version stays in History, so this can be undone.${warning}`)) return;
     setBusy(true);
     const res = await adminFetch(`/api/admin/docs/${slug}/revisions/${r.id}`, { method: "POST" });
-    const body = (await res.json().catch(() => ({}))) as { error?: string };
+    const body = (await res.json().catch(() => ({}))) as { error?: string; message?: string | null };
     setBusy(false);
     if (res.ok) {
-      toast.success(`${label}: earlier version restored. Reloading…`);
-      window.setTimeout(() => window.location.reload(), 900);
+      if (body.message) toast.info(`${label}: ${body.message} Reloading…`);
+      else toast.success(`${label}: earlier version restored. Reloading…`);
+      window.setTimeout(() => window.location.reload(), body.message ? 3500 : 900);
     } else if (res.status !== 409) {
       toast.error(body.error || "Could not restore that version.");
     }

@@ -6,7 +6,7 @@ import { Icon } from "./Icon";
 import { Thumb } from "./Thumb";
 import { adminFetch } from "./adminFetch";
 import { invalidateLibrary } from "./mediaStore";
-import { checkFile, uploadMedia, type StorageInfo } from "./upload";
+import { checkFile, uploadMedia, UploadStoppedError, type StorageInfo } from "./upload";
 import { toast } from "./toast";
 import {
   SECTIONS,
@@ -23,9 +23,11 @@ import x from "./sections.module.css";
 
 type Storage = SectionsSnapshot["storage"];
 
-type Progress = { key: string; name: string; fraction: number; error?: string };
+type Progress = { key: string; name: string; fraction: number; error?: string; retry?: boolean };
 
 const PUBLISHED_FLAG = "hcop-just-published";
+/** The section being edited, kept across the reload that Publish does. */
+const ACTIVE_SECTION_KEY = "hcop-active-section";
 
 const itemsOf = (s: SectionState) => s.draft?.items ?? s.live;
 
@@ -85,13 +87,23 @@ export function SectionMediaManager({
   const queued = useRef<Partial<Record<SectionId, SectionItem[]>>>({});
   const running = useRef<Partial<Record<SectionId, boolean>>>({});
   const textTimers = useRef<Partial<Record<SectionId, number>>>({});
+  // Uploads in flight (Cancel) and failed ones (Try again), by progress row.
+  const uploadCtrls = useRef<Record<string, AbortController>>({});
+  const retries = useRef<Record<string, () => void>>({});
 
   useEffect(() => {
     if (sessionStorage.getItem(PUBLISHED_FLAG)) {
       sessionStorage.removeItem(PUBLISHED_FLAG);
       setJustPublished(true);
     }
+    // Come back to the section that was open (e.g. after Publish reloads the page).
+    const saved = sessionStorage.getItem(ACTIVE_SECTION_KEY);
+    if (saved && SECTIONS.some((c) => c.id === saved)) setActive(saved as SectionId);
   }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(ACTIVE_SECTION_KEY, active);
+  }, [active]);
 
   const dirty = sections.filter((s) => s.draft);
   const busyUploading = progress.some((p) => !p.error && p.fraction < 1);
@@ -210,9 +222,12 @@ export function SectionMediaManager({
         continue;
       }
       setProgress((p) => [...p, { key, name: file.name, fraction: 0 }]);
+      const ctrl = new AbortController();
+      uploadCtrls.current[key] = ctrl;
       try {
         const media = await uploadMedia(file, storageInfo, {
           target: { section: cfg.id },
+          signal: ctrl.signal,
           onProgress: (f) => setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: f } : r))),
         });
         const item: SectionItem = {
@@ -235,7 +250,14 @@ export function SectionMediaManager({
         update(cfg.id, next);
         setProgress((p) => p.filter((r) => r.key !== key));
       } catch (err) {
-        setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: 1, error: (err as Error).message } : r)));
+        if (err instanceof UploadStoppedError && err.reason === "cancelled") {
+          setProgress((p) => p.filter((r) => r.key !== key));
+        } else {
+          retries.current[key] = () => void addFiles([file]);
+          setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: 1, error: (err as Error).message, retry: true } : r)));
+        }
+      } finally {
+        delete uploadCtrls.current[key];
       }
     }
     invalidateLibrary();
@@ -249,14 +271,18 @@ export function SectionMediaManager({
       return void toast.error(cfg.kind === "video" ? "Please choose a video." : "Please choose a photo.");
     }
     const key = `replace-${Math.random()}`;
+    const itemId = latest.current[index]?.id;
     setProgress((p) => [...p, { key, name: `Replacing with ${file.name}`, fraction: 0 }]);
+    const ctrl = new AbortController();
+    uploadCtrls.current[key] = ctrl;
     try {
       const media = await uploadMedia(file, storageInfo, {
         target: { section: cfg.id, replace: true },
+        signal: ctrl.signal,
         onProgress: (f) => setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: f } : r))),
       });
-      const next = latest.current.map((it, i) => {
-        if (i !== index) return it;
+      const next = latest.current.map((it) => {
+        if (it.id !== itemId) return it;
         // Same place, title and description; new file (and framing back to centre).
         const { position: _drop, ...rest } = it;
         void _drop;
@@ -277,7 +303,18 @@ export function SectionMediaManager({
       setProgress((p) => p.filter((r) => r.key !== key));
       toast.success("Replaced. Press Publish to put it on the website.");
     } catch (err) {
-      setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: 1, error: (err as Error).message } : r)));
+      if (err instanceof UploadStoppedError && err.reason === "cancelled") {
+        setProgress((p) => p.filter((r) => r.key !== key));
+      } else {
+        retries.current[key] = () => {
+          const at = latest.current.findIndex((it) => it.id === itemId);
+          if (at < 0) return void toast.error("That photo is no longer in this section.");
+          void replaceFile(at, file);
+        };
+        setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: 1, error: (err as Error).message, retry: true } : r)));
+      }
+    } finally {
+      delete uploadCtrls.current[key];
     }
     invalidateLibrary();
     void refreshStorage();
@@ -532,15 +569,41 @@ export function SectionMediaManager({
                 <span className={x.progressName}>{p.name}</span>
                 {p.error ? (
                   <>
-                    <span className={x.progressMsg}>{p.error}</span>
-                    <button type="button" className={x.linkBtn} onClick={() => setProgress((all) => all.filter((r) => r.key !== p.key))}>
+                    <span className={x.progressMsg} role="alert">{p.error}</span>
+                    {p.retry ? (
+                      <button
+                        type="button"
+                        className={x.retryBtn}
+                        onClick={() => {
+                          const again = retries.current[p.key];
+                          delete retries.current[p.key];
+                          setProgress((all) => all.filter((r) => r.key !== p.key));
+                          again?.();
+                        }}
+                      >
+                        Try again
+                      </button>
+                    ) : null}
+                    <button
+                      type="button"
+                      className={x.linkBtn}
+                      onClick={() => {
+                        delete retries.current[p.key];
+                        setProgress((all) => all.filter((r) => r.key !== p.key));
+                      }}
+                    >
                       Dismiss
                     </button>
                   </>
                 ) : (
-                  <span className={x.progressBar} aria-label={`${Math.round(p.fraction * 100)}% uploaded`}>
-                    <span style={{ width: `${Math.round(p.fraction * 100)}%` }} />
-                  </span>
+                  <>
+                    <span className={x.progressBar} aria-label={`${Math.round(p.fraction * 100)}% uploaded`}>
+                      <span style={{ width: `${Math.round(p.fraction * 100)}%` }} />
+                    </span>
+                    <button type="button" className={x.linkBtn} onClick={() => uploadCtrls.current[p.key]?.abort()}>
+                      Cancel
+                    </button>
+                  </>
                 )}
               </li>
             ))}

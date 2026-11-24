@@ -20,7 +20,11 @@ function buildCsp(nonce: string) {
     "style-src 'self' 'unsafe-inline'",
     `img-src 'self' data: blob: ${blob}`,
     "font-src 'self' data:",
-    `connect-src 'self' https://vercel.com/api/blob https://*.blob.vercel-storage.com${isDev ? " ws: wss:" : ""}`,
+    // Browser uploads (@vercel/blob/client) call https://vercel.com/api/blob/?pathname=…
+    // and …/api/blob/mpu for large files. The trailing slash makes this a path
+    // prefix; without it CSP only allows the exact URL /api/blob and every
+    // real browser upload is blocked.
+    `connect-src 'self' https://vercel.com/api/blob/ https://*.blob.vercel-storage.com${isDev ? " ws: wss:" : ""}`,
     `media-src 'self' blob: ${blob}`,
     "frame-src 'none'",
     "object-src 'none'",
