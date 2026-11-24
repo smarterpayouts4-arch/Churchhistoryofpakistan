@@ -38,7 +38,12 @@ await check("/archive", [site.pages.archive.eyebrow, fam.items[0]?.title], [fam.
 await check("/interviews", [home.page_context.interviews_intro, ints.items[0]?.title], [ints.items[0]?.posterSrc]);
 await check("/churches", [site.pages.churches.title, cats.items[0]?.cathedral], []);
 await check("/people", [home.page_context.people_intro, ppl.frames[0]?.title], [ppl.frames[0]?.src]);
-await check("/share-your-story", [home.page_context.contribute_intro, site.pages.contribute_notice.strong], []);
+{
+  // The "not open yet" notice only shows when story intake is off; when it is on, the form's own notice shows instead.
+  const storyHtml = await (await fetch(`${base}/share-your-story`)).text();
+  const intakeOn = /<form[\s>]/.test(storyHtml);
+  await check("/share-your-story", [home.page_context.contribute_intro, intakeOn ? "Before you share." : site.pages.contribute_notice.strong], []);
+}
 await check("/sources", [site.pages.sources.title], []);
 await check("/blog", blog.posts.filter(p=>p.status==="published").length ? blog.posts.filter(p=>p.status==="published").map(p=>p.title) : ["First stories are being prepared"], []);
 await check("/no-such-page-xyz", [site.pages.not_found.title], []);
