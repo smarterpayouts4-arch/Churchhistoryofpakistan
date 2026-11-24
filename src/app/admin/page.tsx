@@ -27,6 +27,7 @@ import { resolveHomeLayout } from "@/content/home-layout";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { StorageBanner } from "@/components/admin/StorageBanner";
+import { TEMP_OPEN_ADMIN_FOR_TESTING } from "@/lib/auth/test-mode";
 import { loadSectionsState } from "@/lib/sections/server";
 import styles from "./admin.module.css";
 
@@ -90,6 +91,12 @@ export default async function AdminDashboardPage() {
           </Link>
           <LogoutButton />
         </div>
+        {TEMP_OPEN_ADMIN_FOR_TESTING ? (
+          <div className={styles.testModeBanner} role="alert">
+            <strong>Test mode: admin is unlocked.</strong> Anyone with this link can edit the site. Turn this off before
+            handoff (set <code>TEMP_OPEN_ADMIN_FOR_TESTING</code> to <code>false</code> in <code>src/lib/auth/test-mode.ts</code>).
+          </div>
+        ) : null}
         <StorageBanner status={storage} problems={session.role === "admin" ? authConfigProblems() : []} />
         <AdminDashboard
           initialHomepage={homepage}

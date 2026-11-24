@@ -5,6 +5,7 @@ import path from "path";
 import { randomBytes } from "crypto";
 import type { AdminRole } from "@/lib/cms/types";
 import { getUserById } from "./users";
+import { TEMP_OPEN_ADMIN_FOR_TESTING, TEST_MODE_SESSION } from "./test-mode";
 
 export const ADMIN_SESSION_COOKIE = "hcop_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 hours
@@ -78,6 +79,8 @@ export async function readSessionToken(
 }
 
 export async function getAdminSession(): Promise<AdminSession | null> {
+  // TEMPORARY: see src/lib/auth/test-mode.ts — admin is unlocked for testing.
+  if (TEMP_OPEN_ADMIN_FOR_TESTING) return TEST_MODE_SESSION;
   const jar = await cookies();
   return readSessionToken(jar.get(ADMIN_SESSION_COOKIE)?.value);
 }

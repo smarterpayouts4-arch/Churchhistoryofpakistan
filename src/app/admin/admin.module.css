@@ -415,3 +415,15 @@ video.inspectThumb {
   margin: 0;
   accent-color: var(--color-burgundy);
 }
+
+/* TEMPORARY test-mode banner (see src/lib/auth/test-mode.ts) */
+.testModeBanner {
+  margin: 0 0 var(--space-4, 1rem);
+  padding: 0.8rem 1rem;
+  border: 2px solid #8f322f;
+  border-radius: 6px;
+  background: #fff3cd;
+  color: #4a1a16;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
