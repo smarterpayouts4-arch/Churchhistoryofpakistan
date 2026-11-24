@@ -64,7 +64,9 @@ export async function GalleryImage({
         blurDataURL={meta.blur}
         className={`${styles.photo} ${fitClass} ${className ?? ""}`}
         // objectFit comes from the fit classes; undefined clears MediaImage's inline default.
-        style={{ objectFit: undefined, "--focal": position || "50% 30%" } as React.CSSProperties}
+        // Phones crop to a shorter 4:3 tile; without a chosen focal point keep the
+        // top of the photo (heads) and trim from the bottom.
+        style={{ objectFit: undefined, "--focal": position || "50% 30%", "--focal-phone": position || "50% 0%" } as React.CSSProperties}
       />
     </>
   );

@@ -39,7 +39,7 @@
 
   .photo.phoneCover {
     object-fit: cover;
-    object-position: var(--focal, 50% 30%);
+    object-position: var(--focal-phone, var(--focal, 50% 0%));
   }
 
   .photo.phoneContain {
