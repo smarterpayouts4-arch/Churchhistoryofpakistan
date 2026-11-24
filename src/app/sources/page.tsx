@@ -37,11 +37,15 @@ export default async function SourcesPage() {
         <h2>{copy.institutional_heading}</h2>
         <ul className={styles.list}>
           {sources.institutional.map((s) => (
-            <li key={s.url}>
+            <li key={s.title}>
               <strong>
-                <a href={s.url} rel="noopener noreferrer" target="_blank">
-                  {s.title}
-                </a>
+                {s.url ? (
+                  <a href={s.url} rel="noopener noreferrer" target="_blank">
+                    {s.title}
+                  </a>
+                ) : (
+                  s.title
+                )}
               </strong>
               <p className={styles.meta}>{s.use}</p>
             </li>
@@ -51,11 +55,15 @@ export default async function SourcesPage() {
         <h2 style={{ marginTop: "2.5rem" }}>Raiwind-specific sources</h2>
         <ul className={styles.list}>
           {sources.raiwind.map((s) => (
-            <li key={s.url}>
+            <li key={s.title}>
               <strong>
-                <a href={s.url} rel="noopener noreferrer" target="_blank">
-                  {s.title}
-                </a>
+                {s.url ? (
+                  <a href={s.url} rel="noopener noreferrer" target="_blank">
+                    {s.title}
+                  </a>
+                ) : (
+                  s.title
+                )}
               </strong>
               <p className={styles.meta}>{s.use}</p>
             </li>

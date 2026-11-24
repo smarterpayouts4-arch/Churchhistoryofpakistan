@@ -5,7 +5,8 @@
 
 export type SourceEntry = {
   title: string;
-  url: string;
+  /** Omitted when the source's website is offline: the citation stays, without a dead link. */
+  url?: string;
   use: string;
 };
 
@@ -40,13 +41,11 @@ export const sources: SourcesContent = {
       "use": "St. John's Cathedral, Gojra"
     },
     {
-      "title": "Diocese of Lahore · About Us (URL unreachable as of 2026-09-23)",
-      "url": "https://copldc.org/about-us/",
-      "use": "Cathedral Church of the Resurrection and 1887 construction; source URL is unreachable, and no alternate URL is confirmed"
+      "title": "Diocese of Lahore · About Us (website offline)",
+      "use": "Cathedral Church of the Resurrection and 1887 construction"
     },
     {
-      "title": "Diocese of Peshawar",
-      "url": "https://peshawardiocese.org/",
+      "title": "Diocese of Peshawar (website offline)",
       "use": "St. John's Cathedral and address"
     },
     {

@@ -73,7 +73,6 @@
       "address": "Cathedral Close, The Mall, Lahore 54000, Pakistan",
       "verification": "Official Diocese of Lahore history identifies the Cathedral Church of the Resurrection, constructed in 1887.",
       "verification_urls": [
-        "https://copldc.org/about-us/",
         "https://nccpakistan.org.pk/member-churches/"
       ],
       "photo_status": "open_license",
@@ -116,8 +115,6 @@
       "address": "Saddar Road / 1 Sir Syed Road, Peshawar Cantonment, Pakistan",
       "verification": "Current Diocese of Peshawar site identifies St. John's Cathedral and gives its Peshawar Cantonment address.",
       "verification_urls": [
-        "https://peshawardiocese.org/",
-        "https://peshawardiocese.org/new-parishes-clergy/",
         "https://nccpakistan.org.pk/member-churches/"
       ],
       "photo_status": "open_license",
