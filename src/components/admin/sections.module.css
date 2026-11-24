@@ -615,7 +615,8 @@
   color: var(--color-ink);
 }
 
-.tile[draggable="true"] .grip {
+.thumb[draggable="true"],
+.thumbVideo[draggable="true"] {
   cursor: grab;
 }
 
@@ -842,8 +843,8 @@
 
 /* Touch screens cannot drag tiles; the Earlier/Later buttons do the job, so hide the grip. */
 @media (hover: none) {
-  .tile[draggable="true"] .grip,
-  .tileOver[draggable="true"] .grip {
+  .thumb[draggable="true"] .grip,
+  .thumbVideo[draggable="true"] .grip {
     display: none;
   }
 }

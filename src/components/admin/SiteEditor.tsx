@@ -4,6 +4,7 @@ import { adminFetch } from "./adminFetch";
 import { FormEvent, useState } from "react";
 import type { SiteNavItem, SiteSettings } from "@/lib/cms/types";
 import styles from "@/app/admin/admin.module.css";
+import { LINE, PROSE, URL_FIELD } from "./typing";
 
 type Props = {
   initialSite: SiteSettings;
@@ -186,12 +187,12 @@ export function SiteEditor({ initialSite, pending, setPending, setMessage, setEr
               <div key={i} className={styles.grid2} style={{ marginBottom: "0.5rem" }}>
                 <label className={styles.label}>
                   Label
-                  <input className={styles.input} value={item.label} onChange={(e) => updateNav(which, i, { label: e.target.value })} required />
+                  <input {...LINE} className={styles.input} value={item.label} onChange={(e) => updateNav(which, i, { label: e.target.value })} required />
                 </label>
                 <label className={styles.label}>
                   Link (href)
                   <span style={{ display: "flex", gap: "0.5rem" }}>
-                    <input className={styles.input} value={item.href} onChange={(e) => updateNav(which, i, { href: e.target.value })} required />
+                    <input {...URL_FIELD} className={styles.input} value={item.href} onChange={(e) => updateNav(which, i, { href: e.target.value })} required />
                     <button type="button" className={styles.dangerBtn} onClick={() => removeNav(which, i)} aria-label={`Remove ${item.label}`}>
                       Remove
                     </button>
@@ -213,7 +214,7 @@ export function SiteEditor({ initialSite, pending, setPending, setMessage, setEr
               <label key={field.path} className={styles.label} style={{ display: "block", marginBottom: "0.75rem" }}>
                 {field.label}
                 {field.type === "textarea" ? (
-                  <textarea
+                  <textarea {...PROSE}
                     className={styles.textarea}
                     rows={field.rows ?? 3}
                     value={getPath(site, field.path) ?? ""}
@@ -221,7 +222,7 @@ export function SiteEditor({ initialSite, pending, setPending, setMessage, setEr
                     required
                   />
                 ) : (
-                  <input
+                  <input {...LINE}
                     className={styles.input}
                     value={getPath(site, field.path) ?? ""}
                     onChange={(e) => setSite((s) => setPath(s, field.path, e.target.value))}

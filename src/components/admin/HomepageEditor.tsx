@@ -5,6 +5,7 @@ import type { HomepageContent, PurposeCard, TimelineEntry } from "@/lib/cms/type
 import { ImageField } from "./ImageField";
 import { adminFetch } from "./adminFetch";
 import styles from "@/app/admin/admin.module.css";
+import { LINE, PROSE } from "./typing";
 
 type Props = {
   initialHomepage: HomepageContent;
@@ -171,7 +172,7 @@ export function HomepageEditor({
         <div className={styles.grid2}>
           <label className={styles.label}>
             Site title
-            <input
+            <input {...LINE}
               className={styles.input}
               required
               value={home.site_title}
@@ -182,7 +183,7 @@ export function HomepageEditor({
           </label>
           <label className={styles.label}>
             Guiding principle
-            <input
+            <input {...LINE}
               className={styles.input}
               required
               value={home.guiding_principle}
@@ -194,7 +195,7 @@ export function HomepageEditor({
         </div>
         <label className={styles.label}>
           Strapline
-          <input
+          <input {...LINE}
             className={styles.input}
             required
             value={home.strapline}
@@ -208,7 +209,7 @@ export function HomepageEditor({
         <div className={styles.grid2}>
           <label className={styles.label}>
             Eyebrow
-            <input
+            <input {...LINE}
               className={styles.input}
               required
               value={home.hero.eyebrow}
@@ -217,7 +218,7 @@ export function HomepageEditor({
           </label>
           <label className={styles.label}>
             Title
-            <input
+            <input {...LINE}
               className={styles.input}
               required
               value={home.hero.title}
@@ -227,7 +228,7 @@ export function HomepageEditor({
         </div>
         <label className={styles.label}>
           Intro
-          <textarea
+          <textarea {...PROSE}
             className={styles.textarea}
             required
             value={home.hero.intro}
@@ -236,7 +237,7 @@ export function HomepageEditor({
         </label>
         <label className={styles.label}>
           Purpose line
-          <textarea
+          <textarea {...PROSE}
             className={styles.textarea}
             required
             value={home.hero.purpose}
@@ -261,7 +262,7 @@ export function HomepageEditor({
             <div className={styles.grid2}>
               <label className={styles.label}>
                 Title
-                <input
+                <input {...LINE}
                   className={styles.input}
                   required
                   value={card.title}
@@ -283,7 +284,7 @@ export function HomepageEditor({
             </div>
             <label className={styles.label}>
               Copy
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 required
                 value={card.copy}
@@ -302,7 +303,7 @@ export function HomepageEditor({
             <label className={styles.label}>
               Paragraph {i + 1}
               {i === 3 ? " (pull quote on homepage)" : ""}
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 required
                 value={para}
@@ -347,7 +348,7 @@ export function HomepageEditor({
             <div className={styles.grid2}>
               <label className={styles.label}>
                 Year
-                <input
+                <input {...LINE}
                   className={styles.input}
                   required
                   value={entry.year}
@@ -356,7 +357,7 @@ export function HomepageEditor({
               </label>
               <label className={styles.label}>
                 Title
-                <input
+                <input {...LINE}
                   className={styles.input}
                   required
                   value={entry.title}
@@ -366,7 +367,7 @@ export function HomepageEditor({
             </div>
             <label className={styles.label}>
               Copy
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 required
                 value={entry.copy}
@@ -375,7 +376,7 @@ export function HomepageEditor({
             </label>
             <label className={styles.label}>
               Source URL
-              <input
+              <input {...LINE}
                 className={styles.input}
                 required
                 value={entry.source}
@@ -401,7 +402,7 @@ export function HomepageEditor({
           <div key={i} className={styles.grid2}>
             <label className={styles.label}>
               Label {i + 1}
-              <input
+              <input {...LINE}
                 className={styles.input}
                 required
                 value={label}
@@ -446,7 +447,7 @@ export function HomepageEditor({
           <label key={key} className={styles.label}>
             {label}
             {key.endsWith("_copy") || key.endsWith("_note") || key.endsWith("_intro") ? (
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 required
                 value={home.page_context[key]}
@@ -458,7 +459,7 @@ export function HomepageEditor({
                 }
               />
             ) : (
-              <input
+              <input {...LINE}
                 className={styles.input}
                 required
                 value={home.page_context[key]}

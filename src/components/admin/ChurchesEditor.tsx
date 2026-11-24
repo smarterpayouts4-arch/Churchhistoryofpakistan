@@ -5,6 +5,8 @@ import { FormEvent, useMemo, useState } from "react";
 import type { CathedralRecord, CathedralsFile } from "@/lib/cms/types";
 import { ImageField } from "./ImageField";
 import styles from "@/app/admin/admin.module.css";
+import { LINE, NAME, PROSE, URL_FIELD } from "./typing";
+import { BufferedTextarea } from "./BufferedField";
 
 type Props = {
   initialCathedrals: CathedralsFile;
@@ -102,7 +104,7 @@ export function ChurchesEditor({
 
       <label className={styles.label}>
         Curator note
-        <textarea
+        <textarea {...PROSE}
           className={styles.textarea}
           value={note}
           onChange={(e) => setNote(e.target.value)}
@@ -163,7 +165,7 @@ export function ChurchesEditor({
             <div className={styles.grid2}>
               <label className={styles.label}>
                 Diocese
-                <input
+                <input {...LINE}
                   className={styles.input}
                   required
                   value={selected.diocese}
@@ -172,7 +174,7 @@ export function ChurchesEditor({
               </label>
               <label className={styles.label}>
                 Cathedral
-                <input
+                <input {...LINE}
                   className={styles.input}
                   required
                   value={selected.cathedral}
@@ -183,7 +185,7 @@ export function ChurchesEditor({
             <div className={styles.grid2}>
               <label className={styles.label}>
                 City
-                <input
+                <input {...LINE}
                   className={styles.input}
                   required
                   value={selected.city}
@@ -215,7 +217,7 @@ export function ChurchesEditor({
             </div>
             <label className={styles.label}>
               Address
-              <input
+              <input {...LINE}
                 className={styles.input}
                 required
                 value={selected.address}
@@ -224,7 +226,7 @@ export function ChurchesEditor({
             </label>
             <label className={styles.label}>
               Verification
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 required
                 value={selected.verification}
@@ -233,19 +235,17 @@ export function ChurchesEditor({
             </label>
             <label className={styles.label}>
               Verification URLs (one per line)
-              <textarea
+              <BufferedTextarea {...URL_FIELD}
                 className={styles.textarea}
                 value={urlsToLines(selected.verification_urls)}
-                onChange={(e) =>
-                  patchSelected({ verification_urls: linesToUrls(e.target.value) })
-                }
+                onValue={(text) => patchSelected({ verification_urls: linesToUrls(text) })}
                 rows={4}
               />
             </label>
             <div className={styles.grid2}>
               <label className={styles.label}>
                 Photo source page
-                <input
+                <input {...URL_FIELD}
                   className={styles.input}
                   value={selected.photo_source_page}
                   onChange={(e) =>
@@ -255,7 +255,7 @@ export function ChurchesEditor({
               </label>
               <label className={styles.label}>
                 Photo remote URL
-                <input
+                <input {...URL_FIELD}
                   className={styles.input}
                   value={selected.photo_remote_url}
                   onChange={(e) =>
@@ -267,7 +267,7 @@ export function ChurchesEditor({
             <div className={styles.grid2}>
               <label className={styles.label}>
                 Photo author
-                <input
+                <input {...NAME}
                   className={styles.input}
                   value={selected.photo_author}
                   onChange={(e) =>
@@ -277,7 +277,7 @@ export function ChurchesEditor({
               </label>
               <label className={styles.label}>
                 Photo license
-                <input
+                <input {...LINE}
                   className={styles.input}
                   value={selected.photo_license}
                   onChange={(e) =>
@@ -303,7 +303,7 @@ export function ChurchesEditor({
             </div>
             <label className={styles.label}>
               Notes
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 value={selected.notes}
                 onChange={(e) => patchSelected({ notes: e.target.value })}
@@ -312,7 +312,7 @@ export function ChurchesEditor({
             <div className={styles.grid2}>
               <label className={styles.label}>
                 Map query
-                <input
+                <input {...LINE}
                   className={styles.input}
                   required
                   value={selected.map_query}
@@ -321,7 +321,7 @@ export function ChurchesEditor({
               </label>
               <label className={styles.label}>
                 Maps search URL
-                <input
+                <input {...URL_FIELD}
                   className={styles.input}
                   required
                   value={selected.maps_search_url}

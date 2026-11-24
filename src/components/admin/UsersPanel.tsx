@@ -5,6 +5,7 @@ import styles from "@/app/admin/admin.module.css";
 import s from "./studio.module.css";
 import { adminFetch } from "./adminFetch";
 import { toast } from "./toast";
+import { NAME } from "./typing";
 
 type User = {
   id: string;
@@ -153,7 +154,7 @@ export function UsersPanel({ me }: { me: string }) {
         <div className={styles.grid2}>
           <label className={styles.label}>
             Name
-            <input className={styles.input} required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <input {...NAME} className={styles.input} required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </label>
           <label className={styles.label}>
             Email (used to sign in)
@@ -169,7 +170,7 @@ export function UsersPanel({ me }: { me: string }) {
           <label className={styles.label}>
             Temporary password (at least 10 characters)
             <span style={{ display: "flex", gap: "0.4rem" }}>
-              <input className={styles.input} required minLength={10} autoComplete="new-password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+              <input className={styles.input} required minLength={10} autoComplete="new-password" spellCheck={false} autoCorrect="off" autoCapitalize="none" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
               <button type="button" className={s.smallBtn} onClick={() => setForm({ ...form, password: suggestPassword() })}>
                 Suggest
               </button>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { PeopleFrame } from "@/lib/cms/types";
 import { ImageField } from "./ImageField";
 import styles from "@/app/admin/admin.module.css";
+import { LINE, PROSE } from "./typing";
 
 type Props = {
   initialFrames: PeopleFrame[];
@@ -69,7 +70,7 @@ export function PeopleFramesEditor({
             <p className={styles.hint}>{frame.id}</p>
             <label className={styles.label}>
               Title
-              <input
+              <input {...LINE}
                 className={styles.input}
                 value={frame.title}
                 onChange={(e) => patchFrame(frame.id, { title: e.target.value })}
@@ -77,7 +78,7 @@ export function PeopleFramesEditor({
             </label>
             <label className={styles.label}>
               Alt text
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 value={frame.alt}
                 onChange={(e) => patchFrame(frame.id, { alt: e.target.value })}

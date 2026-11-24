@@ -12,6 +12,7 @@ import { toast } from "./toast";
 import { Thumb } from "./Thumb";
 import { CropTool } from "./CropTool";
 import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, PHOTO_ACCEPT, VIDEO_ACCEPT, formatBytes } from "@/lib/media/rules";
+import { PROSE } from "./typing";
 
 type Filter = "all" | "uploaded" | "site" | "unused";
 
@@ -399,7 +400,7 @@ function MediaDetail({
               {entry.item ? (
                 <label className={styles.label} style={{ marginTop: "0.75rem" }}>
                   Description (who or what is shown)
-                  <textarea className={styles.textarea} value={alt} onChange={(e) => setAlt(e.target.value)} placeholder="e.g. Bishop J. S. Qadir Bakhsh at the Central Cathedral, 1975" />
+                  <textarea {...PROSE} className={styles.textarea} value={alt} onChange={(e) => setAlt(e.target.value)} placeholder="e.g. Bishop J. S. Qadir Bakhsh at the Central Cathedral, 1975" />
                 </label>
               ) : (
                 <p className={styles.hint} style={{ marginTop: "0.75rem" }}>

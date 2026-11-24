@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import styles from "@/app/admin/admin.module.css";
 import { adminFetch } from "./adminFetch";
 import { toast } from "./toast";
+import { NAME } from "./typing";
 
 /** Change your own display name or password. */
 export function AccountPanel({ name, email, role }: { name: string; email: string; role: string }) {
@@ -44,7 +45,7 @@ export function AccountPanel({ name, email, role }: { name: string; email: strin
       </p>
       <label className={styles.label}>
         Your name (shown in History)
-        <input className={styles.input} required value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+        <input {...NAME} className={styles.input} required value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
       </label>
       <h3 style={{ margin: "0.5rem 0 0" }}>Change password</h3>
       <label className={styles.label}>

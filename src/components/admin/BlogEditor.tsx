@@ -6,6 +6,8 @@ import type { BlogPost } from "@/lib/cms/types";
 import { slugify } from "@/lib/blog/markdown-client";
 import { ImageField } from "./ImageField";
 import styles from "@/app/admin/admin.module.css";
+import { LINE, NAME, PROSE, URL_FIELD } from "./typing";
+import { BufferedInput } from "./BufferedField";
 
 type Props = {
   initialPosts: BlogPost[];
@@ -114,16 +116,16 @@ export function BlogEditor({ initialPosts, pending, setPending, setMessage, setE
                 {editing && editing.id === post.id ? (
                   <div className={styles.form} style={{ marginTop: "1rem" }}>
                     <label className={styles.label}>Title
-                      <input className={styles.input} value={editing.title} onChange={(e) => {
+                      <input {...LINE} className={styles.input} value={editing.title} onChange={(e) => {
                         const title = e.target.value;
                         patch(editing.id, { title, slug: editing.slug && editing.slug !== slugify(editing.title) ? editing.slug : slugify(title) });
                       }} />
                     </label>
                     <label className={styles.label}>Slug (web address, auto-filled from title)
-                      <input className={styles.input} value={editing.slug} onChange={(e) => patch(editing.id, { slug: slugify(e.target.value) })} />
+                      <BufferedInput {...URL_FIELD} className={styles.input} value={editing.slug} onValue={(text) => patch(editing.id, { slug: slugify(text) })} />
                     </label>
                     <label className={styles.label}>Excerpt (short summary for cards & search)
-                      <textarea className={styles.textarea} value={editing.excerpt} onChange={(e) => patch(editing.id, { excerpt: e.target.value })} />
+                      <textarea {...PROSE} className={styles.textarea} value={editing.excerpt} onChange={(e) => patch(editing.id, { excerpt: e.target.value })} />
                     </label>
                     <ImageField
                       label="Cover photo"
@@ -132,21 +134,21 @@ export function BlogEditor({ initialPosts, pending, setPending, setMessage, setE
                       onChange={(url, entry) => patch(editing.id, { coverSrc: url, ...(entry?.alt && !editing.coverAlt ? { coverAlt: entry.alt } : {}) })}
                     />
                     <label className={styles.label}>Cover image alt text
-                      <input className={styles.input} value={editing.coverAlt} onChange={(e) => patch(editing.id, { coverAlt: e.target.value })} />
+                      <input {...LINE} className={styles.input} value={editing.coverAlt} onChange={(e) => patch(editing.id, { coverAlt: e.target.value })} />
                     </label>
                     <div className={styles.grid2}>
                       <label className={styles.label}>Author
-                        <input className={styles.input} value={editing.author} onChange={(e) => patch(editing.id, { author: e.target.value })} />
+                        <input {...NAME} className={styles.input} value={editing.author} onChange={(e) => patch(editing.id, { author: e.target.value })} />
                       </label>
                       <label className={styles.label}>Date
                         <input className={styles.input} type="date" value={editing.date} onChange={(e) => patch(editing.id, { date: e.target.value })} />
                       </label>
                     </div>
                     <label className={styles.label}>Tags (comma-separated)
-                      <input className={styles.input} value={editing.tags.join(", ")} onChange={(e) => patch(editing.id, { tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean) })} />
+                      <BufferedInput {...LINE} autoCapitalize="none" className={styles.input} value={editing.tags.join(", ")} onValue={(text) => patch(editing.id, { tags: text.split(",").map((t) => t.trim()).filter(Boolean) })} />
                     </label>
                     <label className={styles.label}>Body (Markdown)
-                      <textarea className={styles.textarea} style={{ minHeight: "16rem" }} value={editing.body} onChange={(e) => patch(editing.id, { body: e.target.value })} />
+                      <textarea {...PROSE} className={styles.textarea} style={{ minHeight: "16rem" }} value={editing.body} onChange={(e) => patch(editing.id, { body: e.target.value })} />
                     </label>
                     <div className={styles.grid2}>
                       <label className={styles.label}>Status

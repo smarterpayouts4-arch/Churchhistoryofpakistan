@@ -6,6 +6,7 @@ import type { FamilyArchiveItem } from "@/lib/cms/types";
 import styles from "@/app/admin/admin.module.css";
 import { ImageField } from "./ImageField";
 import { Thumb } from "./Thumb";
+import { LINE, PROSE, URL_FIELD } from "./typing";
 
 type ArchiveFormState = {
   id: string;
@@ -251,7 +252,7 @@ export function FamilyArchivesEditor({
       <h2 id="fa-heading">Family Archives</h2>
       <label className={styles.label}>
         Collection note
-        <textarea
+        <textarea {...PROSE}
           className={styles.textarea}
           value={note}
           onChange={(e) => setNote(e.target.value)}
@@ -271,7 +272,7 @@ export function FamilyArchivesEditor({
         <div className={styles.grid2}>
           <label className={styles.label}>
             Title
-            <input
+            <input {...LINE}
               className={styles.input}
               required
               value={form.title}
@@ -280,7 +281,7 @@ export function FamilyArchivesEditor({
           </label>
           <label className={styles.label}>
             Date label (optional)
-            <input
+            <input {...LINE}
               className={styles.input}
               value={form.dateLabel}
               onChange={(e) =>
@@ -295,7 +296,7 @@ export function FamilyArchivesEditor({
             The published caption stays in this box. Saving keeps this wording
             unless you change it.
           </span>
-          <textarea
+          <textarea {...PROSE}
             className={styles.textarea}
             required
             value={form.caption}
@@ -304,7 +305,7 @@ export function FamilyArchivesEditor({
         </label>
         <label className={styles.label}>
           Context note (optional public-record / press)
-          <textarea
+          <textarea {...PROSE}
             className={styles.textarea}
             value={form.contextNote}
             onChange={(e) =>
@@ -318,15 +319,15 @@ export function FamilyArchivesEditor({
             <div key={i} className={styles.grid2}>
               <label className={styles.label}>
                 Title
-                <input className={styles.input} value={r.label} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, label: e.target.value } : x)) }))} />
+                <input {...LINE} className={styles.input} value={r.label} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, label: e.target.value } : x)) }))} />
               </label>
               <label className={styles.label}>
                 Web address
-                <input className={styles.input} type="url" placeholder="https://" value={r.url} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, url: e.target.value } : x)) }))} />
+                <input {...URL_FIELD} className={styles.input} type="url" placeholder="https://" value={r.url} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, url: e.target.value } : x)) }))} />
               </label>
               <label className={styles.label}>
                 Note (optional)
-                <input className={styles.input} value={r.note} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, note: e.target.value } : x)) }))} />
+                <input {...LINE} className={styles.input} value={r.note} onChange={(e) => setForm((f) => ({ ...f, references: f.references.map((x, n) => (n === i ? { ...x, note: e.target.value } : x)) }))} />
               </label>
               <div className={styles.rowActions} style={{ alignItems: "end" }}>
                 <button type="button" className={styles.dangerBtn} onClick={() => setForm((f) => ({ ...f, references: f.references.filter((_, n) => n !== i) }))}>
@@ -376,7 +377,7 @@ export function FamilyArchivesEditor({
         </div>
         <label className={styles.label}>
           Alt text
-          <textarea
+          <textarea {...PROSE}
             className={styles.textarea}
             required
             value={form.alt}
@@ -386,7 +387,7 @@ export function FamilyArchivesEditor({
         <div className={styles.grid2}>
           <label className={styles.label}>
             Source label
-            <input
+            <input {...LINE}
               className={styles.input}
               required
               value={form.sourceLabel}
@@ -397,7 +398,7 @@ export function FamilyArchivesEditor({
           </label>
           <label className={styles.label}>
             Source URL (optional)
-            <input
+            <input {...URL_FIELD}
               className={styles.input}
               value={form.sourceUrl}
               onChange={(e) =>

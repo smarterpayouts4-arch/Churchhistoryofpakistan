@@ -24,6 +24,7 @@ function videoDimensions(url: string): Promise<{ width: number; height: number; 
   });
 }
 import styles from "@/app/admin/admin.module.css";
+import { LINE, NAME, PROSE, URL_FIELD } from "./typing";
 
 type Props = {
   initialInterviews: FeaturedInterview[];
@@ -111,7 +112,7 @@ export function FeaturedInterviewsEditor({
             <p className={styles.hint}>{item.id}</p>
             <label className={styles.label}>
               Title
-              <input
+              <input {...LINE}
                 className={styles.input}
                 value={item.title}
                 onChange={(e) => patchInterview(item.id, { title: e.target.value })}
@@ -119,7 +120,7 @@ export function FeaturedInterviewsEditor({
             </label>
             <label className={styles.label}>
               Copy
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 value={item.copy}
                 onChange={(e) => patchInterview(item.id, { copy: e.target.value })}
@@ -127,7 +128,7 @@ export function FeaturedInterviewsEditor({
             </label>
             <label className={styles.label}>
               Speaker (optional — only when confirmed)
-              <input
+              <input {...NAME}
                 className={styles.input}
                 value={item.speaker ?? ""}
                 onChange={(e) => patchInterview(item.id, { speaker: e.target.value })}
@@ -135,7 +136,7 @@ export function FeaturedInterviewsEditor({
             </label>
             <label className={styles.label}>
               Transcript (optional — shown under the player)
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 rows={5}
                 value={item.transcript ?? ""}
@@ -144,7 +145,7 @@ export function FeaturedInterviewsEditor({
             </label>
             <label className={styles.label}>
               Captions file (optional, .vtt under /media/)
-              <input
+              <input {...URL_FIELD}
                 className={styles.input}
                 placeholder="/media/archive/interviews/captions/example.vtt"
                 value={item.captionsSrc ?? ""}
@@ -153,7 +154,7 @@ export function FeaturedInterviewsEditor({
             </label>
             <label className={styles.label}>
               Alt text
-              <textarea
+              <textarea {...PROSE}
                 className={styles.textarea}
                 value={item.alt}
                 onChange={(e) => patchInterview(item.id, { alt: e.target.value })}

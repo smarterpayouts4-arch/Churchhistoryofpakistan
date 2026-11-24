@@ -122,6 +122,10 @@ export function LoginForm({ previewOpen = false }: Props) {
               className={styles.input}
               name="username"
               autoComplete="username"
+              inputMode="email"
+              spellCheck={false}
+              autoCorrect="off"
+              autoCapitalize="none"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -134,6 +138,9 @@ export function LoginForm({ previewOpen = false }: Props) {
               name="password"
               type={showPw ? "text" : "password"}
               autoComplete="current-password"
+              spellCheck={false}
+              autoCorrect="off"
+              autoCapitalize="none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

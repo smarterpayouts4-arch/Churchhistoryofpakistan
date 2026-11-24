@@ -21,6 +21,8 @@ import {
 } from "@/lib/sections/config";
 import { MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, PHOTO_ACCEPT, VIDEO_ACCEPT, formatBytes } from "@/lib/media/rules";
 import x from "./sections.module.css";
+import { LINE, PROSE } from "./typing";
+import { BufferedInput, BufferedTextarea } from "./BufferedField";
 
 type Storage = SectionsSnapshot["storage"];
 
@@ -621,8 +623,8 @@ export function SectionMediaManager({
         {items.length ? (
           <p className={x.hint}>
             {cfg.kind === "image"
-              ? "Drag a photo (or use the arrows) to change the order. Tap a photo on the most important spot, such as a face, to keep it in view."
-              : "Drag a video (or use the arrows) to change the order. The first video shows first on the website."}
+              ? "Drag a photo (or use the arrows) to change the order. Tap a photo on the most important spot, such as a face, to keep it in view. Spelling mistakes are underlined in red: tap the word (or right-click on a computer) to pick the right spelling."
+              : "Drag a video (or use the arrows) to change the order. The first video shows first on the website. Spelling mistakes are underlined in red: tap the word (or right-click on a computer) to pick the right spelling."}
           </p>
         ) : (
           <p className={x.empty}>No {noun} in this section yet.</p>
@@ -768,7 +770,6 @@ function Tile({
   return (
     <li
       className={dragOver ? x.tileOver : x.tile}
-      draggable
       onDragStart={(e) => {
         e.dataTransfer.setData("text/x-section-index", String(index));
         e.dataTransfer.effectAllowed = "move";
@@ -788,7 +789,9 @@ function Tile({
         }
       }}
     >
-      <div className={video ? x.thumbVideo : x.thumb}>
+      {/* Only the picture is draggable. A draggable tile around the text boxes
+          upset typing and text selection on iPhone/iPad (and Firefox). */}
+      <div className={video ? x.thumbVideo : x.thumb} draggable>
         {video ? (
           item.posterSrc ? (
             <Thumb src={item.posterSrc} alt="" sizes="(max-width: 700px) 92vw, 320px" />
@@ -840,11 +843,12 @@ function Tile({
             <span>
               Title <small>(shown on the website)</small>
             </span>
-            <input
+            <BufferedInput
+              {...LINE}
               className={x.input}
               value={item.title ?? ""}
               maxLength={300}
-              onChange={(e) => onEdit({ title: e.target.value })}
+              onValue={(title) => onEdit({ title })}
             />
           </label>
         ) : null}
@@ -852,13 +856,14 @@ function Tile({
           <span>
             {cfg.titled ? "Description" : "Caption"} <small>(what or who is shown)</small>
           </span>
-          <textarea
+          <BufferedTextarea
+            {...PROSE}
             className={x.textarea}
             rows={2}
             value={item.alt}
             maxLength={1000}
             placeholder={video ? "e.g. Youth programme at St John's, 2024" : "e.g. Bishop Young outside the cathedral, 1975"}
-            onChange={(e) => onEdit({ alt: e.target.value })}
+            onValue={(alt) => onEdit({ alt })}
           />
         </label>
       </div>
