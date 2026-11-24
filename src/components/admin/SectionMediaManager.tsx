@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { photoKey } from "@/lib/media/dedupe";
 import { Icon } from "./Icon";
 import { Thumb } from "./Thumb";
-import { adminFetch } from "./adminFetch";
+import { NO_CONNECTION, adminFetch } from "./adminFetch";
 import { invalidateLibrary } from "./mediaStore";
 import { checkFile, uploadMedia, UploadStoppedError, withType, type StorageInfo } from "./upload";
 import { HEVC_WARNING, isHevcVideo } from "./videoCodec";
@@ -84,6 +84,7 @@ export function SectionMediaManager({
     Object.fromEntries(initial.sections.map((s) => [s.id, s.draft?.rev ?? 0])),
   );
   const queued = useRef<Partial<Record<SectionId, SectionItem[]>>>({});
+  const wasOffline = useRef(false);
   const running = useRef<Partial<Record<SectionId, boolean>>>({});
   const textTimers = useRef<Partial<Record<SectionId, number>>>({});
   // Uploads in flight (Cancel) and failed ones (Try again), by progress row.
@@ -124,6 +125,7 @@ export function SectionMediaManager({
         } catch {
           // No connection. Keep the change waiting; it is sent again when the connection is back.
           setSaveState("offline");
+          wasOffline.current = true;
           return;
         }
         // Done with this change, unless a newer one came in while it was being sent.
@@ -155,6 +157,11 @@ export function SectionMediaManager({
         }
       }
       setSaveState("saved");
+      if (wasOffline.current) {
+        wasOffline.current = false;
+        toast.clear(NO_CONNECTION);
+        toast.success("You're back online. Your change is saved.");
+      }
     } finally {
       running.current[id] = false;
     }

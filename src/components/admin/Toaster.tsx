@@ -12,6 +12,7 @@ export function Toaster() {
   useEffect(
     () =>
       toast.subscribe((t) => {
+        if (t.clear) return void setItems((list) => list.filter((x) => x.message !== t.message));
         setItems((list) => [...list.filter((x) => x.message !== t.message), t].slice(-4));
         if (t.kind !== "error") {
           window.setTimeout(() => setItems((list) => list.filter((x) => x.id !== t.id)), 10000);

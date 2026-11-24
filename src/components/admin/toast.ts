@@ -7,6 +7,8 @@ export type ToastItem = {
   kind: ToastKind;
   message: string;
   action?: ToastAction;
+  /** Take away any message with this text (e.g. "no connection" once it is back). */
+  clear?: boolean;
 };
 
 type Listener = (t: ToastItem) => void;
@@ -23,6 +25,7 @@ export const toast = {
   success: (m: string, o?: { action?: ToastAction }) => emit("success", m, o),
   error: (m: string, o?: { action?: ToastAction }) => emit("error", m, o),
   info: (m: string, o?: { action?: ToastAction }) => emit("info", m, o),
+  clear: (m: string) => listeners.forEach((l) => l({ id: nextId++, kind: "info", message: m, clear: true })),
   subscribe(l: Listener) {
     listeners.add(l);
     return () => {

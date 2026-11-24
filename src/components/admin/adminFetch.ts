@@ -13,6 +13,8 @@ import { toast } from "./toast";
 
 const versions: Record<string, string> = {};
 
+export const NO_CONNECTION = "Could not reach the server. Check your internet connection and try again.";
+
 export function setDocVersions(map: Record<string, string>) {
   Object.assign(versions, map);
 }
@@ -82,7 +84,7 @@ export async function adminFetch(input: string, init: RequestInit = {}): Promise
   try {
     res = await fetch(input, { ...init, headers, credentials: "same-origin" });
   } catch (err) {
-    toast.error("Could not reach the server. Check your internet connection and try again.");
+    toast.error(NO_CONNECTION);
     throw err;
   }
   const newVersion = res.headers.get("x-cms-version");
