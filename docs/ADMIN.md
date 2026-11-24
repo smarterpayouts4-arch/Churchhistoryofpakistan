@@ -4,10 +4,10 @@ This is how to look after the website without touching any code. If something he
 
 ## The short version
 
-1. Sign in.
-2. **Photos & videos** opens. Pick a section.
-3. Add, replace, delete or reorder photos and videos. Each change saves itself as a draft.
-4. Press **Publish to website**. Your changes are live straight away. Nothing needs to be redeployed and no code is touched.
+1. Sign in. **Photos & videos** opens.
+2. Pick a section.
+3. Add, change, move or delete photos and videos. Each change saves itself.
+4. Press **Publish to website**. Your changes are live straight away.
 
 Until you press Publish, visitors keep seeing the old version, so you can take your time.
 
@@ -30,59 +30,47 @@ The four buttons along the top are the parts of the website that show photos or 
 | Section | Where it shows on the website | Limit |
 |---|---|---|
 | **Homepage slideshow** | The large rotating photo at the top of the homepage | 20 photos |
-| **Family Archive gallery** | The Archive page (the first four also show on the homepage) | 20 photos |
+| **Family Archive gallery** | The Archive page (the first four also show on the homepage) | 30 photos |
 | **People photos** | The People page | 20 photos |
 | **Interview videos** | The Interviews page and the homepage | 5 videos |
 
-Each section has a **See it on the website** link.
+### Add a photo or video
 
-### Add photos or videos
+1. Pick a section.
+2. Press **+ Add photos** (or **+ Add videos**). On a phone or iPad you can pick from your photos or take a new one. On a computer you can also drag files onto the dotted box.
+3. A bar shows the upload. New ones go to the **front** and are marked **New**.
 
-- Drag files from your computer onto the dotted box, or press **+ Add photos** (or **+ Add videos**). On a phone, the button lets you pick from your photos or take a new one.
-- A progress bar shows each file. You can add several at once.
-- New ones go to the **front** of the section and are marked **New**, so the newest photos and videos show first. Drag them elsewhere if you like.
-- **Photos:** JPEG, PNG, WebP, GIF or AVIF, up to 20 MB each. Photos are straightened and made web-friendly automatically.
-- **Videos:** MP4, WebM or MOV, up to 100 MB each. Landscape (16:9) videos filmed on a tripod look best.
-- **iPhone photos (HEIC):** these won't upload. On the iPhone, go to Settings → Camera → Formats and choose **Most Compatible**, or share the photo by email, which turns it into a JPEG.
+- Photos up to 20 MB, videos up to 100 MB.
+- **iPhone and iPad photos (HEIC)** are changed to JPEG automatically. Nothing to set up.
+- If something goes wrong, a message appears in the section saying what to do, with **Try again**.
 
-### When a section is full
+### Change, move or delete
 
-When a section reaches its limit (20 photos, or 5 videos), the upload box is replaced by a message like **"Homepage slideshow is full (20 of 20 photos). Delete a photo to add another."** Delete one you no longer need, then add the new one.
-
-The Family Archive gallery already had more than 20 photos before the limit existed. All of them stay on the website, but you need to delete some before you can add new ones there.
-
-### Replace, delete, reorder
-
-- **Replace** swaps the file but keeps its place, title and description.
-- **Delete** asks you to confirm. The photo leaves the website when you publish.
-- **Reorder:** drag a photo to a new place, or use the **←** and **→** arrows (easiest on a phone). The order here is the order on the website.
-- **Focus point (photos):** tap or click a photo on its most important spot, usually a face. That spot stays in view when the photo is cropped to fit.
-
-### Titles and descriptions
-
-- **Title** (archive, people and videos) shows on the website under the photo or video.
-- **Description** or **Caption** says what or who is shown, for someone who can't see the picture. For example: "Bishop Young and Bishop J. S. Qadir Bakhsh outside the cathedral, 1975." On the homepage slideshow it's also the caption on the photo. Only write what you actually know. Don't guess names or dates.
+- **Title** shows under the photo on the website. **Description** says what or who is shown. Only write what you know.
+- **Earlier / Later** moves a photo. The order here is the order on the website.
+- **Replace** swaps the picture but keeps its place and words.
+- **Delete** asks first. The photo only leaves the website when you press Publish.
+- Spelling mistakes are underlined in red. Tap the word to pick the right spelling.
 
 ### Publish
 
-The bar above the sections always tells you where things stand:
+Your changes save by themselves, but visitors don't see them until you press **Publish to website**.
 
-- **Everything is published** (green): the website shows exactly what you see.
-- **You have unpublished changes** (gold): your changes are saved as a draft, but visitors still see the old version. It lists the sections you changed.
+- **Everything is published** (green): the website matches what you see.
+- **You have unpublished changes** (gold): saved, but not on the website yet.
+- **Not saved — check your internet**: the connection dropped. Keep the page open; it saves by itself when the connection is back.
 
-Press **Publish to website** to make every change live at once. The bar then says **Published. Your changes are live on the website.** with a link to look.
+Changed your mind before publishing? Press **Throw away my changes**, or **Undo changes to this section** under the photos.
 
-Changed your mind? **Discard** throws away every unpublished change, and **Undo changes to this section** (under the photos) does the same for one section. Each publish is also kept in History (see "Undoing a change" below).
+### When a section is full
 
-### Storage
+The add button is replaced by a message such as **"People photos is full (20 of 20 photos). Delete a photo to add another."**
 
-The free website plan has 1 GB of storage for photos and videos. The thin bar shows how much is used. When you delete or replace an uploaded photo or video and publish, its file is removed, which frees the space again. The photos that came with the website are never removed.
+## Advanced settings (for Oscar)
 
-## More settings
+At the very bottom of the admin is a button **Advanced settings (for Oscar)**. The owner doesn't need it. It opens the text pages, churches, blog, history and accounts. These pages save straight to the website when you press **Save** (no Publish step), and each one has a **History** button to bring back an earlier version. Setup notes (test mode, missing settings) are listed there too, not at the top of the page.
 
-Everything else is tucked under **More settings** in the menu, so the main page stays simple. These pages save straight to the website when you press **Save** (they don't use the Publish button):
-
-| Menu item | What you can change |
+| Item | What you can change |
 |---|---|
 | **Homepage text** | Homepage title, introduction, founder portrait, timeline text |
 | **Homepage section order** | Move homepage sections up or down, or hide one |
@@ -96,8 +84,6 @@ Everything else is tucked under **More settings** in the menu, so the main page 
 | **All uploaded files** | Every uploaded file: describe, crop a copy, or delete unused files |
 | **Accounts** | Administrators only: add, change or remove people |
 
-**Stories** and **My account** are in the main menu. Every page under More settings shows **Last saved** and has a **History** button.
-
 ## Editing text
 
 Type into the boxes, then press **Save**. A small message at the bottom right confirms it saved. Changes show on the live site straight away.
@@ -106,11 +92,11 @@ Please keep to facts that have a source. If you're not sure about a name, date o
 
 ## Homepage sections
 
-Open **More settings → Homepage section order**. Drag a section, or use the ↑ ↓ arrows, to move it. Use the switch to hide a section without deleting anything. Press **Save**.
+Open **Advanced settings (for Oscar) → Homepage section order**. Drag a section, or use the ↑ ↓ arrows, to move it. Use the switch to hide a section without deleting anything. Press **Save**.
 
 ## Undoing a change
 
-Every save is kept. On any admin page, press **History**:
+Every save and every publish is kept. Under **Advanced settings (for Oscar)**, open the matching page and press **History** (for example **People photo details** for People photos):
 
 - **View** shows what that version contained.
 - **Restore** brings that version back. The version you're replacing stays in History too, so a restore can always be undone.
@@ -147,7 +133,8 @@ Contact details from visitors are private. They never appear on the public site.
 
 - **A yellow or red banner at the top of the admin** means the site's storage isn't connected. Saving is switched off so nothing gets lost. Tell Oscar; [DEPLOYMENT.md](DEPLOYMENT.md) explains the fix.
 - **"Your sign-in has expired"** means you need to sign in again. Your changes are still on screen, so copy anything important before you reload.
-- **An upload failed:** check the file type and size limits above, then try once more.
+- **An upload failed:** the message in the section says why (for example, the file is too big). Press **Try again**, or pick a smaller file.
+- **"Not saved — check your internet"**: keep the page open. It saves by itself when the connection is back. The page warns you if you try to close it before then.
 - **Everyone is locked out:** Oscar can turn on recovery login. See [DEPLOYMENT.md](DEPLOYMENT.md#locked-out).
 
 ## For whoever runs the site on their own computer

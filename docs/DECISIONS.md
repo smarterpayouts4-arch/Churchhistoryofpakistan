@@ -299,3 +299,10 @@ The owner asked to keep the existing design, layout, pages and content, and only
 
 **Consequences.** One clear owner path with one Publish button. Restoring a very old History version can point at an upload that was deleted after it was taken off the site; the photo would then need re-uploading. See `docs/ADMIN.md` and `docs/ARCHITECTURE.md`.
 
+## ADR-012 — Keep the owner's admin plain (2026-11-24)
+
+**Context.** The owner is about 70 and not technical. A review found setup warnings filling the first phone screen, eleven developer pages one tap away, jargon ("draft", "discard", "alt text"), and a save that could silently fail on a weak connection.
+
+**Decision.** No new features. The admin opens on **Photos & videos**, with **Stories** and **My account** beside it; every other editor sits behind one collapsed **Advanced settings (for Oscar)** button at the bottom, which also lists setup notes (test mode, missing settings) instead of banners at the top. Plain wording ("Saved (not on the website yet)", "Throw away my changes", "Describe the picture"). Success messages stay 10 seconds; upload problems scroll into view. A section save that fails for lack of connection is kept and sent again when the browser is back online (and every 10 seconds); the page warns before closing while a save is pending; Publish refuses while a change is unsaved. The Family Archive gallery limit is 30 (`MAX_ARCHIVE_PHOTOS`), so its 24 existing photos fit.
+
+**Consequences.** Same storage, same routes, same History. Oscar reaches everything as before, one button further down.

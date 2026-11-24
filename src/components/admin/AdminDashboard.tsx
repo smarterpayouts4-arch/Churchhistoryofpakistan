@@ -73,9 +73,11 @@ type Props = {
   intakeEnabled: boolean;
   sections: SectionsSnapshot;
   storageInfo: StorageInfo;
+  /** Setup notes for Oscar (test mode, missing settings), shown only under Advanced settings. */
+  devNotes?: string[];
 };
 
-/** Tabs outside the owner's everyday path, tucked under "More settings". */
+/** Tabs outside the owner's everyday path, tucked under "Advanced settings (for Oscar)" at the bottom. */
 const MORE_TABS: Tab[] = ["home", "layout", "archives", "churches", "interviews", "people", "blog", "profile", "site", "media", "users"];
 const ALL_TABS: Tab[] = ["photos", "contributions", "account", ...MORE_TABS];
 
@@ -110,6 +112,7 @@ export function AdminDashboard(props: Props) {
     intakeEnabled,
     sections,
     storageInfo,
+    devNotes = [],
   } = props;
   // Register the versions this page was rendered with (conflict detection).
   useState(() => {
@@ -185,11 +188,6 @@ export function AdminDashboard(props: Props) {
       <nav className={s.sidebar} aria-label="Admin sections">
         <p className={s.sidebarGroup}>Website</p>
         {main.map(navButton)}
-        <button type="button" className={s.moreBtn} aria-expanded={more} onClick={() => setMore((v) => !v)}>
-          <span>More settings</span>
-          <span aria-hidden="true">{more ? "▴" : "▾"}</span>
-        </button>
-        {more ? extra.map(navButton) : null}
       </nav>
 
       <div className={s.main} key={tab}>
@@ -282,6 +280,29 @@ export function AdminDashboard(props: Props) {
           </section>
         ) : null}
       </div>
+      <section className={s.advanced} aria-label="Advanced settings">
+        <button type="button" className={s.moreBtn} aria-expanded={more} onClick={() => setMore((v) => !v)}>
+          <span>Advanced settings (for Oscar)</span>
+          <span aria-hidden="true">{more ? "▴" : "▾"}</span>
+        </button>
+        {more ? (
+          <>
+            <p className={s.advancedNote}>
+              You don&rsquo;t need these for photos and videos. Changes here go live as soon as you press Save.
+            </p>
+            {devNotes.length ? (
+              <ul className={s.advancedNote}>
+                {devNotes.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            ) : null}
+            <nav className={s.advancedGrid} aria-label="Advanced settings">
+              {extra.map(navButton)}
+            </nav>
+          </>
+        ) : null}
+      </section>
       <Toaster />
       <ConflictDialog />
     </div>

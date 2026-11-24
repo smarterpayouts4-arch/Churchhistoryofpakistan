@@ -5,7 +5,7 @@ import Link from "next/link";
 import { toast, type ToastItem } from "./toast";
 import s from "./studio.module.css";
 
-/** Success toasts fade after 5s; errors stay until dismissed. */
+/** Success toasts fade after 10s; errors stay until dismissed. */
 export function Toaster() {
   const [items, setItems] = useState<ToastItem[]>([]);
 
@@ -14,7 +14,7 @@ export function Toaster() {
       toast.subscribe((t) => {
         setItems((list) => [...list.filter((x) => x.message !== t.message), t].slice(-4));
         if (t.kind !== "error") {
-          window.setTimeout(() => setItems((list) => list.filter((x) => x.id !== t.id)), 5000);
+          window.setTimeout(() => setItems((list) => list.filter((x) => x.id !== t.id)), 10000);
         }
       }),
     [],

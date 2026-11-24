@@ -56,6 +56,15 @@ export default async function AdminDashboardPage() {
       loadSectionsState(),
     ]);
   const storage = storageStatus();
+  // Setup notes for Oscar only. They are not shown at the top of the owner's page any more;
+  // they sit inside "Advanced settings (for Oscar)" and in the server log.
+  const devNotes = [
+    ...(TEMP_OPEN_ADMIN_FOR_TESTING
+      ? ["Test mode: the admin is unlocked (anyone with the link can edit). Before handoff set TEMP_OPEN_ADMIN_FOR_TESTING to false in src/lib/auth/test-mode.ts."]
+      : []),
+    ...(session.role === "admin" ? authConfigProblems() : []),
+  ];
+  if (devNotes.length) console.warn(`[admin] ${devNotes.join(" | ")}`);
 
   const docs: Record<string, unknown> = {
     "family-archives.json": archives,
@@ -91,13 +100,7 @@ export default async function AdminDashboardPage() {
           </Link>
           <LogoutButton />
         </div>
-        {TEMP_OPEN_ADMIN_FOR_TESTING ? (
-          <div className={styles.testModeBanner} role="alert">
-            <strong>Test mode: admin is unlocked.</strong> Anyone with this link can edit the site. Turn this off before
-            handoff (set <code>TEMP_OPEN_ADMIN_FOR_TESTING</code> to <code>false</code> in <code>src/lib/auth/test-mode.ts</code>).
-          </div>
-        ) : null}
-        <StorageBanner status={storage} problems={session.role === "admin" ? authConfigProblems() : []} />
+        <StorageBanner status={storage} problems={[]} />
         <AdminDashboard
           initialHomepage={homepage}
           initialLayout={{ sections: resolveHomeLayout(layout) }}
@@ -116,6 +119,7 @@ export default async function AdminDashboardPage() {
           intakeEnabled={intakeStatus().enabled}
           sections={sections}
           storageInfo={{ blob: storage.blob, hosted: storage.hosted }}
+          devNotes={devNotes}
         />
       </div>
     </div>

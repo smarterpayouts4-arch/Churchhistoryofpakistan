@@ -133,6 +133,43 @@
   color: var(--color-muted-brown);
 }
 
+/* "Advanced settings (for Oscar)": one quiet button at the bottom of the admin. */
+.advanced {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-8, 4rem);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.advanced .moreBtn {
+  width: auto;
+  justify-self: start;
+  margin-top: 0;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.advancedNote {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--color-muted-brown);
+}
+
+.advancedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0.4rem;
+}
+
+.advancedGrid .navBtn,
+.advancedGrid .navBtnActive {
+  border: 1px solid var(--color-border);
+}
+
 @media (max-width: 900px) {
   .shell {
     grid-template-columns: 1fr;

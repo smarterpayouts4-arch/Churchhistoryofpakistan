@@ -73,7 +73,7 @@ export function SectionMediaManager({
   const [storage, setStorage] = useState<Storage>(initial.storage);
   const [active, setActive] = useState<SectionId>("hero");
   const [progress, setProgress] = useState<Progress[]>([]);
-  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error" | "offline">("idle");
   const [publishing, setPublishing] = useState(false);
   const [justPublished, setJustPublished] = useState(false);
   const [confirm, setConfirm] = useState<null | { title: string; body: string; action: string; run: () => void }>(null);
@@ -114,12 +114,20 @@ export function SectionMediaManager({
     try {
       while (queued.current[id]) {
         const items = queued.current[id]!;
-        delete queued.current[id];
-        const res = await adminFetch(`/api/admin/sections/${id}`, {
-          method: "PUT",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ items, rev: revs.current[id] ?? 0 }),
-        });
+        let res: Response;
+        try {
+          res = await adminFetch(`/api/admin/sections/${id}`, {
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ items, rev: revs.current[id] ?? 0 }),
+          });
+        } catch {
+          // No connection. Keep the change waiting; it is sent again when the connection is back.
+          setSaveState("offline");
+          return;
+        }
+        // Done with this change, unless a newer one came in while it was being sent.
+        if (queued.current[id] === items) delete queued.current[id];
         const body = (await res.json().catch(() => ({}))) as { draft?: SectionDraft | null; error?: string; conflict?: boolean };
         if (!res.ok) {
           setSaveState("error");
@@ -131,8 +139,8 @@ export function SectionMediaManager({
             toast.error(body.error ?? "Could not save your change. Please try again.");
           }
           // Show the server's last good state again.
-          const fresh = await adminFetch("/api/admin/sections");
-          if (fresh.ok) {
+          const fresh = await adminFetch("/api/admin/sections").catch(() => null);
+          if (fresh?.ok) {
             const snap = (await fresh.json()) as SectionsSnapshot;
             snap.sections.forEach((s) => (revs.current[s.id] = s.draft?.rev ?? 0));
             setSections(snap.sections);
@@ -184,9 +192,42 @@ export function SectionMediaManager({
     [flush],
   );
 
+  // Not saved because the connection dropped: try again when it is back (and every 10 seconds).
+  useEffect(() => {
+    if (saveState !== "offline") return;
+    const retry = () => {
+      for (const s of SECTIONS) if (queued.current[s.id]) void flush(s.id);
+    };
+    window.addEventListener("online", retry);
+    const timer = window.setInterval(retry, 10000);
+    return () => {
+      window.removeEventListener("online", retry);
+      window.clearInterval(timer);
+    };
+  }, [saveState, flush]);
+
+  // Warn before leaving the page while a change is still being saved.
+  const unsaved = saveState === "saving" || saveState === "offline" || progress.some((p) => !p.error && p.fraction < 1);
+  useEffect(() => {
+    if (!unsaved) return;
+    const warn = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [unsaved]);
+
+  // A failed upload or a "section is full" note: bring it into view (on a phone it can be off screen).
+  const problemsRef = useRef<HTMLDivElement>(null);
+  const errorCount = progress.filter((p) => p.error).length;
+  useEffect(() => {
+    if (errorCount || notice) problemsRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [errorCount, notice]);
+
   async function refreshStorage() {
-    const res = await adminFetch("/api/admin/sections");
-    if (res.ok) setStorage(((await res.json()) as SectionsSnapshot).storage);
+    const res = await adminFetch("/api/admin/sections").catch(() => null);
+    if (res?.ok) setStorage(((await res.json()) as SectionsSnapshot).storage);
   }
 
   const section = sections.find((s) => s.id === active)!;
@@ -331,7 +372,7 @@ export function SectionMediaManager({
     const noun = cfg.kind === "video" ? "video" : "photo";
     setConfirm({
       title: `Delete this ${noun}?`,
-      body: `${it.title || it.alt ? `“${it.title || it.alt}”` : `${noun === "video" ? "Video" : "Photo"} ${index + 1}`} will be taken off ${cfg.label} when you press Publish. Until then you can bring it back with Discard.`,
+      body: `${it.title || it.alt ? `“${it.title || it.alt}”` : `${noun === "video" ? "Video" : "Photo"} ${index + 1}`} will be taken off ${cfg.label} when you press Publish. Until then you can get it back with “Undo changes to this section” under the photos.`,
       action: `Delete ${noun}`,
       run: () => {
         update(cfg.id, items.filter((_, i) => i !== index));
@@ -364,7 +405,15 @@ export function SectionMediaManager({
       window.clearTimeout(textTimers.current[s.id]);
       if (queued.current[s.id]) await flush(s.id);
     }
-    const res = await adminFetch("/api/admin/sections/publish", { method: "POST" });
+    if (SECTIONS.some((s) => queued.current[s.id])) {
+      setPublishing(false);
+      return void toast.error("Not saved — check your internet, then press Publish again. Nothing on the website was changed.");
+    }
+    const res = await adminFetch("/api/admin/sections/publish", { method: "POST" }).catch(() => null);
+    if (!res) {
+      setPublishing(false);
+      return;
+    }
     const body = (await res.json().catch(() => ({}))) as { error?: string };
     if (!res.ok) {
       setPublishing(false);
@@ -378,19 +427,19 @@ export function SectionMediaManager({
 
   function discardAll() {
     setConfirm({
-      title: "Discard all unpublished changes?",
-      body: "Every section goes back to what is on the website now. New uploads that were never published are deleted.",
-      action: "Discard changes",
+      title: "Throw away all your changes?",
+      body: "Every section goes back to what is on the website now. Photos and videos you added but never published are removed.",
+      action: "Yes, throw them away",
       run: async () => {
-        const res = await adminFetch("/api/admin/sections", { method: "DELETE" });
-        if (!res.ok) return void toast.error("Could not discard the changes.");
+        const res = await adminFetch("/api/admin/sections", { method: "DELETE" }).catch(() => null);
+        if (!res?.ok) return void toast.error("Could not throw away the changes. Please try again.");
         const snap = (await res.json()) as SectionsSnapshot;
         snap.sections.forEach((s) => (revs.current[s.id] = s.draft?.rev ?? 0));
         setSections(snap.sections);
         setStorage(snap.storage);
         setNotice(null);
         setJustPublished(false);
-        toast.success("Changes discarded. The website was not changed.");
+        toast.success("Your changes were thrown away. The website was not changed.");
       },
     });
   }
@@ -434,9 +483,14 @@ export function SectionMediaManager({
               </strong>
               <span>
                 In {dirty.map((s) => SECTIONS.find((c) => c.id === s.id)!.label).join(", ")}.{" "}
-                {saveState === "saving" ? "Saving draft…" : saveState === "error" ? "Last change not saved." : "Draft saved."}{" "}
-                Visitors still see the old version.
+                {saveState === "saving" ? "Saving…" : saveState === "offline" || saveState === "error" ? "" : "Saved (not on the website yet)."}{" "}
+                Visitors still see the old version until you press Publish.
               </span>
+              {saveState === "offline" ? (
+                <p className={x.saveProblem}>Not saved — check your internet. It will save by itself when the connection is back.</p>
+              ) : saveState === "error" ? (
+                <p className={x.saveProblem}>Your last change was not saved. Please try again.</p>
+              ) : null}
             </>
           ) : justPublished ? (
             <>
@@ -461,7 +515,7 @@ export function SectionMediaManager({
         <div className={x.publishActions}>
           {dirty.length ? (
             <button type="button" className={x.ghostBtn} onClick={discardAll} disabled={publishing}>
-              Discard<span className={x.wide}>&nbsp;changes</span>
+              Throw away<span className={x.wide}>&nbsp;my changes</span>
             </button>
           ) : null}
           <button
@@ -501,7 +555,7 @@ export function SectionMediaManager({
                     : `${n} of ${c.max} ${c.kind === "video" ? "videos" : "photos"}`}
                 </small>
               </span>
-              {s.draft ? <span className={x.tabDirty}>Unpublished</span> : null}
+              {s.draft ? <span className={x.tabDirty}>Not published yet</span> : null}
             </button>
           );
         })}
@@ -561,6 +615,7 @@ export function SectionMediaManager({
         ) : (
           <DropZone cfg={cfg} onFiles={addFiles} />
         )}
+        <div ref={problemsRef} style={{ scrollMarginTop: "12rem" }} />
         {notice && !full ? (
           <div className={x.fullNote} role="status">
             <Icon name="info" size={20} />
@@ -646,7 +701,7 @@ export function SectionMediaManager({
 
         {section.draft ? (
           <p className={x.draftMeta}>
-            Draft saved <LocalTime iso={section.draft.updatedAt} />.{" "}
+            Saved <LocalTime iso={section.draft.updatedAt} /> (not on the website yet).{" "}
             <button
               type="button"
               className={x.linkBtn}
@@ -656,8 +711,8 @@ export function SectionMediaManager({
                   body: "This section goes back to what is on the website now.",
                   action: "Undo changes",
                   run: async () => {
-                    const res = await adminFetch(`/api/admin/sections/${cfg.id}`, { method: "DELETE" });
-                    if (!res.ok) return void toast.error("Could not undo the changes.");
+                    const res = await adminFetch(`/api/admin/sections/${cfg.id}`, { method: "DELETE" }).catch(() => null);
+                    if (!res?.ok) return void toast.error("Could not undo the changes.");
                     const snap = (await res.json()) as SectionsSnapshot;
                     snap.sections.forEach((s) => (revs.current[s.id] = s.draft?.rev ?? 0));
                     setSections(snap.sections);

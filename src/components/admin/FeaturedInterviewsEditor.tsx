@@ -153,7 +153,7 @@ export function FeaturedInterviewsEditor({
               />
             </label>
             <label className={styles.label}>
-              Alt text
+              Describe the picture
               <textarea {...PROSE}
                 className={styles.textarea}
                 value={item.alt}

@@ -68,6 +68,13 @@
   color: var(--color-muted-brown);
 }
 
+.saveProblem {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #8f322f;
+}
+
 .publishText a {
   color: var(--color-burgundy);
   font-weight: 700;

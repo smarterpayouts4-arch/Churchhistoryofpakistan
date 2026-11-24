@@ -6,6 +6,8 @@
 
 /** Most photos any one section can hold. */
 export const MAX_IMAGES_PER_SECTION = 20;
+/** The Family Archive gallery already held 24 photos, so it gets more room. */
+export const MAX_ARCHIVE_PHOTOS = 30;
 /** Most videos on the whole site (they all live in the Interviews section). */
 export const MAX_VIDEOS = 5;
 
@@ -42,7 +44,7 @@ export const SECTIONS: readonly SectionConfig[] = [
     where: "The photo gallery on the Archive page. The first four that are not already in the homepage slideshow also show on the homepage.",
     href: "/archive",
     kind: "image",
-    max: MAX_IMAGES_PER_SECTION,
+    max: MAX_ARCHIVE_PHOTOS,
     titled: true,
   },
   {

@@ -376,7 +376,7 @@ export function FamilyArchivesEditor({
           </label>
         </div>
         <label className={styles.label}>
-          Alt text
+          Describe the picture
           <textarea {...PROSE}
             className={styles.textarea}
             required
