@@ -149,8 +149,9 @@ function overallLimitMs(bytes: number) {
  * event; `stopped` rejects with an UploadStoppedError when the upload is
  * stuck, too slow, or cancelled through the caller's AbortSignal.
  */
-function watchdog(bytes: number, outer?: AbortSignal, opts: { progressEvents?: boolean } = {}) {
+function watchdog(bytes: number, outer?: AbortSignal, opts: { progressEvents?: boolean; stallMs?: number } = {}) {
   const progressEvents = opts.progressEvents ?? true;
+  const stallMs = opts.stallMs ?? UPLOAD_STALL_MS;
   const ctrl = new AbortController();
   const started = Date.now();
   let last = started;
@@ -169,7 +170,7 @@ function watchdog(bytes: number, outer?: AbortSignal, opts: { progressEvents?: b
     const now = Date.now();
     // Without progress events there is nothing to measure a stall by, so
     // only the overall limit applies.
-    if (progressEvents && now - last > UPLOAD_STALL_MS) stop("stalled");
+    if (progressEvents && now - last > stallMs) stop("stalled");
     else if (now - started > limit) stop("timeout");
   }, 1000);
   const onOuter = () => stop("cancelled");
@@ -271,6 +272,12 @@ function isNetworkFailure(err: unknown) {
 
 /** How soon a network failure still counts as "the streamed upload never worked". */
 const QUICK_FAILURE_MS = 20_000;
+/**
+ * A streamed attempt with no progress for this long is given up and sent the
+ * plain way. (Where streaming is broken, the library retries silently and no
+ * progress arrives at all.)
+ */
+const STREAM_STALL_MS = 15_000;
 
 type BlobUploadFn = (typeof import("@vercel/blob/client"))["upload"];
 
@@ -280,8 +287,9 @@ type BlobUploadFn = (typeof import("@vercel/blob/client"))["upload"];
  * without it, it sends the file as one plain request.
  *
  * In streamed mode the attempt is abandoned with StreamUploadTrouble when the
- * library starts over internally (progress goes backwards) or the network
- * fails within the first seconds, so the caller can retry the plain way.
+ * library starts over internally (progress goes backwards), progress stops for
+ * 15 seconds, or the network fails within the first seconds, so the caller can
+ * retry the plain way (overall time limit only, as there's no progress then).
  */
 async function blobAttempt(
   upload: BlobUploadFn,
@@ -292,7 +300,7 @@ async function blobAttempt(
   onProgress?: UploadProgress,
   signal?: AbortSignal,
 ) {
-  const guard = watchdog(file.size, signal, { progressEvents: progress });
+  const guard = watchdog(file.size, signal, { progressEvents: progress, stallMs: progress ? STREAM_STALL_MS : undefined });
   const started = Date.now();
   let highest = -1;
   let trouble: (() => void) | null = null;
@@ -325,6 +333,8 @@ async function blobAttempt(
     try {
       return await Promise.race([sending, guard.stopped, troubled]);
     } catch (err) {
+      // Streamed attempt went quiet: try the plain way rather than give up.
+      if (progress && err instanceof UploadStoppedError && err.reason === "stalled") throw new StreamUploadTrouble();
       if (
         progress &&
         !(err instanceof UploadStoppedError) &&
