@@ -47,8 +47,8 @@ export async function Hero() {
           </Link>
         </div>
         {bandImages.length ? <figure className={styles.featured}>
-          <div className={styles.imageTopline}><span>From the collection</span><span>Family archive</span></div>
-          <HeroBand images={bandImages} />
+          <div className={styles.imageTopline}><span>From the collection</span><Link className={styles.toplineLink} href="/archive">Family archive <span aria-hidden="true">→</span></Link></div>
+          <HeroBand images={bandImages} href="/archive" />
         </figure> : featured && <figure className={styles.featured}>
           <div className={styles.imageTopline}><span>From the collection</span><span>01 / Family archive</span></div>
           <Link href={`/archive#${featured.id}`} className={styles.photoLink} aria-label={`View ${featured.title}`}>

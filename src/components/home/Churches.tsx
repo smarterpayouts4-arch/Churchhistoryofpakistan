@@ -36,7 +36,7 @@ export async function ChurchesPreview() {
         </div>
         <div className={styles.placesGrid}>
           {featured.map((c) => (
-            <PlaceCard key={c.id} cathedral={c}>
+            <PlaceCard key={c.id} cathedral={c} href={`/churches#${c.id}`}>
               <Link className={styles.placeLink} href={`/churches#${c.id}`}>
                 View history &amp; sources <span aria-hidden="true">→</span>
               </Link>

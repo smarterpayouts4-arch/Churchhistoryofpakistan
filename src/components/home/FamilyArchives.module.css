@@ -273,3 +273,9 @@
   /* bottom corner on phones, so the badge never sits on a face */
   .enlargeHint { top: auto; bottom: .5rem; right: .5rem; letter-spacing: .05em; padding: .2rem .5rem; }
 }
+
+/* Homepage cards: the title and the "Family Archive" tag are links. */
+.titleLink { color: inherit; text-decoration: none; }
+.titleLink:hover, .titleLink:focus-visible { text-decoration: underline; text-underline-offset: .15em; }
+.tagLink { text-decoration: none; }
+.tagLink:hover, .tagLink:focus-visible { color: var(--color-burgundy); border-color: currentColor; }

@@ -35,8 +35,8 @@ export async function FamilyArchives() {
         </div>
         <div className={styles.archiveGrid}>
           {familyArchiveHomePreview.map((item, i) => (
-            <ArchiveCard key={item.id} item={item} lightbox={`home-archive:${i}`} sizes="(max-width: 600px) calc(100vw - 2.5rem), (max-width: 1100px) 46vw, 310px">
-              <span className={styles.provenance}>{item.provenance}</span>
+            <ArchiveCard key={item.id} item={item} href={`/archive#${item.id}`} lightbox={`home-archive:${i}`} sizes="(max-width: 600px) calc(100vw - 2.5rem), (max-width: 1100px) 46vw, 310px">
+              <Link className={`${styles.provenance} ${styles.tagLink}`} href="/archive">{item.provenance}</Link>
               {item.dateLabel ? (
                 <span className={styles.archiveDate}>{item.dateLabel}</span>
               ) : null}

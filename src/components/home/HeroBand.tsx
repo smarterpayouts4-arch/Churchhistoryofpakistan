@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MediaImage } from "@/components/ui/MediaImage";
 import type { HeroBandImage } from "@/lib/cms/types";
@@ -14,7 +15,8 @@ import styles from "./Hero.module.css";
 /** Up to this many photos get dots; more get a "3 / 20" stepper. */
 const MAX_DOTS = 6;
 
-export function HeroBand({ images }: { images: HeroBandImage[] }) {
+/** href: where tapping the photo goes (the Family Archive). */
+export function HeroBand({ images, href }: { images: HeroBandImage[]; href?: string }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [rotationEnabled, setRotationEnabled] = useState(true);
@@ -42,7 +44,7 @@ export function HeroBand({ images }: { images: HeroBandImage[] }) {
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      <div className={styles.bandFrame}>
+      <FrameLink href={href} label={`${current.alt} — open the Family Archive`}>
         {images.map((img, i) => {
           // Only the current photo and its neighbours are in the page, so a
           // 20-photo slideshow doesn't download all 20 at once.
@@ -70,7 +72,7 @@ export function HeroBand({ images }: { images: HeroBandImage[] }) {
         <p className={styles.bandCaption} aria-live="off">
           {current.alt}
         </p>
-      </div>
+      </FrameLink>
       {images.length > 1 ? (
         <div className={styles.bandDots} role="group" aria-label="Hero photographs">
           <button type="button" className={styles.rotationButton} onClick={() => setRotationEnabled(v => !v)} aria-pressed={!rotationEnabled}>{rotationEnabled ? "Pause slideshow" : "Resume slideshow"}</button>
@@ -114,5 +116,15 @@ export function HeroBand({ images }: { images: HeroBandImage[] }) {
         </div>
       ) : null}
     </div>
+  );
+}
+
+/** The photo frame; a link when href is given, so tapping the photo goes somewhere. */
+function FrameLink({ href, label, children }: { href?: string; label: string; children: React.ReactNode }) {
+  if (!href) return <div className={styles.bandFrame}>{children}</div>;
+  return (
+    <Link href={href} className={`${styles.bandFrame} ${styles.bandFrameLink}`} aria-label={label}>
+      {children}
+    </Link>
   );
 }

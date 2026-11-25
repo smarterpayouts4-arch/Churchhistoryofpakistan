@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import type { FamilyArchiveItem } from "@/lib/cms/types";
 import { GalleryImage } from "@/components/ui/GalleryImage";
 import { ArchivePublicRecord } from "@/components/ui/ArchivePublicRecord";
@@ -15,6 +16,7 @@ export async function ArchiveCard({
   children,
   lightbox,
   sizes = "(max-width: 600px) calc(100vw - 2.5rem), (max-width: 1100px) 46vw, 420px",
+  href,
 }: {
   item: FamilyArchiveItem;
   titleTag?: "h2" | "h3";
@@ -23,6 +25,8 @@ export async function ArchiveCard({
   lightbox?: string;
   /** next/image sizes for the grid this card sits in. */
   sizes?: string;
+  /** Where tapping the title goes (the homepage links each card to its record). */
+  href?: string;
 }) {
   return (
     <article id={Title === "h2" ? item.id : undefined} className={styles.archiveCard}>
@@ -48,7 +52,7 @@ export async function ArchiveCard({
         ) : null}
       </div>
       <Title>
-        {item.title}
+        {href ? <Link className={styles.titleLink} href={href}>{item.title}</Link> : item.title}
       </Title>
       <p className={styles.archiveCaption}>{item.caption}</p>
       <ArchivePublicRecord item={item} />

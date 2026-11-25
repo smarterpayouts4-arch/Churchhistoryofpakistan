@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import type { CathedralRecord } from "@/lib/cms/types";
 import { GalleryImage } from "@/components/ui/GalleryImage";
 import styles from "@/components/home/Churches.module.css";
@@ -7,10 +8,13 @@ export async function PlaceCard({
   cathedral,
   titleTag: Title = "h3",
   children,
+  href,
 }: {
   cathedral: CathedralRecord;
   titleTag?: "h2" | "h3";
   children?: ReactNode;
+  /** Where tapping the title goes (the homepage links each card to its church). */
+  href?: string;
 }) {
   const open = cathedral.photo_status === "open_license";
 
@@ -34,7 +38,7 @@ export async function PlaceCard({
       <div className={styles.placeCopy}>
         <p className="eyebrow">{cathedral.diocese}</p>
         <Title>
-          {cathedral.cathedral}
+          {href ? <Link className={styles.titleLink} href={href}>{cathedral.cathedral}</Link> : cathedral.cathedral}
         </Title>
         <p>{cathedral.city}</p>
         <p className={styles.address}>{cathedral.address}</p>

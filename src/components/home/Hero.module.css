@@ -310,3 +310,10 @@
 .bandCount { min-width: 4.5rem; text-align: center; font-size: 1rem; font-variant-numeric: tabular-nums; color: var(--color-muted-brown); }
 .rotationButton { min-height: 44px; border: 0; background: transparent; color: var(--color-burgundy); font-size: 1rem; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .bandSlide { transition: none; } }
+
+/* "Family archive" label and the slideshow photo both open the Family Archive. */
+.toplineLink { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+.toplineLink:hover, .toplineLink:focus-visible { color: var(--color-burgundy); }
+.bandFrameLink { display: block; color: inherit; }
+.bandFrameLink:focus-visible { outline: 3px solid var(--color-burgundy); outline-offset: 2px; }
+.toplineLink { white-space: nowrap; }

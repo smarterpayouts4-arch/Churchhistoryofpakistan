@@ -112,3 +112,7 @@
   }
 
 }
+
+/* Homepage cards: the church name is a link too. */
+.titleLink { color: inherit; text-decoration: none; }
+.titleLink:hover, .titleLink:focus-visible { text-decoration: underline; text-underline-offset: .15em; }
