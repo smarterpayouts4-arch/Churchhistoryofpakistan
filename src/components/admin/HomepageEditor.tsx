@@ -439,7 +439,7 @@ export function HomepageEditor({
             ["contribute_copy", "Home story invitation — paragraph"],
             ["guiding_note", "Guiding principle note"],
             ["archive_intro", "Archive page intro"],
-            ["interviews_intro", "Interviews page intro"],
+            ["interviews_intro", "Videos page intro"],
             ["people_intro", "People page intro"],
             ["contribute_intro", "Share Your Story page — intro"],
           ] as const

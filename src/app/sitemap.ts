@@ -4,7 +4,7 @@ import { loadPublishedBlogPosts } from "@/content/blog";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl().replace(/\/$/, "");
-  const routes = ["", "/about", "/archive", "/interviews", "/churches", "/people", "/sources", "/share-your-story", "/blog"];
+  const routes = ["", "/about", "/archive", "/videos", "/churches", "/people", "/sources", "/share-your-story", "/blog"];
   const posts = await loadPublishedBlogPosts().catch(() => []);
   return [
     ...routes.map((r) => ({ url: `${base}${r || "/"}`, changeFrequency: "monthly" as const, priority: r === "" ? 1 : 0.7 })),

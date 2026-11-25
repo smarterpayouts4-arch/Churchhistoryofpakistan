@@ -4,7 +4,7 @@ import { InterviewCard } from "./InterviewCard";
 import styles from "./Interviews.module.css";
 
 /**
- * The interview video grid shared by the home section and /interviews.
+ * The interview video grid shared by the home section and /videos.
  * One video gets the wide "featured" layout; the grid adapts by count.
  */
 export function InterviewGrid({

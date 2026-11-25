@@ -76,7 +76,7 @@ export default async function PeoplePage() {
         />
 
         <nav className="linkRow" aria-label="Related pages">
-          <Link href="/interviews">Interviews</Link>
+          <Link href="/videos">Videos</Link>
           <Link href="/share-your-story">Share a memory</Link>
           <Link href="/sources">Sources</Link>
         </nav>

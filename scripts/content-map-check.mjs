@@ -35,7 +35,7 @@ async function check(route, strings = [], images = []) {
 await check("/", [home.hero.eyebrow, home.hero.intro, home.strapline, site.hero_ctas.primary_label, site.home_sections.purpose.heading, home.hero.purpose, home.timeline[0]?.title, site.home_sections.connection.heading, home.page_context.contribute_heading, home.guiding_principle.replace(/\.$/, ""), site.footer.about_copy], [home.hero.portrait, ...(home.hero.band_images ?? []).map(i => i.src)]);
 await check("/about", [site.pages.about.title, home.hero.intro]);
 await check("/archive", [site.pages.archive.eyebrow, fam.items[0]?.title], [fam.items[0]?.imageSrc]);
-await check("/interviews", [home.page_context.interviews_intro, ints.items[0]?.title], [ints.items[0]?.posterSrc]);
+await check("/videos", [home.page_context.interviews_intro, ints.items[0]?.title], [ints.items[0]?.posterSrc]);
 await check("/churches", [site.pages.churches.title, cats.items[0]?.cathedral], []);
 await check("/people", [home.page_context.people_intro, ppl.frames[0]?.title], [ppl.frames[0]?.src]);
 {

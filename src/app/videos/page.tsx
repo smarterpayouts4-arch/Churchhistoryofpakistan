@@ -11,16 +11,16 @@ import { loadMediaMeta } from "@/lib/media/meta";
 import styles from "../pages.module.css";
 
 const description =
-  "Youth motivational programmes (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan. Additional oral-history interviews forthcoming.";
+  "Videos: youth motivational programmes (Rab Ki Khidmat / Youth Empowerment) from History: Church of Pakistan.";
 
 export const metadata: Metadata = {
-  title: "Interviews",
+  title: "Videos",
   description,
-  ...socialMetadata({ title: "Interviews", description, path: "/interviews", image: "interviews" }),
-  alternates: { canonical: "/interviews" },
+  ...socialMetadata({ title: "Videos", description, path: "/videos", image: "interviews" }),
+  alternates: { canonical: "/videos" },
 };
 
-export default async function InterviewsPage() {
+export default async function VideosPage() {
   const [featuredInterviews, homepage, site, meta] = await Promise.all([
     loadFeaturedInterviews(),
     loadHomepage(),
@@ -32,7 +32,7 @@ export default async function InterviewsPage() {
     <div className={styles.page}>
       <PageHeader
         eyebrow="Youth empowerment"
-        title="Interviews"
+        title="Videos"
         intro={homepage.page_context.interviews_intro}
       />
       <div className="shell pageBody">
@@ -49,7 +49,7 @@ export default async function InterviewsPage() {
         />
 
         <nav className="linkRow" aria-label="Related pages">
-          <Link href="/share-your-story">Suggest an interview subject</Link>
+          <Link href="/share-your-story">Suggest a video</Link>
           <Link href="/people">People records</Link>
         </nav>
       </div>

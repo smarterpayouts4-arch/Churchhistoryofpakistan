@@ -5,7 +5,7 @@ import { loadMediaMeta } from "@/lib/media/meta";
 import { InterviewGrid } from "./InterviewGrid";
 
 /**
- * Featured Interviews = youth motivational videos (Rab Ki Khidmat / Youth Empowerment).
+ * Videos section (was "Featured Interviews") = youth motivational videos (Rab Ki Khidmat / Youth Empowerment).
  * Video cards (see InterviewCard): 16:9 poster, play button, running time,
  * title and description; the video opens in an accessible modal player.
  */
@@ -25,7 +25,7 @@ export async function Interviews() {
             <p className="eyebrow">{copy.eyebrow}</p>
             <h2 id="interviews-heading">{copy.heading}</h2>
           </div>
-          <Link className="sectionLink" href="/interviews">
+          <Link className="sectionLink" href="/videos">
             {copy.view_all_label} →
           </Link>
         </div>

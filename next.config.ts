@@ -58,6 +58,9 @@ const nextConfig: NextConfig = {
     return [
       { source: "/contribute", destination: "/share-your-story", permanent: true },
       { source: "/contribute/:path*", destination: "/share-your-story", permanent: true },
+      // "Interviews" was renamed "Videos" (links like /interviews#a-video keep their #part).
+      { source: "/interviews", destination: "/videos", permanent: true },
+      { source: "/interviews/:path*", destination: "/videos", permanent: true },
     ];
   },
   async headers() {

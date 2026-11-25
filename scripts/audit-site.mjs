@@ -16,7 +16,7 @@ const ROUTES = [
   "/",
   "/about",
   "/archive",
-  "/interviews",
+  "/videos",
   "/churches",
   "/people",
   "/share-your-story",
@@ -66,7 +66,7 @@ async function probe(path) {
         path !== "/share-your-story" ||
         !/thank you for (your )?submission|successfully submitted/i.test(text),
       forthcomingHonest:
-        !["/interviews", "/people"].includes(path) ||
+        !["/videos", "/people"].includes(path) ||
         /forthcoming|coming soon/i.test(text),
     };
     return {

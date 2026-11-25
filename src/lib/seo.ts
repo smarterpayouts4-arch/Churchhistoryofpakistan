@@ -25,7 +25,7 @@ const ALT: Record<ShareImageKey, string> = {
   default: "History: Church of Pakistan — a living archive of faith and memory. Cross-and-book emblem on parchment.",
   about: "About the Project — History: Church of Pakistan",
   archive: "The Family Archive — History: Church of Pakistan",
-  interviews: "Interviews — History: Church of Pakistan",
+  interviews: "Videos — History: Church of Pakistan",
   churches: "Churches — History: Church of Pakistan",
   people: "People — History: Church of Pakistan",
   "share-your-story": "Share Your Story — History: Church of Pakistan",

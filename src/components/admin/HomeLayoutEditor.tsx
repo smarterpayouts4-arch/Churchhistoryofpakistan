@@ -13,7 +13,7 @@ const LABELS: Record<string, [string, string]> = {
   purpose: ["Our purpose", "The four purpose cards"],
   churches: ["Cathedrals & churches", "Preview of the eight cathedrals"],
   timeline: ["Timeline", "Dated, sourced milestones"],
-  interviews: ["Interviews", "Featured interview videos"],
+  interviews: ["Videos", "Videos (youth programmes)"],
   connection: ["My connection", "The curator's personal statement"],
   contribute: ["Share Your Story invitation", "Invites visitors to add their stories, memories and photos"],
   guiding: ["Guiding principle", "Closing quotation"],

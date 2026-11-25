@@ -86,7 +86,7 @@ export default async function MediaInspectPage() {
           Recommendation rule: use <strong>contain</strong> when the native and card
           aspect ratios differ by more than 0.25, or when portrait/landscape
           orientation mismatches. This board is read-only; use the existing
-          Churches, Family Archives, Featured Interviews, or Media tabs to edit.
+          Churches, Family Archives, Videos, or Media tabs to edit.
         </p>
 
         <div className={styles.inspectTableWrap}>

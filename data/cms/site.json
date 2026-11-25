@@ -1,6 +1,6 @@
 {
   "seo": {
-    "description": "Enter the living memory of the Church of Pakistan: photographs, documents, interviews and family stories that honour our forefathers, preserve their sacrifice and service, and keep their legacy alive for generations to come.",
+    "description": "Enter the living memory of the Church of Pakistan: photographs, documents, videos and family stories that honour our forefathers, preserve their sacrifice and service, and keep their legacy alive for generations to come.",
     "title_suffix": "Preserving Our Heritage"
   },
   "nav": {
@@ -18,8 +18,8 @@
         "label": "Archive"
       },
       {
-        "href": "/interviews",
-        "label": "Interviews"
+        "href": "/videos",
+        "label": "Videos"
       },
       {
         "href": "/churches",
@@ -52,8 +52,8 @@
         "label": "Archive"
       },
       {
-        "href": "/interviews",
-        "label": "Interviews"
+        "href": "/videos",
+        "label": "Videos"
       },
       {
         "href": "/churches",
@@ -86,8 +86,8 @@
   "hero_ctas": {
     "primary_label": "Enter the Archive",
     "primary_href": "/archive",
-    "secondary_label": "Watch Interviews",
-    "secondary_href": "/interviews"
+    "secondary_label": "Watch Videos",
+    "secondary_href": "/videos"
   },
   "home_sections": {
     "purpose": {
@@ -96,10 +96,10 @@
     },
     "interviews": {
       "eyebrow": "Youth empowerment",
-      "heading": "Featured Interviews",
+      "heading": "Videos",
       "view_all_label": "View all",
       "note_heading": "Youth motivational programmes",
-      "note_body": "from the History: Church of Pakistan Facebook page (Rab Ki Khidmat / Youth Empowerment). Additional oral-history interviews remain forthcoming."
+      "note_body": "from the History: Church of Pakistan Facebook page (Rab Ki Khidmat / Youth Empowerment). More videos are coming."
     },
     "churches": {
       "eyebrow": "Eight dioceses • one shared history",
@@ -162,8 +162,8 @@
       "status_label": "Forthcoming"
     },
     "interviews_page": {
-      "forthcoming_title": "Oral-history interviews still forthcoming",
-      "forthcoming_body": "Additional oral-history interviews (verified interviewees, roles, transcripts, and citations) remain forthcoming. The videos below are youth motivational programmes published on the Facebook page; they are not Family Archive stills or interview records."
+      "forthcoming_title": "More videos coming soon",
+      "forthcoming_body": "More videos are coming. The videos below are youth motivational programmes published on the Facebook page."
     },
     "contribute_notice": {
       "strong": "Sharing stories online is not open yet.",

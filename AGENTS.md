@@ -71,7 +71,7 @@ Also see: `reference/INVENTORY.md`, `docs/SOURCES_AND_RIGHTS.md`, `docs/ASSET_RE
 | `/` (home) | Archival homepage per package homepage order |
 | `/about` | Project purpose / connection |
 | `/archive` | Browse archival records |
-| `/interviews` | Interviews (placeholders until real content) |
+| `/videos` | Videos (youth programmes; was /interviews, which redirects here) |
 | `/churches` | Eight diocesan cathedrals / places |
 | `/people` | People records (forthcoming — no invented bios) |
 | `/share-your-story` | Share Your Story — visitors add stories, memories and photos (`/contribute` redirects here) |

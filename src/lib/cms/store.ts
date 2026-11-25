@@ -73,7 +73,7 @@ export const DOC_LABELS: Record<ContentDoc, string> = {
   "home-layout.json": "Homepage section order",
   "site.json": "Site settings & page text",
   "family-archives.json": "Family Archive records",
-  "featured-interviews.json": "Interviews",
+  "featured-interviews.json": "Videos",
   "people-frames.json": "People photos",
   "cathedrals.json": "Churches",
   "curator-profile.json": "Curator profile",

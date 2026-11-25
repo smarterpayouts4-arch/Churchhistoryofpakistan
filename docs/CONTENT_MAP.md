@@ -43,7 +43,7 @@ Images: `/media/…` paths (repo `public/media/`) or Vercel Blob URLs when
 |---|---|---|---|
 | `/about` | homepage intro + curator profile + site about header | Home / Curator profile / Site & Pages | `homepage.json`, `curator-profile.json`, `site.json` |
 | `/archive` | family archive items + note, archive intro | Family Archives (+ Site & Pages eyebrow) | `family-archives.json`, `homepage.json`, `site.json` |
-| `/interviews` | interview items (incl. per-cover mobile focal `coverPosition`), intros, forthcoming panel | Featured Interviews / Site & Pages | `featured-interviews.json`, `homepage.json`, `site.json` |
+| `/videos` (was `/interviews`) | interview items (incl. per-cover mobile focal `coverPosition`), intros, forthcoming panel | Featured Interviews / Site & Pages | `featured-interviews.json`, `homepage.json`, `site.json` |
 | `/churches` | cathedral records (name/address/verification/photos/rights) | Churches (+ Site & Pages header/rights) | `cathedrals.json`, `site.json` |
 | `/people` | people stills + forthcoming copy | People / Site & Pages | `people-frames.json`, `site.json` |
 | `/contribute` | form labels = `contribution_fields`, intro, intake notice | Home / Site & Pages | `homepage.json`, `site.json` |

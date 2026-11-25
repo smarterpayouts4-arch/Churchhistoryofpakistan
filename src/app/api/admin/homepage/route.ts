@@ -32,7 +32,7 @@ export const PUT = adminRoute(async (req: NextRequest) => {
   revalidatePath("/", "layout");
   revalidatePath("/about");
   revalidatePath("/archive");
-  revalidatePath("/interviews");
+  revalidatePath("/videos");
   revalidatePath("/people");
   revalidatePath("/share-your-story");
   return NextResponse.json({ ok: true, data: parsed.data });

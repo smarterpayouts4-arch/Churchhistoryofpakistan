@@ -95,6 +95,6 @@ export const PUT = adminRoute(async (req: NextRequest, ctx: Ctx) => {
   data.items[idx] = next;
   await saveFeaturedInterviews(data);
   revalidatePath("/");
-  revalidatePath("/interviews");
+  revalidatePath("/videos");
   return NextResponse.json({ ok: true, item: next });
 });
