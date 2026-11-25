@@ -57,7 +57,7 @@ The four buttons along the top are the parts of the website that show photos or 
 Your changes save by themselves, but visitors don't see them until you press **Publish to website**.
 
 - **Everything is published** (green): the website matches what you see.
-- **You have unpublished changes** (gold): saved, but not on the website yet.
+- **You have unpublished changes** (gold): saved, but not on the website yet. Changed sections are marked **Changed**.
 - **Not saved — check your internet**: the connection dropped. Keep the page open; it saves by itself when the connection is back.
 
 Changed your mind before publishing? Press **Throw away my changes**, or **Undo changes to this section** under the photos.

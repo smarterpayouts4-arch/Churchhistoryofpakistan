@@ -279,6 +279,7 @@
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
 /* ---------- Section panel ---------- */
@@ -793,10 +794,12 @@
   }
   .publishActions {
     width: 100%;
-    flex-wrap: nowrap;
+    /* Two buttons in one row where they fit; on narrow phones (360 px) Publish
+       drops to its own full-width row instead of pushing the page sideways. */
+    flex-wrap: wrap;
   }
   .publishBtn {
-    flex: 1;
+    flex: 1 1 auto;
   }
   .tab,
   .tabActive {

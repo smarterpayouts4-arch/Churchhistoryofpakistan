@@ -301,6 +301,9 @@ export function SectionMediaManager({
         latest.current = next;
         update(cfg.id, next);
         setProgress((p) => p.filter((r) => r.key !== key));
+        toast.success(
+          `${cfg.kind === "video" ? "Video" : "Photo"} added. Press “Publish to website” to show it on the website.`,
+        );
       } catch (err) {
         if (err instanceof UploadStoppedError && err.reason === "cancelled") {
           setProgress((p) => p.filter((r) => r.key !== key));
@@ -562,7 +565,7 @@ export function SectionMediaManager({
                     : `${n} of ${c.max} ${c.kind === "video" ? "videos" : "photos"}`}
                 </small>
               </span>
-              {s.draft ? <span className={x.tabDirty}>Not published yet</span> : null}
+              {s.draft ? <span className={x.tabDirty}>Changed</span> : null}
             </button>
           );
         })}
