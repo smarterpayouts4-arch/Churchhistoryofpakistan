@@ -44,7 +44,7 @@ export function HeroBand({ images, href }: { images: HeroBandImage[]; href?: str
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      <FrameLink href={href} label={`${current.alt} — open the Family Archive`}>
+      <FrameLink href={href} label={current.alt ? `${current.alt} — open the Family Archive` : "Open the Family Archive"}>
         {images.map((img, i) => {
           // Only the current photo and its neighbours are in the page, so a
           // 20-photo slideshow doesn't download all 20 at once.
