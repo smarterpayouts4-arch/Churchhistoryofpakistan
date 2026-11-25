@@ -28,10 +28,10 @@ export function Footer({
         <div>
           <div className={styles.brandRow}>
             <Image
-              src="/media/brand/archive-cross-mark.svg"
+              src="/media/brand/emblem-320.png"
               alt=""
-              width={40}
-              height={40}
+              width={88}
+              height={88}
               unoptimized
               className={styles.brandMark}
             />

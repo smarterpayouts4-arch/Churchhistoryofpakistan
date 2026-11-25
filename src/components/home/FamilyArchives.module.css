@@ -278,4 +278,8 @@
 .titleLink { color: inherit; text-decoration: none; }
 .titleLink:hover, .titleLink:focus-visible { text-decoration: underline; text-underline-offset: .15em; }
 .tagLink { text-decoration: none; }
+/* Phones/tablets: the tag that opens the Family Archive gets a 44px-tall tap area. */
+@media (max-width: 1024px) {
+  .tagLink { display: inline-flex; align-items: center; min-height: 44px; }
+}
 .tagLink:hover, .tagLink:focus-visible { color: var(--color-burgundy); border-color: currentColor; }

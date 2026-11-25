@@ -1,5 +1,3 @@
-36f1003b75761fec25d5ee0678e1538381063477a366d8fe13c5d700074f6d2a  public/media/brand/archive-cross-mark.svg
-36f1003b75761fec25d5ee0678e1538381063477a366d8fe13c5d700074f6d2a  public/media/brand/favicon.svg
 4b3fac0ba97840828f5bd0e1380cbf3a4802172a9db6ace33bfbeb64828d334e  public/media/cathedrals/karachi-holy-trinity.jpg
 f238edb21297f7878e640f6ef18445e048a486e266624ce59bc4cfc951feb1f5  public/media/cathedrals/lahore-resurrection.jpg
 afde24c00a467fdcdd4baed00c6a6f45eb7ded29a61ca2640f1a6fe800d2eb48  public/media/cathedrals/multan-st-mary.jpg

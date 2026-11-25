@@ -97,7 +97,8 @@ SEO pieces:
 ## Share previews & icons
 
 - **Share images:** static 1200×630 PNGs in `public/media/og/` (`og-default.png` plus one per key page, each under 200 KB). Title and emblem sit inside the centre 560 px so WhatsApp/iMessage square and small-thumbnail crops stay legible. `src/lib/seo.ts` (`socialMetadata`) adds absolute `og:image` / `twitter:image` URLs (from `NEXT_PUBLIC_SITE_URL`, else the Vercel production domain, else `https://churchhistoryofpakistan.vercel.app`) with width, height and alt, and `summary_large_image`.
-- **Icons:** `public/favicon.ico` (16/32/48), `public/icon.svg`, `public/apple-touch-icon.png` (180), `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`; `src/app/manifest.ts` serves `/manifest.webmanifest` (theme `#6d2227`, background `#f3e7cf`).
+- **Logo:** source `public/media/brand/church-of-pakistan-emblem.png` (1254×1254, from the owner, Nov 2026). Derived: `emblem-shield.png` (gold shield cut out, transparent; header, phone menu), `emblem-320.png` (footer tile), `emblem-512.png` (structured-data logo). Share images keep their layout; the old cross-and-book medallion was swapped for the shield badge.
+- **Icons:** `public/favicon.ico` (16/32/48, shield), `public/icon.png` (256, shield), `public/apple-touch-icon.png` (180), `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`; `src/app/manifest.ts` serves `/manifest.webmanifest` (theme `#6d2227`, background `#f3e7cf`).
 - Messaging apps cache previews for days. After changing an image, use a new file name (or add `?v=2`) to force a refresh.
 
 ## Share Your Story (visitor stories) — `src/app/share-your-story/` (`/contribute` 308-redirects here), `src/lib/contributions/intake.ts`

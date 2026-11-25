@@ -16,8 +16,21 @@
   gap: 1rem;
 }
 
+/* Full emblem (cream square) as a neat rounded tile on the dark footer. */
 .brandMark {
   flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border-radius: 14px;
+  box-shadow: 0 0 0 1px rgba(195, 154, 95, .55);
+}
+
+@media (max-width: 480px) {
+  .brandMark {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+  }
 }
 
 .brand {
@@ -69,8 +82,14 @@
   padding-top: 1.5rem;
 }
 
+/* Same look as before, but a full 44px-tall tap area (it sat inside a line of small text). */
 .curatorLink {
   color: var(--color-paper);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: .2rem;
+  vertical-align: middle;
 }
 
 .footer :focus-visible {

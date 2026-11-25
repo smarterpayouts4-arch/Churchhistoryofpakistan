@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
-      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png", sizes: "256x256" },
       { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
     ],
     shortcut: "/favicon.ico",
@@ -71,7 +71,7 @@ export default async function RootLayout({
         name: homepage.site_title,
         url: `${base}/`,
         slogan: homepage.strapline,
-        logo: `${base}/media/brand/archive-cross-mark.svg`,
+        logo: `${base}/media/brand/emblem-512.png`,
         founder: { "@type": "Person", name: "Javed Qadir Bakhsh" },
       },
     ],

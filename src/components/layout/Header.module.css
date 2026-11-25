@@ -24,9 +24,10 @@
   min-height: 48px;
 }
 
-.brand img {
-  width: 43px;
-  height: 43px;
+/* The emblem's gold shield (tall, narrow), sized to the two lines of text beside it. */
+.brand .brandMark {
+  width: auto;
+  height: 58px;
 }
 
 .brandText {
@@ -55,6 +56,11 @@
   display: flex;
   align-items: center;
   gap: clamp(.9rem, 1.4vw, 1.5rem);
+}
+
+.drawerMark {
+  width: auto;
+  height: 40px;
 }
 
 .drawerHead,
@@ -235,6 +241,9 @@
   }
 
   .drawerTitle {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
     font-family: var(--font-display);
     font-size: 1.6rem;
     font-weight: 700;
@@ -320,9 +329,8 @@
 }
 
 @media (max-width: 480px) {
-  .brand img {
-    width: 34px;
-    height: 34px;
+  .brand .brandMark {
+    height: 46px;
   }
 
   .brandStrong {

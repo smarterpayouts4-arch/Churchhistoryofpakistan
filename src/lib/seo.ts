@@ -22,7 +22,7 @@ export type ShareImageKey =
   | "blog";
 
 const ALT: Record<ShareImageKey, string> = {
-  default: "History: Church of Pakistan — a living archive of faith and memory. Cross-and-book emblem on parchment.",
+  default: "History: Church of Pakistan — a living archive of faith and memory. Gold Church of Pakistan emblem on parchment.",
   about: "About the Project — History: Church of Pakistan",
   archive: "The Family Archive — History: Church of Pakistan",
   interviews: "Videos — History: Church of Pakistan",

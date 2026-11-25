@@ -78,7 +78,7 @@ export const SECTIONS: readonly SectionConfig[] = [
   {
     id: "portrait",
     label: "Curator photo",
-    where: "Your photo on the homepage and the About page.",
+    where: "Your photo (Javed Qadir Bakhsh). It shows in every place your picture appears: the small round photo at the top of the homepage, “My connection” on the homepage, and the About page.",
     href: "/about",
     kind: "image",
     max: 1,

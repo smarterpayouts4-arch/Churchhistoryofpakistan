@@ -18,9 +18,9 @@ export async function ShareStoryCta() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className={styles.contributeMark}
-            src="/media/brand/archive-cross-mark.svg"
+            src="/media/brand/emblem-shield.png"
             alt=""
-            width={72}
+            width={34}
             height={72}
           />
           <Link className={`btn-primary btn-gilt ${styles.btnCream}`} href="/share-your-story">

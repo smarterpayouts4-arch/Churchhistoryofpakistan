@@ -17,8 +17,7 @@ Registry generated: 2026-09-17 (America/New_York)
 |------|------|----------------|---------|--------|-------|
 | `reference/brand/archive-cross-mark.svg` | Package-generated archival cross + open-book mark (source) | reference_only | Package-generated; site use OK | History: Church of Pakistan / package brand | Identical twin of favicon.svg in this package build |
 | `reference/brand/favicon.svg` | Favicon source | reference_only | Package-generated; site use OK | History: Church of Pakistan / package brand | Same bytes as archive-cross-mark.svg |
-| `public/media/brand/archive-cross-mark.svg` | Publishable brand mark | **publish** | Package-generated; site use OK | History: Church of Pakistan / package brand | Copied from package assets/brand |
-| `public/media/brand/favicon.svg` | Publishable favicon | **publish** | Package-generated; site use OK | History: Church of Pakistan / package brand | Copied from package assets/brand |
+| `public/media/brand/church-of-pakistan-emblem.png` | Church of Pakistan History emblem (gold shield, dove, lettering) — site logo since Nov 2026 | **publish** | Supplied by the owner | History: Church of Pakistan | Source for emblem-shield.png, emblem-320.png, emblem-512.png, favicon and app icons |
 
 ---
 
