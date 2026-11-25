@@ -5,6 +5,7 @@ import { loadCathedralItems } from "@/content/cathedrals";
 import { PlaceCard } from "@/components/ui/PlaceCard";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
+import { CURATOR_PHOTO_STATUS } from "@/lib/cms/photo-status";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/Churches.module.css";
 
@@ -35,7 +36,9 @@ export default async function ChurchesPage() {
           {cathedrals.map((c) => (
               <PlaceCard key={c.id} cathedral={c} titleTag="h2">
                   <p className={styles.meta}>{c.verification}</p>
-                  {c.photo_author ? (
+                  {c.photo_status === CURATOR_PHOTO_STATUS ? (
+                    <p className={styles.meta}>Photo: from the curator&rsquo;s collection.</p>
+                  ) : c.photo_author ? (
                     <p className={styles.meta}>
                       Photo: {c.photo_author}
                       {c.photo_license ? ` / ${c.photo_license}` : ""}

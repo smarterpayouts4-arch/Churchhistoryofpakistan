@@ -36,6 +36,15 @@ const ACTIVE_SECTION_KEY = "hcop-active-section";
 
 const itemsOf = (s: SectionState) => s.draft?.items ?? s.live;
 
+const TAB_ICONS: Record<SectionId, string> = {
+  hero: "home",
+  gallery: "archive",
+  people: "people",
+  churches: "church",
+  portrait: "person",
+  interviews: "video",
+};
+
 function newId(name: string) {
   const stem =
     name
@@ -364,7 +373,7 @@ export function SectionMediaManager({
       });
       update(cfg.id, next);
       setProgress((p) => p.filter((r) => r.key !== key));
-      toast.success("Replaced. Press Publish to put it on the website.");
+      toast.success("Replaced. Press “Publish to website” to show it on the website.");
     } catch (err) {
       if (err instanceof UploadStoppedError && err.reason === "cancelled") {
         setProgress((p) => p.filter((r) => r.key !== key));
@@ -373,6 +382,45 @@ export function SectionMediaManager({
           const at = latest.current.findIndex((it) => it.id === itemId);
           if (at < 0) return void toast.error("That photo is no longer in this section.");
           void replaceFile(at, file);
+        };
+        setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: 1, error: (err as Error).message, retry: true } : r)));
+      }
+    } finally {
+      delete uploadCtrls.current[key];
+    }
+    invalidateLibrary();
+    void refreshStorage();
+  }
+
+  /** Videos: a new cover picture (what people see before pressing play). */
+  async function changeCover(index: number, chosen: File) {
+    const file = withType(chosen);
+    const problem = checkFile(file);
+    if (problem) return void toast.error(problem);
+    if (!file.type.startsWith("image/")) return void toast.error("Please choose a photo for the cover picture.");
+    const key = `cover-${Math.random()}`;
+    const itemId = latest.current[index]?.id;
+    setProgress((p) => [...p, { key, name: `New cover picture: ${file.name}`, fraction: 0 }]);
+    const ctrl = new AbortController();
+    uploadCtrls.current[key] = ctrl;
+    try {
+      // A cover is a photo, so it is not checked against the video section's room.
+      const media = await uploadMedia(file, storageInfo, {
+        signal: ctrl.signal,
+        onProgress: (f) => setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: f } : r))),
+      });
+      const next = latest.current.map((it) => (it.id === itemId ? { ...it, posterSrc: media.url } : it));
+      latest.current = next;
+      update(cfg.id, next);
+      setProgress((p) => p.filter((r) => r.key !== key));
+      toast.success("New cover picture added. Press “Publish to website” to show it on the website.");
+    } catch (err) {
+      if (err instanceof UploadStoppedError && err.reason === "cancelled") {
+        setProgress((p) => p.filter((r) => r.key !== key));
+      } else {
+        retries.current[key] = () => {
+          const at = latest.current.findIndex((it) => it.id === itemId);
+          if (at >= 0) void changeCover(at, file);
         };
         setProgress((p) => p.map((r) => (r.key === key ? { ...r, fraction: 1, error: (err as Error).message, retry: true } : r)));
       }
@@ -555,20 +603,25 @@ export function SectionMediaManager({
               type="button"
               className={c.id === active ? x.tabActive : x.tab}
               aria-pressed={c.id === active}
+              disabled={busyUploading}
               onClick={() => {
                 setActive(c.id);
                 setNotice(null);
               }}
             >
               <span className={x.tabIcon} aria-hidden="true">
-                <Icon name={c.kind === "video" ? "video" : c.id === "hero" ? "home" : c.id === "people" ? "people" : "archive"} />
+                <Icon name={TAB_ICONS[c.id]} />
               </span>
               <span className={x.tabText}>
                 <strong>{c.label}</strong>
                 <small>
-                  {n > c.max
-                    ? `${n} ${c.kind === "video" ? "videos" : "photos"} · limit ${c.max}`
-                    : `${n} of ${c.max} ${c.kind === "video" ? "videos" : "photos"}`}
+                  {c.fixed
+                    ? c.id === "churches"
+                      ? `${n} churches`
+                      : "1 photo"
+                    : n > c.max
+                      ? `${n} ${c.kind === "video" ? "videos" : "photos"} · limit ${c.max}`
+                      : `${n} of ${c.max} ${c.kind === "video" ? "videos" : "photos"}`}
                 </small>
               </span>
               {s.draft ? <span className={x.tabDirty}>Changed</span> : null}
@@ -588,13 +641,13 @@ export function SectionMediaManager({
               </a>
             </p>
           </div>
-          <div className={x.count} aria-label={over ? `${items.length} ${noun}, limit ${cfg.max}` : `${items.length} of ${cfg.max} ${noun}`}>
+          {cfg.fixed ? null : <div className={x.count} aria-label={over ? `${items.length} ${noun}, limit ${cfg.max}` : `${items.length} of ${cfg.max} ${noun}`}>
             <strong>
               {over ? items.length : `${items.length} of ${cfg.max}`}
             </strong>{" "}
             {noun}
             <span>{over ? `Over the limit of ${cfg.max}` : full ? "Full" : `${cfg.max - items.length} ${cfg.max - items.length === 1 ? "space" : "spaces"} left`}</span>
-          </div>
+          </div>}
         </div>
 
         <div className={x.meterRow}>
@@ -614,7 +667,7 @@ export function SectionMediaManager({
           </small>
         </div>
 
-        {full ? (
+        {cfg.fixed ? null : full ? (
           <div className={x.fullNote} role="status">
             <Icon name="info" size={20} />
             <span>
@@ -689,9 +742,13 @@ export function SectionMediaManager({
 
         {items.length ? (
           <p className={x.hint}>
-            {cfg.kind === "image"
+            {cfg.id === "churches"
+              ? "Each church has one photo. To change it, press “Replace photo” under that church and choose a photo. Tap a photo on the most important spot to keep it in view."
+              : cfg.id === "portrait"
+                ? "To change your photo, press “Replace photo” and choose a photo."
+                : cfg.kind === "image"
               ? "Drag a photo (or use the arrows) to change the order. Tap a photo on the most important spot, such as a face, to keep it in view. Spelling mistakes are underlined in red: tap the word (or right-click on a computer) to pick the right spelling."
-              : "Drag a video (or use the arrows) to change the order. The first video shows first on the website. Spelling mistakes are underlined in red: tap the word (or right-click on a computer) to pick the right spelling."}
+                  : "Drag a video (or use the arrows) to change the order. The first video shows first on the website. Spelling mistakes are underlined in red: tap the word (or right-click on a computer) to pick the right spelling."}
           </p>
         ) : (
           <p className={x.empty}>No {noun} in this section yet.</p>
@@ -710,6 +767,7 @@ export function SectionMediaManager({
               onMove={move}
               onEdit={(patch) => edit(i, patch)}
               onReplace={(f) => replaceFile(i, f)}
+              onCover={(f) => changeCover(i, f)}
               onDelete={() => removeAt(i)}
             />
           ))}
@@ -814,6 +872,7 @@ function Tile({
   onMove,
   onEdit,
   onReplace,
+  onCover,
   onDelete,
 }: {
   cfg: SectionConfig;
@@ -826,18 +885,22 @@ function Tile({
   onMove: (from: number, to: number) => void;
   onEdit: (patch: Partial<SectionItem>) => void;
   onReplace: (f: File) => void;
+  onCover: (f: File) => void;
   onDelete: () => void;
 }) {
   const replaceInput = useRef<HTMLInputElement>(null);
+  const coverInput = useRef<HTMLInputElement>(null);
+  const fixed = Boolean(cfg.fixed);
   const [dragOver, setDragOver] = useState(false);
   const video = cfg.kind === "video";
-  const name = item.title || item.alt || `${video ? "Video" : "Photo"} ${index + 1}`;
+  const name = item.label || item.title || item.alt || `${video ? "Video" : "Photo"} ${index + 1}`;
   const mins = item.durationSeconds ? `${Math.floor(item.durationSeconds / 60)}:${String(Math.round(item.durationSeconds % 60)).padStart(2, "0")}` : null;
 
   return (
     <li
       className={dragOver ? x.tileOver : x.tile}
       onDragStart={(e) => {
+        if (fixed) return;
         e.dataTransfer.setData("text/x-section-index", String(index));
         e.dataTransfer.effectAllowed = "move";
       }}
@@ -858,13 +921,16 @@ function Tile({
     >
       {/* Only the picture is draggable. A draggable tile around the text boxes
           upset typing and text selection on iPhone/iPad (and Firefox). */}
-      <div className={video ? x.thumbVideo : x.thumb} draggable>
+      <div className={video ? x.thumbVideo : x.thumb} draggable={!fixed}>
         {video ? (
           item.posterSrc ? (
             <Thumb src={item.posterSrc} alt="" sizes="(max-width: 700px) 92vw, 320px" />
           ) : (
             <Thumb src={item.src} kind="video" alt={name} />
           )
+        ) : cfg.id === "portrait" ? (
+          // The curator photo is shown whole (no focal point to choose).
+          <Thumb src={item.src} alt={name} sizes="(max-width: 700px) 92vw, 320px" />
         ) : (
           // Tap/click the photo on its most important spot (a mouse/touch extra; the
           // tile works without it).
@@ -888,15 +954,21 @@ function Tile({
             ) : null}
           </span>
         )}
-        <span className={x.number} aria-hidden="true">
-          {index + 1}
-        </span>
+        {fixed ? null : (
+          <span className={x.number} aria-hidden="true">
+            {index + 1}
+          </span>
+        )}
         {status ? <span className={x.status}>{status === "new" ? "New" : "Replaced"}</span> : null}
         {video && mins ? <span className={x.duration}>{mins}</span> : null}
-        <span className={x.grip} aria-hidden="true" title="Drag to reorder">
-          <Icon name="grip" size={18} />
-        </span>
+        {fixed ? null : (
+          <span className={x.grip} aria-hidden="true" title="Drag to reorder">
+            <Icon name="grip" size={18} />
+          </span>
+        )}
       </div>
+
+      {fixed && item.label ? <h4 className={x.placeName}>{item.label}</h4> : null}
 
       {sameAs ? (
         <p className={x.sameNote}>
@@ -904,7 +976,7 @@ function Tile({
         </p>
       ) : null}
 
-      <div className={x.fields}>
+      {fixed ? null : <div className={x.fields}>
         {cfg.titled ? (
           <label className={x.label}>
             <span>
@@ -933,9 +1005,10 @@ function Tile({
             onValue={(alt) => onEdit({ alt })}
           />
         </label>
-      </div>
+      </div>}
 
       <div className={x.actions}>
+        {fixed ? null : <>
         <button type="button" className={x.moveBtn} onClick={() => onMove(index, index - 1)} disabled={index === 0} aria-label={`Move ${name} earlier`}>
           <span aria-hidden="true" className={x.arrowSide}>←</span>
           <span aria-hidden="true" className={x.arrowUp}>↑</span>
@@ -947,12 +1020,33 @@ function Tile({
           <span aria-hidden="true" className={x.arrowUp}>↓</span>
         </button>
         <span className={x.spacer} />
+        </>}
         <button type="button" className={x.actionBtn} onClick={() => replaceInput.current?.click()}>
-          Replace
+          {fixed ? "Replace photo" : "Replace"}
         </button>
-        <button type="button" className={x.deleteBtn} onClick={onDelete}>
-          Delete
-        </button>
+        {video ? (
+          <button type="button" className={x.actionBtn} onClick={() => coverInput.current?.click()}>
+            Change cover picture
+          </button>
+        ) : null}
+        {fixed ? null : (
+          <button type="button" className={x.deleteBtn} onClick={onDelete}>
+            Delete
+          </button>
+        )}
+        {video ? (
+          <input
+            ref={coverInput}
+            type="file"
+            hidden
+            accept={PHOTO_ACCEPT}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) onCover(f);
+              e.target.value = "";
+            }}
+          />
+        ) : null}
         <input
           ref={replaceInput}
           type="file"

@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { CathedralRecord } from "@/lib/cms/types";
 import { GalleryImage } from "@/components/ui/GalleryImage";
 import styles from "@/components/home/Churches.module.css";
+import { CURATOR_PHOTO_STATUS } from "@/lib/cms/photo-status";
 
 export async function PlaceCard({
   cathedral,
@@ -17,6 +18,8 @@ export async function PlaceCard({
   href?: string;
 }) {
   const open = cathedral.photo_status === "open_license";
+  // A photo the curator put in from the admin ("Photos & videos" → Churches & cathedrals).
+  const curator = cathedral.photo_status === CURATOR_PHOTO_STATUS;
 
   return (
     <article id={Title === "h2" ? cathedral.id : undefined} className={styles.placeCard}>
@@ -25,14 +28,17 @@ export async function PlaceCard({
           src={cathedral.local_file}
           ratio={4 / 3}
           alt={
-            open
-              ? `Exterior of ${cathedral.cathedral}, ${cathedral.city}`
-              : `Archival placeholder for ${cathedral.cathedral}, ${cathedral.city}`
+            curator
+              ? `Photograph of ${cathedral.cathedral}, ${cathedral.city}`
+              : open
+                ? `Exterior of ${cathedral.cathedral}, ${cathedral.city}`
+                : `Archival placeholder for ${cathedral.cathedral}, ${cathedral.city}`
           }
+          position={cathedral.photo_position}
           sizes="(max-width: 600px) calc(100vw - 2.5rem), (max-width: 1100px) 46vw, 320px"
         />
-        <span className={`${styles.rightsBadge} ${open ? "" : styles.rightsPending}`}>
-          {open ? "Reusable photo verified" : "Photo permission pending"}
+        <span className={`${styles.rightsBadge} ${open || curator ? "" : styles.rightsPending}`}>
+          {curator ? "Photo from the curator" : open ? "Reusable photo verified" : "Photo permission pending"}
         </span>
       </div>
       <div className={styles.placeCopy}>

@@ -885,3 +885,12 @@
     transition: none;
   }
 }
+
+/* Churches & cathedrals / Curator photo: the place's name under its photo. */
+.placeName {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  font-weight: 700;
+  color: var(--color-ink);
+}

@@ -170,6 +170,8 @@ export type CathedralRecord = {
   photo_author: string;
   photo_license: string;
   local_file: string;
+  /** Focal point of the photo in its card (CSS object-position), set in "Photos & videos". */
+  photo_position?: string;
   fallback_file?: string;
   notes: string;
   map_query: string;

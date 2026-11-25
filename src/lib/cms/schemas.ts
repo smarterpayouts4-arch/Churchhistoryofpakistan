@@ -267,6 +267,7 @@ export const cathedralRecordSchema = z.object({
   photo_author: z.string().max(300),
   photo_license: z.string().max(300),
   local_file: z.string().min(1).max(500),
+  photo_position: z.string().max(40).optional(),
   fallback_file: z.string().max(500).optional(),
   notes: z.string().max(8000),
   map_query: z.string().min(1).max(500),

@@ -2,6 +2,8 @@ import { createHash } from "crypto";
 import { z } from "zod";
 import { readDoc, writeDoc } from "@/lib/cms/store";
 import type {
+  CathedralRecord,
+  CathedralsFile,
   FamilyArchiveItem,
   FamilyArchivesFile,
   FeaturedInterview,
@@ -10,6 +12,7 @@ import type {
   PeopleFrame,
   PeopleFramesFile,
 } from "@/lib/cms/types";
+import { CURATOR_PHOTO_STATUS } from "@/lib/cms/photo-status";
 import { deleteUnusedUploads, getMediaIndex } from "@/lib/media/library";
 import { isImageUrl, isVideoUrl, STORAGE_BUDGET_BYTES } from "@/lib/media/rules";
 import {
@@ -29,7 +32,9 @@ import {
  *   hero       → homepage.json  hero.band_images
  *   gallery    → family-archives.json  items
  *   people     → people-frames.json  frames
- *   interviews → featured-interviews.json  items
+ *   churches   → cathedrals.json  items[].local_file (one fixed photo per church)
+ *   portrait   → homepage.json  hero.portrait (one fixed photo)
+ *   interviews → featured-interviews.json  items (shown to the owner as "Videos")
  *
  * Edits are saved as a draft (private doc section-drafts.json). Nothing on
  * the website changes until Publish, which writes the live documents through
@@ -71,6 +76,8 @@ export const sectionItemSchema = z.object({
   width: z.number().int().positive().max(20000).optional(),
   height: z.number().int().positive().max(20000).optional(),
   durationSeconds: z.number().positive().max(86400).optional(),
+  /** Fixed places: shown to the owner only; publish never reads it. */
+  label: z.string().max(300).optional(),
 });
 
 export const saveDraftSchema = z.object({
@@ -83,6 +90,7 @@ export const saveDraftSchema = z.object({
 export function kindProblem(id: SectionId, items: SectionItem[]): string | null {
   const cfg = sectionConfig(id)!;
   const ok = cfg.kind === "video" ? isVideoUrl : isImageUrl;
+  if (items.some((i) => i.posterSrc && !isImageUrl(i.posterSrc))) return "Please choose a photo for the cover picture.";
   const bad = items.find((i) => !ok(i.src));
   if (!bad) return null;
   return cfg.kind === "video" ? "This section only takes videos." : "This section only takes photos.";
@@ -102,17 +110,24 @@ type LiveDocs = {
   archives: FamilyArchivesFile;
   people: PeopleFramesFile;
   interviews: FeaturedInterviewsFile;
+  cathedrals: CathedralsFile;
 };
 
 async function readLiveDocs(): Promise<LiveDocs> {
-  const [homepage, archives, people, interviews] = await Promise.all([
+  const [homepage, archives, people, interviews, cathedrals] = await Promise.all([
     readDoc<HomepageFile>("homepage.json"),
     readDoc<FamilyArchivesFile>("family-archives.json"),
     readDoc<PeopleFramesFile>("people-frames.json"),
     readDoc<FeaturedInterviewsFile>("featured-interviews.json"),
+    readDoc<CathedralsFile>("cathedrals.json"),
   ]);
-  return { homepage, archives, people, interviews };
+  return { homepage, archives, people, interviews, cathedrals };
 }
+
+/** "St. John's Cathedral, Gojra" — how a church is named to the owner. */
+const churchName = (c: CathedralRecord) => `${c.cathedral}, ${c.city.split(",")[0]!.trim()}`;
+
+
 
 function clean<T extends object>(o: T): T {
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
@@ -132,6 +147,12 @@ function liveItems(id: SectionId, docs: LiveDocs): SectionItem[] {
       );
     case "people":
       return docs.people.frames.map((f) => clean({ id: f.id, src: f.src, alt: f.alt, title: f.title, position: f.position }));
+    case "churches":
+      return docs.cathedrals.items.map((c) =>
+        clean({ id: c.id, src: c.local_file, alt: "", position: c.photo_position, label: churchName(c) }),
+      );
+    case "portrait":
+      return [{ id: "curator-photo", src: docs.homepage.hero.portrait, alt: "", label: "Javed Qadir Bakhsh" }];
     case "interviews":
       return docs.interviews.items.map((v) =>
         clean({
@@ -209,6 +230,13 @@ export async function saveDraft(
   }
   const kind = kindProblem(id, items);
   if (kind) throw new SectionError(kind, 415);
+  if (cfg.fixed) {
+    // One photo per place: same places, same order (only the photo changes).
+    const same = items.length === live.length && items.every((it, i) => it.id === live[i]!.id);
+    if (!same) throw new SectionError("Reload the page and try again.", 409, { conflict: true });
+    // The name comes from the website, never from the browser.
+    items = items.map((it, i) => clean({ ...it, label: live[i]!.label, alt: "", title: undefined }));
+  }
   const ids = items.map((i) => i.id);
   if (new Set(ids).size !== ids.length) throw new SectionError("The same photo is listed twice.");
   const baseIds = existing?.baseIds ?? live.map((i) => i.id);
@@ -327,7 +355,14 @@ function applyInterviews(file: FeaturedInterviewsFile, draft: SectionDraft): Fea
     const height = i.height ?? prev?.height ?? 720;
     const sized = { width, height, orientation: height > width ? ("portrait" as const) : ("landscape" as const) };
     if (prev && prev.videoSrc === i.src) {
-      return clean({ ...prev, title, alt: i.alt || prev.alt });
+      // Same video. A new cover picture (set by the owner) replaces the old cover.
+      const newCover = i.posterSrc && i.posterSrc !== (prev.coverSrc || prev.posterSrc);
+      return clean({
+        ...prev,
+        title,
+        alt: i.alt || prev.alt,
+        ...(newCover ? { posterSrc: i.posterSrc!, coverSrc: undefined, coverPosition: undefined } : {}),
+      });
     }
     if (prev) {
       // A different video file: the old poster, captions and transcript belonged to the old one.
@@ -359,6 +394,37 @@ function applyInterviews(file: FeaturedInterviewsFile, draft: SectionDraft): Fea
     });
   });
   return { ...file, items: [...addedLive, ...items] };
+}
+
+/** Churches: only the photo (and its focal point) changes; everything else stays. */
+function applyChurches(file: CathedralsFile, draft: SectionDraft): CathedralsFile {
+  const byId = new Map(draft.items.map((i) => [i.id, i]));
+  return {
+    ...file,
+    items: file.items.map((c) => {
+      const i = byId.get(c.id);
+      if (!i) return c;
+      if (i.src === c.local_file) return clean({ ...c, photo_position: i.position });
+      // A new photo from the owner: the old photo's credit and licence no longer apply.
+      return clean({
+        ...c,
+        local_file: i.src,
+        photo_position: i.position,
+        photo_status: CURATOR_PHOTO_STATUS,
+        photo_source_page: "",
+        photo_remote_url: "",
+        photo_author: "",
+        photo_license: "",
+        fallback_file: undefined,
+      });
+    }),
+  };
+}
+
+function applyPortrait(file: HomepageFile, draft: SectionDraft): HomepageFile {
+  const photo = draft.items[0];
+  if (!photo) return file;
+  return { ...file, hero: { ...file.hero, portrait: photo.src } };
 }
 
 function applyHero(file: HomepageFile, draft: SectionDraft): HomepageFile {
@@ -409,10 +475,19 @@ export async function publishDrafts(): Promise<PublishResult> {
     const kind = kindProblem(id, draft.items);
     if (kind) throw new SectionError(`${cfg.label}: ${kind}`, 415);
     let key: keyof LiveDocs;
+    // Two sections can change the same document (slideshow + curator photo): build on each other.
     switch (id) {
       case "hero":
         key = "homepage";
-        next.homepage = applyHero(docs.homepage, draft);
+        next.homepage = applyHero(next.homepage ?? docs.homepage, draft);
+        break;
+      case "portrait":
+        key = "homepage";
+        next.homepage = applyPortrait(next.homepage ?? docs.homepage, draft);
+        break;
+      case "churches":
+        key = "cathedrals";
+        next.cathedrals = applyChurches(docs.cathedrals, draft);
         break;
       case "gallery":
         key = "archives";
@@ -430,13 +505,15 @@ export async function publishDrafts(): Promise<PublishResult> {
     const after = liveItems(id, { ...docs, ...next } as LiveDocs);
     const limit = limitProblem(cfg, after, before.map((i) => i.id));
     if (limit) throw new SectionError(limit, 409, { full: true, section: id });
-    summaries[key] = changeSummary(cfg.label, before, after);
+    const summary = changeSummary(cfg.label, before, after);
+    summaries[key] = summaries[key] ? `${summaries[key]}; ${summary}` : summary;
   }
 
   if (next.homepage) await writeDoc("homepage.json", next.homepage, { summary: summaries.homepage });
   if (next.archives) await writeDoc("family-archives.json", next.archives, { summary: summaries.archives });
   if (next.people) await writeDoc("people-frames.json", next.people, { summary: summaries.people });
   if (next.interviews) await writeDoc("featured-interviews.json", next.interviews, { summary: summaries.interviews });
+  if (next.cathedrals) await writeDoc("cathedrals.json", next.cathedrals, { summary: summaries.cathedrals });
 
   for (const id of ids) delete drafts.drafts[id];
   await writeDrafts(drafts);
