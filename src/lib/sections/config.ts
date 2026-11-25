@@ -15,7 +15,7 @@ export const MAX_VIDEOS = 5;
  * Section ids are stored in saved drafts, so they never change ("interviews"
  * is the Videos section; only its label was renamed).
  */
-export const SECTION_IDS = ["hero", "gallery", "people", "churches", "portrait", "interviews"] as const;
+export const SECTION_IDS = ["hero", "gallery", "people", "churches", "portrait", "about", "interviews"] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
 
 export type SectionConfig = {
@@ -82,6 +82,16 @@ export const SECTIONS: readonly SectionConfig[] = [
     href: "/about",
     kind: "image",
     max: 1,
+    titled: false,
+    fixed: true,
+  },
+  {
+    id: "about",
+    label: "About page photos",
+    where: "The photos in your life story on the About page, one beside each part of the story. Press “Replace photo” under a photo to put in a different one. (Your own photo at the top of the page is in “Curator photo”.)",
+    href: "/about#profile",
+    kind: "image",
+    max: MAX_IMAGES_PER_SECTION,
     titled: false,
     fixed: true,
   },

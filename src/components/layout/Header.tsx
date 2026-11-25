@@ -92,7 +92,7 @@ export function Header({ siteName, navItems = primaryNav }: { siteName: string; 
     <header className={styles.header} data-scrolled={scrolled}>
       <div className={`shell ${styles.inner}`}>
         <Link className={styles.brand} href="/" onClick={() => setOpen(false)}>
-          <Image className={styles.brandMark} src="/media/brand/emblem-shield.png" alt="" width={27} height={58} unoptimized priority />
+          <Image className={styles.brandMark} src="/media/brand/emblem-240.png" alt="" width={72} height={72} unoptimized priority />
           <span className={styles.brandText}>
             <span className={styles.brandStrong}>{siteName}</span>
             <span className={styles.brandSmall}>Preserving our heritage</span>
@@ -134,7 +134,7 @@ export function Header({ siteName, navItems = primaryNav }: { siteName: string; 
           <div className={styles.drawerHead}>
             <span className={styles.drawerTitle}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className={styles.drawerMark} src="/media/brand/emblem-shield.png" alt="" width={19} height={40} />
+              <img className={styles.drawerMark} src="/media/brand/emblem-240.png" alt="" width={48} height={48} />
               Menu
             </span>
             <button

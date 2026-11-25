@@ -12,6 +12,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { loadSiteSettings } from "@/content/site";
 import styles from "../pages.module.css";
 import homeStyles from "@/components/home/MyConnection.module.css";
+import { StorySection, storyStyles } from "./CuratorStory";
 
 const description =
   "About History: Church of Pakistan and founder-curator Javed Qadir Bakhsh · public service, Church leadership, and preserving history for coming generations.";
@@ -32,6 +33,8 @@ export default async function AboutPage() {
   const bullets = homepage.connection.slice(0, 3);
   const pull = homepage.connection[3];
   const { profile: p, source: CURATOR_PROFILE_SOURCE } = curator;
+  const [intro, ...rest] = p.sections;
+  const photos = new Map((curator.photos ?? []).map((ph) => [ph.id, ph]));
 
   return (
     <div className={styles.page}>
@@ -61,61 +64,26 @@ export default async function AboutPage() {
             portraitSrc={homepage.hero.portrait}
             style={{ marginTop: "1.5rem" }}
           >
-            {p.introduction.map((para) => (
-              <p key={para.slice(0, 48)} style={{ marginBottom: "0.85rem" }}>
-                {para}
-              </p>
-            ))}
-            <blockquote className={homeStyles.connectionPull}>
-              “{p.guidingPrinciple}”
-            </blockquote>
+            {intro ? <StorySection section={intro} photos={photos} name={p.name} first /> : null}
             <p className={homeStyles.connectionMeta} style={{ marginTop: "0.75rem" }}>
               {CURATOR_ROLE_LINE}
             </p>
           </ConnectionLayout>
 
-          <div className={styles.grid} style={{ marginTop: "2rem" }}>
-            {p.themes.map((theme) => (
-              <article key={theme.title} className={styles.card}>
-                <h3 style={{ marginTop: 0 }}>{theme.title}</h3>
-                <p>{theme.copy}</p>
-              </article>
+          <div className={storyStyles.story}>
+            {rest.map((section) => (
+              <StorySection
+                key={section.id}
+                section={section}
+                photos={photos}
+                name={p.name}
+                className={styles.card}
+              />
             ))}
           </div>
 
-          <ProseCard title={p.education.title} body={p.education.body} marginTop="1.5rem" />
-
-          <ProseCard title={p.publicService.title} body={p.publicService.body} marginTop="1.25rem" />
-
-          <article className={styles.card} style={{ marginTop: "1.25rem" }}>
-            <h3 style={{ marginTop: 0 }}>{p.churchService.title}</h3>
-            <p>{p.churchService.intro}</p>
-            <ul>
-              {p.churchService.roles.map((role) => (
-                <li key={role.slice(0, 48)} style={{ marginBottom: "0.45rem" }}>
-                  {role}
-                </li>
-              ))}
-            </ul>
-          </article>
-
-          <ProseCard title={p.historyMission.title} body={p.historyMission.body} marginTop="1.25rem" />
-
-          <ProseCard title={p.digitalWork.title} body={p.digitalWork.body} marginTop="1.25rem" />
-
-          <article className={styles.card} style={{ marginTop: "1.25rem" }}>
-            <h3 style={{ marginTop: 0 }}>{p.legacy.title}</h3>
-            <p>{p.legacy.body}</p>
-            <blockquote className={homeStyles.connectionPull} style={{ marginTop: "1rem" }}>
-              “{p.conviction}”
-            </blockquote>
-            <p style={{ marginTop: "0.75rem", fontWeight: 700, color: "var(--color-burgundy)" }}>
-              {p.closingLine}
-            </p>
-            <p className={homeStyles.connectionMeta} style={{ marginTop: "1rem" }}>
-              Source: {CURATOR_PROFILE_SOURCE}
-            </p>
-          </article>
+          <p className={storyStyles.closing}>{p.closingLine}</p>
+          <p className={storyStyles.source}>Source: {CURATOR_PROFILE_SOURCE}</p>
         </section>
 
         <div className={styles.grid} style={{ marginBottom: "3rem" }}>
@@ -147,17 +115,5 @@ export default async function AboutPage() {
         </ConnectionLayout>
       </div>
     </div>
-  );
-}
-
-/** A titled card of paragraphs (curator biography sections). */
-function ProseCard({ title, body, marginTop }: { title: string; body: string[]; marginTop: string }) {
-  return (
-    <article className={styles.card} style={{ marginTop }}>
-      <h3 style={{ marginTop: 0 }}>{title}</h3>
-      {body.map((para) => (
-        <p key={para.slice(0, 40)}>{para}</p>
-      ))}
-    </article>
   );
 }

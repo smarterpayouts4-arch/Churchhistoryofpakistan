@@ -125,52 +125,46 @@ export const featuredInterviewPatchSchema = z.object({
   transcript: z.string().max(100000).optional(),
 });
 
+const curatorBlockSchema = z.union([
+  z.object({ p: z.string().min(1).max(4000) }).strict(),
+  z.object({ subheading: z.string().min(1).max(300) }).strict(),
+  z.object({ list: z.array(z.string().min(1).max(2000)).min(1).max(30) }).strict(),
+  z.object({ quote: z.string().min(1).max(1000) }).strict(),
+  z.object({ emphasis: z.string().min(1).max(1000) }).strict(),
+  z.object({ photo: z.string().min(1).max(120) }).strict(),
+]);
+
 export const curatorProfileSchema = z.object({
   name: z.string().min(1).max(200),
   eyebrow: z.string().min(1).max(200),
   headline: z.string().min(1).max(500),
-  introduction: z.array(z.string().min(1)).min(1),
   guidingPrinciple: z.string().min(1).max(500),
-  conviction: z.string().min(1).max(500),
-  closingLine: z.string().min(1).max(300),
-  education: z.object({
-    title: z.string().min(1),
-    body: z.array(z.string().min(1)).min(1),
-  }),
-  publicService: z.object({
-    title: z.string().min(1),
-    body: z.array(z.string().min(1)).min(1),
-  }),
-  churchService: z.object({
-    title: z.string().min(1),
-    intro: z.string().min(1),
-    roles: z.array(z.string().min(1)).min(1),
-  }),
-  historyMission: z.object({
-    title: z.string().min(1),
-    body: z.array(z.string().min(1)).min(1),
-  }),
-  themes: z
+  sections: z
     .array(
       z.object({
-        title: z.string().min(1),
-        copy: z.string().min(1),
+        id: z.string().regex(/^[a-z0-9][a-z0-9-]{0,79}$/),
+        title: z.string().min(1).max(300),
+        blocks: z.array(curatorBlockSchema).min(1).max(80),
       }),
     )
-    .min(1),
-  digitalWork: z.object({
-    title: z.string().min(1),
-    body: z.array(z.string().min(1)).min(1),
-  }),
-  legacy: z.object({
-    title: z.string().min(1),
-    body: z.string().min(1),
-  }),
+    .min(1)
+    .max(30),
+  closingLine: z.string().min(1).max(300),
+});
+
+export const curatorPhotoSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]{0,119}$/),
+  label: z.string().min(1).max(300),
+  src: publicMediaPath,
+  alt: z.string().max(1000).optional(),
+  width: z.number().int().positive().max(20000).optional(),
+  height: z.number().int().positive().max(20000).optional(),
 });
 
 export const curatorProfileFileSchema = z.object({
   source: z.string().min(1),
   profile: curatorProfileSchema,
+  photos: z.array(curatorPhotoSchema).max(20),
 });
 
 export const loginSchema = z.object({

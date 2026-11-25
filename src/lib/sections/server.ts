@@ -4,6 +4,7 @@ import { readDoc, writeDoc } from "@/lib/cms/store";
 import type {
   CathedralRecord,
   CathedralsFile,
+  CuratorProfileFile,
   FamilyArchiveItem,
   FamilyArchivesFile,
   FeaturedInterview,
@@ -34,6 +35,7 @@ import {
  *   people     → people-frames.json  frames
  *   churches   → cathedrals.json  items[].local_file (one fixed photo per church)
  *   portrait   → homepage.json  hero.portrait (one fixed photo)
+ *   about      → curator-profile.json  photos[].src (one fixed photo per place on the About page)
  *   interviews → featured-interviews.json  items (shown to the owner as "Videos")
  *
  * Edits are saved as a draft (private doc section-drafts.json). Nothing on
@@ -111,17 +113,19 @@ type LiveDocs = {
   people: PeopleFramesFile;
   interviews: FeaturedInterviewsFile;
   cathedrals: CathedralsFile;
+  profile: CuratorProfileFile;
 };
 
 async function readLiveDocs(): Promise<LiveDocs> {
-  const [homepage, archives, people, interviews, cathedrals] = await Promise.all([
+  const [homepage, archives, people, interviews, cathedrals, profile] = await Promise.all([
     readDoc<HomepageFile>("homepage.json"),
     readDoc<FamilyArchivesFile>("family-archives.json"),
     readDoc<PeopleFramesFile>("people-frames.json"),
     readDoc<FeaturedInterviewsFile>("featured-interviews.json"),
     readDoc<CathedralsFile>("cathedrals.json"),
+    readDoc<CuratorProfileFile>("curator-profile.json"),
   ]);
-  return { homepage, archives, people, interviews, cathedrals };
+  return { homepage, archives, people, interviews, cathedrals, profile };
 }
 
 /** "St. John's Cathedral, Gojra" — how a church is named to the owner. */
@@ -153,6 +157,8 @@ function liveItems(id: SectionId, docs: LiveDocs): SectionItem[] {
       );
     case "portrait":
       return [{ id: "curator-photo", src: docs.homepage.hero.portrait, alt: "", label: "Javed Qadir Bakhsh" }];
+    case "about":
+      return (docs.profile.photos ?? []).map((ph) => ({ id: ph.id, src: ph.src, alt: "", label: ph.label }));
     case "interviews":
       return docs.interviews.items.map((v) =>
         clean({
@@ -421,6 +427,20 @@ function applyChurches(file: CathedralsFile, draft: SectionDraft): CathedralsFil
   };
 }
 
+/** About page: only the photo changes; the text and the place stay. */
+function applyAbout(file: CuratorProfileFile, draft: SectionDraft): CuratorProfileFile {
+  const byId = new Map(draft.items.map((i) => [i.id, i]));
+  return {
+    ...file,
+    photos: (file.photos ?? []).map((ph) => {
+      const i = byId.get(ph.id);
+      if (!i || i.src === ph.src) return ph;
+      // A new photo: the old description, size and shape no longer apply.
+      return { id: ph.id, label: ph.label, src: i.src };
+    }),
+  };
+}
+
 function applyPortrait(file: HomepageFile, draft: SectionDraft): HomepageFile {
   const photo = draft.items[0];
   if (!photo) return file;
@@ -485,6 +505,10 @@ export async function publishDrafts(): Promise<PublishResult> {
         key = "homepage";
         next.homepage = applyPortrait(next.homepage ?? docs.homepage, draft);
         break;
+      case "about":
+        key = "profile";
+        next.profile = applyAbout(docs.profile, draft);
+        break;
       case "churches":
         key = "cathedrals";
         next.cathedrals = applyChurches(docs.cathedrals, draft);
@@ -514,6 +538,7 @@ export async function publishDrafts(): Promise<PublishResult> {
   if (next.people) await writeDoc("people-frames.json", next.people, { summary: summaries.people });
   if (next.interviews) await writeDoc("featured-interviews.json", next.interviews, { summary: summaries.interviews });
   if (next.cathedrals) await writeDoc("cathedrals.json", next.cathedrals, { summary: summaries.cathedrals });
+  if (next.profile) await writeDoc("curator-profile.json", next.profile, { summary: summaries.profile });
 
   for (const id of ids) delete drafts.drafts[id];
   await writeDrafts(drafts);

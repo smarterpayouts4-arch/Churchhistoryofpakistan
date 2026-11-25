@@ -24,10 +24,13 @@
   min-height: 48px;
 }
 
-/* The emblem's gold shield (tall, narrow), sized to the two lines of text beside it. */
+/* The full emblem (square, cream background, lettering and dove), shown whole. */
 .brand .brandMark {
-  width: auto;
-  height: 58px;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px var(--color-border);
 }
 
 .brandText {
@@ -59,8 +62,10 @@
 }
 
 .drawerMark {
-  width: auto;
-  height: 40px;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px var(--color-border);
 }
 
 .drawerHead,
@@ -330,7 +335,8 @@
 
 @media (max-width: 480px) {
   .brand .brandMark {
-    height: 46px;
+    width: 56px;
+    height: 56px;
   }
 
   .brandStrong {

@@ -142,10 +142,29 @@ const PRIVATE_DEFAULTS: Record<PrivateDoc, unknown> = {
   "section-drafts.json": { drafts: {} },
 };
 
+/**
+ * Earlier bundled versions of a content document that were never edited in
+ * the admin. The website's database keeps the copy it first loaded, so when
+ * the bundled file is improved, an untouched old copy is swapped for the new
+ * one when read. Anything the owner changed himself is never replaced.
+ *
+ * curator-profile.json: the short biography before the full PDF life story
+ * and About page photos (Nov 2026).
+ */
+const SUPERSEDED_DEFAULTS: Partial<Record<DocName, string[]>> = {
+  "curator-profile.json": ["4e3501a47042701a"],
+};
+
 async function rawRead<T>(name: DocName): Promise<T> {
   if (storageBackend() === "vercel-kv") {
     const result = await kv<string | null>(["GET", `cms:${name}`]);
-    if (result !== null && result !== undefined) return JSON.parse(result) as T;
+    if (result !== null && result !== undefined) {
+      const stored = JSON.parse(result) as T;
+      if (isContentDoc(name) && SUPERSEDED_DEFAULTS[name]?.includes(docVersion(stored))) {
+        return readFileJson<T>(contentPath(name)).catch(() => stored);
+      }
+      return stored;
+    }
     const seeded = isContentDoc(name)
       ? await readFileJson<T>(contentPath(name)).catch(() => defaultFor<T>(name))
       : defaultFor<T>(name);

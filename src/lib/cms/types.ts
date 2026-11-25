@@ -79,26 +79,46 @@ export type PeopleFramesFile = {
   frames: PeopleFrame[];
 };
 
+/** One piece of a section of the curator's life story (About page). */
+export type CuratorBlock =
+  | { p: string }
+  | { subheading: string }
+  | { list: string[] }
+  | { quote: string }
+  | { emphasis: string }
+  /** A photo from the About page photos (by id). */
+  | { photo: string };
+
+export type CuratorSection = {
+  id: string;
+  title: string;
+  blocks: CuratorBlock[];
+};
+
 export type CuratorProfile = {
   name: string;
   eyebrow: string;
   headline: string;
-  introduction: string[];
   guidingPrinciple: string;
-  conviction: string;
+  sections: CuratorSection[];
   closingLine: string;
-  education: { title: string; body: string[] };
-  publicService: { title: string; body: string[] };
-  churchService: { title: string; intro: string; roles: string[] };
-  historyMission: { title: string; body: string[] };
-  themes: { title: string; copy: string }[];
-  digitalWork: { title: string; body: string[] };
-  legacy: { title: string; body: string };
+};
+
+/** A photo on the About page. Changed in the admin under "About page photos". */
+export type CuratorPhoto = {
+  id: string;
+  /** Name shown to the owner in the admin (the part of the page it sits in). */
+  label: string;
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
 };
 
 export type CuratorProfileFile = {
   source: string;
   profile: CuratorProfile;
+  photos: CuratorPhoto[];
 };
 
 /** Homepage CMS — same shape as legacy HomepageContent in src/content/homepage.ts */

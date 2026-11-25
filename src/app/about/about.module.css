@@ -1,0 +1,107 @@
+/* The curator's life story (About page). Photos sit beside the text on
+   computers and tablets, and above it on phones. */
+
+.story {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.section {
+  display: flow-root; /* keeps a floated photo inside its card */
+}
+
+.section h3 {
+  margin-top: 0;
+}
+
+.section p {
+  max-width: none;
+}
+
+.sub {
+  font-size: 1.35rem;
+  color: var(--color-burgundy);
+  margin: 1.75rem 0 .6rem;
+  clear: both;
+}
+
+.list {
+  margin: .25rem 0 1rem;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: .55rem;
+}
+
+.list strong {
+  color: var(--color-ink);
+}
+
+.emphasis {
+  font-style: italic;
+  color: var(--color-muted-brown);
+}
+
+.quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+  color: var(--color-burgundy);
+  line-height: 1.4;
+  margin: .5rem 0 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--color-antique-gold);
+}
+
+.photo {
+  float: right;
+  width: min(40%, var(--natural, 26rem));
+  margin: .35rem 0 1rem 1.75rem;
+}
+
+.photoLeft {
+  composes: photo;
+  float: left;
+  margin: .35rem 1.75rem 1rem 0;
+}
+
+.photoWide {
+  clear: both;
+  margin: 1.25rem 0 1.5rem;
+  width: 100%;
+}
+
+.photo img,
+.photoLeft img,
+.photoWide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  background: var(--color-media-well);
+  box-shadow: var(--shadow-frame);
+}
+
+.closing {
+  margin: 1.25rem 0 0;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--color-burgundy);
+  font-size: 1.25rem;
+}
+
+.source {
+  margin-top: 1rem;
+  font-size: var(--text-small);
+  color: var(--color-muted-brown);
+}
+
+@media (max-width: 760px) {
+  .photo,
+  .photoLeft {
+    float: none;
+    width: 100%;
+    max-width: 30rem;
+    margin: .25rem auto 1.25rem;
+  }
+}

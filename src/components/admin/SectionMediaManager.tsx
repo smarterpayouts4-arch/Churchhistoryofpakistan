@@ -42,6 +42,7 @@ const TAB_ICONS: Record<SectionId, string> = {
   people: "people",
   churches: "church",
   portrait: "person",
+  about: "book",
   interviews: "video",
 };
 
@@ -618,7 +619,9 @@ export function SectionMediaManager({
                   {c.fixed
                     ? c.id === "churches"
                       ? `${n} churches`
-                      : "1 photo"
+                      : n === 1
+                        ? "1 photo"
+                        : `${n} photos`
                     : n > c.max
                       ? `${n} ${c.kind === "video" ? "videos" : "photos"} · limit ${c.max}`
                       : `${n} of ${c.max} ${c.kind === "video" ? "videos" : "photos"}`}
@@ -746,6 +749,8 @@ export function SectionMediaManager({
               ? "Each church has one photo. To change it, press “Replace photo” under that church and choose a photo. Tap a photo on the most important spot to keep it in view."
               : cfg.id === "portrait"
                 ? "To change your photo, press “Replace photo” and choose a photo."
+                : cfg.id === "about"
+                  ? "Each photo is named after the part of the About page it sits in. To change one, press “Replace photo” under it and choose a photo."
                 : cfg.kind === "image"
               ? "Drag a photo (or use the arrows) to change the order. Tap a photo on the most important spot, such as a face, to keep it in view. Spelling mistakes are underlined in red: tap the word (or right-click on a computer) to pick the right spelling."
                   : "Drag a video (or use the arrows) to change the order. The first video shows first on the website. Spelling mistakes are underlined in red: tap the word (or right-click on a computer) to pick the right spelling."}
@@ -928,8 +933,8 @@ function Tile({
           ) : (
             <Thumb src={item.src} kind="video" alt={name} />
           )
-        ) : cfg.id === "portrait" ? (
-          // The curator photo is shown whole (no focal point to choose).
+        ) : cfg.id === "portrait" || cfg.id === "about" ? (
+          // The curator photo and About page photos are shown whole (no focal point to choose).
           <Thumb src={item.src} alt={name} sizes="(max-width: 700px) 92vw, 320px" />
         ) : (
           // Tap/click the photo on its most important spot (a mouse/touch extra; the
