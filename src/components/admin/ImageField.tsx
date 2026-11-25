@@ -6,6 +6,8 @@ import s from "./studio.module.css";
 import { MediaPicker } from "./MediaPicker";
 import { Thumb } from "./Thumb";
 import type { LibraryEntry } from "./mediaStore";
+import { SizeHint } from "./SizeHint";
+import type { PhotoSize } from "@/lib/media/sizeHints";
 
 type Props = {
   label: string;
@@ -20,6 +22,8 @@ type Props = {
   /** Optional gallery fit: "contain" = show the whole photo in its tile (no cropping). */
   fit?: "cover" | "contain";
   onFitChange?: (fit: "cover" | "contain" | undefined) => void;
+  /** Best shape and size for this spot (shown with a "Copy instructions for ChatGPT" button). */
+  size?: PhotoSize;
 };
 
 /**
@@ -37,6 +41,7 @@ export function ImageField({
   onPositionChange,
   fit,
   onFitChange,
+  size,
 }: Props) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -76,6 +81,7 @@ export function ImageField({
         </div>
         <div>
           <p className={s.fieldName}>{value ? decodeURIComponent(value.split("/").pop() ?? value) : `Choose a ${noun} from the library or upload a new one.`}</p>
+          {size && kind === "image" ? <SizeHint size={size} compact /> : null}
           {hint ? <p className={styles.hint} style={{ marginBottom: "0.45rem" }}>{hint}</p> : null}
           {onPositionChange && value && kind === "image" ? (
             <p className={styles.hint} style={{ marginBottom: "0.45rem" }}>

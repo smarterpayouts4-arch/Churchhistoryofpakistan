@@ -25,6 +25,9 @@ import x from "./sections.module.css";
 import { LINE, PROSE } from "./typing";
 import { BufferedInput, BufferedTextarea } from "./BufferedField";
 import { LocalTime } from "./LocalTime";
+import { SizeHint } from "./SizeHint";
+import hintStyles from "./SizeHint.module.css";
+import { PHOTO_SIZES, photoDimensions, shapeAdvice, type PhotoSize } from "@/lib/media/sizeHints";
 
 type Storage = SectionsSnapshot["storage"];
 
@@ -45,6 +48,12 @@ const TAB_ICONS: Record<SectionId, string> = {
   about: "book",
   interviews: "video",
 };
+
+/** Best photo shape and size for each section (videos: their cover pictures). */
+function photoSizeFor(cfg: SectionConfig): PhotoSize {
+  if (cfg.kind === "video") return PHOTO_SIZES.videoCover;
+  return PHOTO_SIZES[cfg.id as Exclude<SectionId, "interviews">];
+}
 
 function newId(name: string) {
   const stem =
@@ -89,6 +98,8 @@ export function SectionMediaManager({
   const [justPublished, setJustPublished] = useState(false);
   const [confirm, setConfirm] = useState<null | { title: string; body: string; action: string; run: () => void }>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  /** Gentle "different shape / small photo" note for the last photo chosen (never blocks the upload). */
+  const [shapeNote, setShapeNote] = useState<string | null>(null);
 
   // Draft revision per section (what the server has) and a save queue.
   const revs = useRef<Record<string, number>>(
@@ -260,8 +271,17 @@ export function SectionMediaManager({
   const latest = useRef(items);
   latest.current = items;
 
+  /** After a photo is chosen: if it is far from the best shape or quite small, say so gently. */
+  function adviseOnPhoto(file: File, size: PhotoSize) {
+    void photoDimensions(file).then((d) => {
+      const advice = d ? shapeAdvice(size, d.width, d.height) : null;
+      if (advice) setShapeNote(`“${file.name}”: ${advice}`);
+    });
+  }
+
   async function addFiles(list: FileList | File[]) {
     setNotice(null);
+    setShapeNote(null);
     const files = Array.from(list).map(withType);
     const wrongKind = files.filter((f) => !f.type.startsWith(cfg.kind === "video" ? "video/" : "image/"));
     if (wrongKind.length) {
@@ -289,6 +309,7 @@ export function SectionMediaManager({
         setNotice(HEVC_WARNING);
         toast.info(HEVC_WARNING);
       }
+      if (file.type.startsWith("image/")) adviseOnPhoto(file, photoSizeFor(cfg));
       setProgress((p) => [...p, { key, name: file.name, fraction: 0 }]);
       const ctrl = new AbortController();
       uploadCtrls.current[key] = ctrl;
@@ -343,6 +364,8 @@ export function SectionMediaManager({
       return void toast.error(cfg.kind === "video" ? "Please choose a video." : "Please choose a photo.");
     }
     if (file.type.startsWith("video/") && (await isHevcVideo(file))) toast.info(HEVC_WARNING);
+    setShapeNote(null);
+    if (file.type.startsWith("image/")) adviseOnPhoto(file, photoSizeFor(cfg));
     const key = `replace-${Math.random()}`;
     const itemId = latest.current[index]?.id;
     setProgress((p) => [...p, { key, name: `Replacing with ${file.name}`, fraction: 0 }]);
@@ -399,6 +422,8 @@ export function SectionMediaManager({
     const problem = checkFile(file);
     if (problem) return void toast.error(problem);
     if (!file.type.startsWith("image/")) return void toast.error("Please choose a photo for the cover picture.");
+    setShapeNote(null);
+    adviseOnPhoto(file, PHOTO_SIZES.videoCover);
     const key = `cover-${Math.random()}`;
     const itemId = latest.current[index]?.id;
     setProgress((p) => [...p, { key, name: `New cover picture: ${file.name}`, fraction: 0 }]);
@@ -608,6 +633,7 @@ export function SectionMediaManager({
               onClick={() => {
                 setActive(c.id);
                 setNotice(null);
+                setShapeNote(null);
               }}
             >
               <span className={x.tabIcon} aria-hidden="true">
@@ -652,6 +678,21 @@ export function SectionMediaManager({
             <span>{over ? `Over the limit of ${cfg.max}` : full ? "Full" : `${cfg.max - items.length} ${cfg.max - items.length === 1 ? "space" : "spaces"} left`}</span>
           </div>}
         </div>
+
+        <SizeHint
+          key={cfg.id}
+          size={photoSizeFor(cfg)}
+          label={cfg.kind === "video" ? "Cover pictures (shown before a video plays)" : undefined}
+        />
+        {shapeNote ? (
+          <div className={hintStyles.note} role="status">
+            <Icon name="info" size={20} />
+            <p>{shapeNote}</p>
+            <button type="button" className={x.linkBtn} onClick={() => setShapeNote(null)}>
+              OK
+            </button>
+          </div>
+        ) : null}
 
         <div className={x.meterRow}>
           <div

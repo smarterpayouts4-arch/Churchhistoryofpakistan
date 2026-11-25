@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { BlogPost } from "@/lib/cms/types";
 import { slugify } from "@/lib/blog/markdown-client";
 import { ImageField } from "./ImageField";
+import { PHOTO_SIZES } from "@/lib/media/sizeHints";
 import styles from "@/app/admin/admin.module.css";
 import { LINE, NAME, PROSE, URL_FIELD } from "./typing";
 import { BufferedInput } from "./BufferedField";
@@ -129,7 +130,7 @@ export function BlogEditor({ initialPosts, pending, setPending, setMessage, setE
                     </label>
                     <ImageField
                       label="Cover photo"
-                      hint="Use a wide photo at least 1200 pixels across so it stays sharp."
+                      size={PHOTO_SIZES.blogCover}
                       value={editing.coverSrc}
                       onChange={(url, entry) => patch(editing.id, { coverSrc: url, ...(entry?.alt && !editing.coverAlt ? { coverAlt: entry.alt } : {}) })}
                     />

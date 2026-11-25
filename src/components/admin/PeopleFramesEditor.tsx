@@ -4,6 +4,7 @@ import { adminFetch } from "./adminFetch";
 import { useState } from "react";
 import type { PeopleFrame } from "@/lib/cms/types";
 import { ImageField } from "./ImageField";
+import { PHOTO_SIZES } from "@/lib/media/sizeHints";
 import styles from "@/app/admin/admin.module.css";
 import { LINE, PROSE } from "./typing";
 
@@ -86,6 +87,7 @@ export function PeopleFramesEditor({
             </label>
             <ImageField
               label="Photo"
+              size={PHOTO_SIZES.people}
               required
               value={frame.src}
               onChange={(url) => patchFrame(frame.id, { src: url, position: undefined })}

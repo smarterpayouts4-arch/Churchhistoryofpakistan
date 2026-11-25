@@ -16,7 +16,7 @@ const description =
 export const metadata: Metadata = {
   title: "Videos",
   description,
-  ...socialMetadata({ title: "Videos", description, path: "/videos", image: "interviews" }),
+  ...socialMetadata({ title: "Videos", description, path: "/videos", image: "videos" }),
   alternates: { canonical: "/videos" },
 };
 

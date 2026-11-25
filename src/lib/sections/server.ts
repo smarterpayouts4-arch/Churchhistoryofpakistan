@@ -49,7 +49,7 @@ type DraftsFile = { drafts: Partial<Record<SectionId, SectionDraft>> };
 
 const DRAFTS = "section-drafts.json" as const;
 /** Poster used when a new video's poster frame could not be made. */
-const FALLBACK_POSTER = "/media/og/og-interviews.png";
+const FALLBACK_POSTER = "/media/og/og-videos.png";
 
 /* ------------------------------ validation ------------------------------ */
 

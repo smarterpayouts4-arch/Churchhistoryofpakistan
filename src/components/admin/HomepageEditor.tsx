@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import type { HomepageContent, PurposeCard, TimelineEntry } from "@/lib/cms/types";
 import { ImageField } from "./ImageField";
+import { PHOTO_SIZES } from "@/lib/media/sizeHints";
 import { adminFetch } from "./adminFetch";
 import styles from "@/app/admin/admin.module.css";
 import { LINE, PROSE } from "./typing";
@@ -246,6 +247,7 @@ export function HomepageEditor({
         </label>
         <ImageField
           label="Curator portrait"
+          size={PHOTO_SIZES.portrait}
           required
           value={home.hero.portrait}
           onChange={(url) => updateHero("portrait", url)}

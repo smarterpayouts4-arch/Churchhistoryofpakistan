@@ -4,6 +4,7 @@ import { adminFetch } from "./adminFetch";
 import { useState } from "react";
 import type { FeaturedInterview } from "@/lib/cms/types";
 import { ImageField } from "./ImageField";
+import { PHOTO_SIZES } from "@/lib/media/sizeHints";
 
 function videoDimensions(url: string): Promise<{ width: number; height: number; duration?: number } | null> {
   return new Promise((resolve) => {
@@ -181,12 +182,14 @@ export function FeaturedInterviewsEditor({
             />
             <ImageField
               label="Poster photo (shown before the video plays)"
+              size={PHOTO_SIZES.videoCover}
               required
               value={item.posterSrc}
               onChange={(url) => patchInterview(item.id, { posterSrc: url })}
             />
             <ImageField
               label="Cover photo for cards (optional)"
+              size={PHOTO_SIZES.videoCover}
               value={item.coverSrc ?? ""}
               position={item.coverPosition || "50% 35%"}
               onPositionChange={(coverPosition) => patchInterview(item.id, { coverPosition })}

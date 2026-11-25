@@ -5,6 +5,7 @@ import { FormEvent, useMemo, useState } from "react";
 import type { FamilyArchiveItem } from "@/lib/cms/types";
 import styles from "@/app/admin/admin.module.css";
 import { ImageField } from "./ImageField";
+import { PHOTO_SIZES } from "@/lib/media/sizeHints";
 import { Thumb } from "./Thumb";
 import { LINE, PROSE, URL_FIELD } from "./typing";
 
@@ -345,12 +346,13 @@ export function FamilyArchivesEditor({
         <div className={styles.grid2}>
           <ImageField
             label="Photo"
+            size={PHOTO_SIZES.gallery}
             required
             value={form.imageSrc}
             onChange={(url, entry) =>
               setForm((f) => ({ ...f, imageSrc: url, imagePosition: undefined, ...(entry?.alt && !f.alt ? { alt: entry.alt } : {}) }))
             }
-            hint="Gallery tiles are all the same shape (4:5). Click the preview on the key spot (a face) to choose what stays in frame; visitors always see the full photo when they open it."
+            hint="Gallery tiles are a little tall on computers (4:5) and a little wide on phones (4:3). Click the preview on the key spot (a face) to choose what stays in frame; visitors always see the full photo when they open it."
             position={form.imagePosition}
             onPositionChange={(imagePosition) => setForm((f) => ({ ...f, imagePosition }))}
             fit={form.imageFit}

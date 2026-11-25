@@ -4,6 +4,7 @@ import { adminFetch } from "./adminFetch";
 import { FormEvent, useMemo, useState } from "react";
 import type { CathedralRecord, CathedralsFile } from "@/lib/cms/types";
 import { ImageField } from "./ImageField";
+import { PHOTO_SIZES } from "@/lib/media/sizeHints";
 import styles from "@/app/admin/admin.module.css";
 import { LINE, NAME, PROSE, URL_FIELD } from "./typing";
 import { BufferedTextarea } from "./BufferedField";
@@ -289,6 +290,7 @@ export function ChurchesEditor({
             <div className={styles.grid2}>
               <ImageField
                 label="Church photo"
+                size={PHOTO_SIZES.churches}
                 required
                 value={selected.local_file}
                 onChange={(url) => patchSelected({ local_file: url })}
@@ -296,6 +298,7 @@ export function ChurchesEditor({
               />
               <ImageField
                 label="Fallback picture (optional)"
+                size={PHOTO_SIZES.churches}
                 value={selected.fallback_file ?? ""}
                 onChange={(url) => patchSelected({ fallback_file: url || undefined })}
                 hint="Shown if the main photo can't load."
