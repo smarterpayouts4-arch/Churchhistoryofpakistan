@@ -1,5 +1,7 @@
 "use client";
 
+import { WEBSITE_UPDATED, loadFresh } from "./freshCode";
+
 /**
  * HEIC/HEIF → JPEG in the browser, before upload.
  * Safari decodes HEIC itself; other browsers load a converter (heic-to, CSP
@@ -45,10 +47,12 @@ export const HEIC_CONVERT_FAILED =
 export async function heicToJpeg(file: File): Promise<File> {
   let jpeg = await nativeDecode(file);
   if (!jpeg || jpeg.type !== "image/jpeg") {
+    // An out-of-date page can't fetch the converter: say so (and reload) instead of blaming the photo.
     try {
-      const { heicTo } = await import("heic-to/csp");
+      const { heicTo } = await loadFresh(() => import("heic-to/csp"));
       jpeg = await heicTo({ blob: file, type: "image/jpeg", quality: JPEG_QUALITY });
-    } catch {
+    } catch (err) {
+      if (err instanceof Error && err.message.startsWith(WEBSITE_UPDATED)) throw err;
       jpeg = null;
     }
   }

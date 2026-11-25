@@ -1,5 +1,6 @@
 "use client";
 
+import { loadFresh } from "./freshCode";
 import { csrfToken } from "./adminFetch";
 import type { MediaItem } from "@/lib/cms/types";
 import { effectiveType, formatBytes, isHeicType, kindForType, maxBytesFor, MAX_IMAGE_BYTES, safeMediaFilename } from "@/lib/media/rules";
@@ -197,7 +198,7 @@ async function blobUpload(
   target?: SectionTarget,
   signal?: AbortSignal,
 ): Promise<MediaItem> {
-  const { upload } = await import("@vercel/blob/client");
+  const { upload } = await loadFresh(() => import("@vercel/blob/client"));
   const dims =
     extra.width && extra.height
       ? { width: extra.width, height: extra.height }

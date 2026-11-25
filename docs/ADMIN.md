@@ -134,6 +134,7 @@ Contact details from visitors are private. They never appear on the public site.
 - **A yellow or red banner at the top of the admin** means the site's storage isn't connected. Saving is switched off so nothing gets lost. Tell Oscar; [DEPLOYMENT.md](DEPLOYMENT.md) explains the fix.
 - **"Your sign-in has expired"** means you need to sign in again. Your changes are still on screen, so copy anything important before you reload.
 - **An upload failed:** the message in the section says why (for example, the file is too big). Press **Try again**, or pick a smaller file.
+- **"The website was just updated"**: the page was open while the website got a new version. It reloads by itself; then add the photo again. If anything ever looks old or a button does nothing, refresh the page (pull down on a phone, or press the reload arrow) or close it and open it again.
 - **"Not saved — check your internet"**: keep the page open. It saves by itself when the connection is back. The page warns you if you try to close it before then.
 - **Everyone is locked out:** Oscar can turn on recovery login. See [DEPLOYMENT.md](DEPLOYMENT.md#locked-out).
 

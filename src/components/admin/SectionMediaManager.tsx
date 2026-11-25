@@ -9,6 +9,7 @@ import { invalidateLibrary } from "./mediaStore";
 import { checkFile, uploadMedia, UploadStoppedError, withType, type StorageInfo } from "./upload";
 import { HEVC_WARNING, isHevcVideo } from "./videoCodec";
 import { toast } from "./toast";
+import { preloadUploader } from "./freshCode";
 import {
   SECTIONS,
   fullMessage,
@@ -90,6 +91,11 @@ export function SectionMediaManager({
   // Uploads in flight (Cancel) and failed ones (Try again), by progress row.
   const uploadCtrls = useRef<Record<string, AbortController>>({});
   const retries = useRef<Record<string, () => void>>({});
+
+  // Load the uploader now, so a later website update can't leave this open page without it.
+  useEffect(() => {
+    if (storageInfo.blob) preloadUploader();
+  }, [storageInfo.blob]);
 
   useEffect(() => {
     if (sessionStorage.getItem(PUBLISHED_FLAG)) {
